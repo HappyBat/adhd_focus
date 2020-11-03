@@ -12,7 +12,7 @@
     "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress",
     "build": "webpack",
     "develop": "webpack --mode development --watch",
-    "start": "webpack-dev-server --open"
+    "start": "webpack-dev-server"
   },
   "keywords": [],
   "author": "Rahel Golub",
