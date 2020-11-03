@@ -28,11 +28,11 @@
   "heroku-run-build-script": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dauriel/add.git"
+    "url": "git+https://github.com/HappyBat/adhd_focus.git"
   },
   "bugs": {
-    "url": "https://github.com/Dauriel/add/issues"
+    "url": "https://github.com/HappyBat/adhd_focus/issues"
   },
-  "homepage": "https://github.com/Dauriel/add#readme",
+  "homepage": "https://github.com/HappyBat/adhd_focus#readme",
   "description": ""
 }
