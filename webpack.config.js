@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const port = process.env.PORT || 8010;
 
 const config = {
   entry: './src/index.js',
@@ -11,7 +12,7 @@ const config = {
   devServer:  {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
-    port: 8000
+    port: port
   },
   module: {
     rules: [{
