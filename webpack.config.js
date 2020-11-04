@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const path = require('path');
-const port = process.env.PORT || 8010;
 
 const config = {
   entry: './src/index.js',
@@ -8,11 +7,6 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
-  },
-  devServer:  {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-    port: port
   },
   module: {
     rules: [{

@@ -11,25 +11,18 @@
     "heroku-prebuild": "npm install",
     "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress",
     "build": "webpack",
-    "develop": "webpack --mode development --watch",
-    "start": "webpack-dev-server"
+    "develop": "webpack --mode development --watch"
   },
   "keywords": [],
   "author": "Rahel Golub",
   "license": "ISC",
   "devDependencies": {
-    "file-loader": "^4.3.0",
-    "phaser": "^3.24.1",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {    
     "file-loader": "^4.3.0",
     "phaser": "^3.24.1",
     "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"},
+    "express": "4.13.4",
   "heroku-run-build-script": true,
   "repository": {
     "type": "git",
