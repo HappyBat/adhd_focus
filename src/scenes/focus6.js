@@ -82,7 +82,7 @@ export default class Focus6 extends Focus_scene {
       this.pop;
 
       this.play_btn = this.add
-        .sprite(680, 600, "play")
+        .sprite(680, 600, "borderPlay")
         .setInteractive({ useHandCursor: true })
         .setScale(0.5);
 

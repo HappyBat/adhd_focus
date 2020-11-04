@@ -28,7 +28,7 @@ export default class Focus2 extends Focus_scene {
       if(layer){
         layer.setVisible(true);
         sleep.setVisible(true);
-        this.sound.play("gnMusic");
+        //this.sound.play("gnMusic");
         console.log("layer2");
         console.log(this.layer)
       }else{
@@ -40,7 +40,7 @@ export default class Focus2 extends Focus_scene {
         .sprite(650, 380, "sleeping")
         .setScale(2)
         .setDepth(2000);
-      this.sound.play("gnMusic");
+      //this.sound.play("gnMusic");
             console.log("layer1");
             console.log(this.layer);
       }
