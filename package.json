@@ -22,7 +22,7 @@
     "file-loader": "^4.3.0",
     "phaser": "^3.24.1",
     "webpack": "^4.44.2",
-    "express": "4.13.4",
+    "express": "4.13.4"},
   "heroku-run-build-script": true,
   "repository": {
     "type": "git",
@@ -33,4 +33,4 @@
   },
   "homepage": "https://github.com/HappyBat/adhd_focus#readme",
   "description": ""
-}}
+}
