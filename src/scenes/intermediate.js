@@ -16,9 +16,10 @@ export default class intermediate extends Phaser.Scene {
         this.pop.setText(this.t,true),
         btn = this.add.sprite(Config.width / 2, Config.height - 170, "prePlay")
         .setInteractive({useHandCursor: true })
-        .setScale(1)
+        .setScale(0.05)
         .setDepth(2000);        
         btn.on('pointerdown', () => {
+            btn.setScale(0.5);
             this.scene.start('focus1');
         });
 
@@ -64,8 +65,9 @@ export default class intermediate extends Phaser.Scene {
         
                 if (this.pop.timedEvent.hasDispatched){
                     btn.destroy();
-                    this.btn2 = this.add.sprite(Config.width / 2, Config.height-170, "borderPlay").setInteractive({ useHandCursor: true });            
+                    this.btn2 = this.add.sprite(Config.width / 2, Config.height-170, "borderPlay").setScale(0.05).setInteractive({ useHandCursor: true });            
                     this.btn2.on('pointerdown', () => {
+                        this.btn2.setScale(0.5);
                         this.scene.start('focus1');
                     });
                 }
@@ -78,8 +80,10 @@ export default class intermediate extends Phaser.Scene {
             Config.height - 170,
             "borderPlay"
           )
+            .setScale(0.05)
             .setInteractive({ useHandCursor: true });
           this.btn2.on("pointerdown", () => {
+            this.btn2.setScale(0.5);
             this.scene.start("focus1");
           });
         }     

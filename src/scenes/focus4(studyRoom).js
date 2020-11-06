@@ -56,7 +56,7 @@ export default class Focus2 extends Focus_scene {
       );
 
       this.play_btn = this.add
-        .sprite(680, 600, "borderPlay")
+        .sprite(680, 600, "play")
         .setInteractive({ useHandCursor: true })
         .setScale(0.5);
       //this.play_btn.on("clicked2", playRemove, this);
@@ -73,6 +73,7 @@ export default class Focus2 extends Focus_scene {
               //text to read
               this.studyText = this.add
                 .image(683, 384, "studyText")
+                .setScale(0.5)
                 .setDepth(1000);
 
               //countdown for task

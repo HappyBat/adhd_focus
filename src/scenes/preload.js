@@ -16,12 +16,12 @@ import arrow_right_white from "../../assets/arrow_right_white.png";
 import arrow_down from "../../assets/arrow_down.png";
 import studyRoom from "../../assets/studyRoom.jpg";
 import living_room from "../../assets/living_room.png";
-import bathroom from "../../assets/bathroom.jpg";
+import bathroom from "../../assets/bathroom.png";
 import kitchen from "../../assets/kitchen.png";
 import city from "../../assets/city.png"
 import todo from "../../assets/todo.png";
 import virus from "../../assets/virus.png";
-//import play from "../../assets/play.png";
+import play from "../../assets/play.png";
 import studyText from "../../assets/studyText.png";
 import depGuy from "../../assets/depGuy.png";
 import hands from "../../assets/hands.png";
@@ -58,9 +58,9 @@ export default class preload_scene extends Phaser.Scene {
     
     preload() {
        //console.log(require("../../audio/gnMusic2mod.mp3"));
-        /*this.load.audio("gnMusic", [
+        this.load.audio("gnMusic", [
           require("../../audio/gnMusic2mod.mp3")
-          ]),*/
+          ]),
         //this.load.scenePlugin('PopupPlugin', './popup.js');
         this.load.image("background", background),
           this.load.image("studyRoom", studyRoom),
@@ -82,7 +82,7 @@ export default class preload_scene extends Phaser.Scene {
           this.load.image("todo", todo),
           this.load.image("virus", virus),
           this.load.image("virus", virus),
-          //this.load.image("play", play),
+          this.load.image("play", play),
           this.load.image("studyText", studyText),
           this.load.image("depGuy", depGuy),
           this.load.image("dolphin_questions", dolphin_questions),
