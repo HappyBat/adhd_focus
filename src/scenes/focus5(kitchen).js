@@ -2,7 +2,8 @@ import Focus_scene from "../focus_scene"
 import PopupPlugin from "../../dist/pop";
 var pointer;
 var executed;
-export default class Focus2 extends Focus_scene {
+var call = 0;
+export default class Focus5 extends Focus_scene {
   constructor() {
     super(
       "focus5",
@@ -48,6 +49,7 @@ export default class Focus2 extends Focus_scene {
     );
     this.pop.setText(this.t, true);
   }
+   callSuper(){super.updateHob();super.updatescore(10)}
 
   update() {
     super.update();
@@ -70,18 +72,26 @@ export default class Focus2 extends Focus_scene {
           if (this.x > 460 && this.x < 530 && this.y > 290 && this.y < 330){
             this.x = 500;
             this.y = 310;
+            call= 1;
           }else {
             this.x = 890;
             this.y = 250;
           }
         })
+        if(call == 1){
+        this.callSuper();
+        }
         executed = true;
+        this.pot2Created = 1;
      }
      console.log(pointer.x); 
      console.log(pointer.y);
      // ...
    }
-
+    if (call == 1 & this.called != 1) {
+      this.called = 1;
+      this.callSuper();
+    }
    if (this.pop) {
      if (this.pop.closeBtn.closedFlag == 1) {
        this.btn1.input.enabled = true;

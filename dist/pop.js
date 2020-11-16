@@ -8,7 +8,7 @@ constructor(scene, bT, bC, wH, p, w,closed, xpos, ypos, textAdjust, fontSize, an
    this.closeBorderThickness = 3//10;
    this.borderColor = bC//0x005e58;//0x907748;
    this.borderAlpha = 1;
-   this.windowAlpha = 0.8;
+   this.windowAlpha = 0.95;
    this.windowColor = 0x303030;
    this.windowHeight = wH//700;
    this.padding = p//32;

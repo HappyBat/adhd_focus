@@ -3,6 +3,7 @@ import PopupPlugin from "../../dist/pop";
 var initialTime2;
 var timeLeftText;
 var timeLeftRect;
+var score = 0;
 
 var x1;
 var y1;
@@ -82,7 +83,7 @@ export default class Focus6 extends Focus_scene {
       this.pop;
 
       this.play_btn = this.add
-        .sprite(680, 600, "play")
+        .sprite(680, 600, "borderPlay")
         .setInteractive({ useHandCursor: true })
         .setScale(0.5);
 
@@ -131,11 +132,13 @@ export default class Focus6 extends Focus_scene {
                   sortingArray[i].x == check_X_PositionArray[i] &&
                   sortingArray[i].y == check_Y_PositionArray[i]
                 ) {
-                  super.updatescore(10);
+                  score = score + 10;
                   counter = counter + 10;
                   console.log(counter)
                 }
+                console.log(score) 
               }
+              super.updatescore(score);
               this.sheet.setVisible(false);
               this.done.setVisible(false);
               timeLeftText.setVisible(false);

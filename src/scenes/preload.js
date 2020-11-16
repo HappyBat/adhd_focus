@@ -16,12 +16,12 @@ import arrow_right_white from "../../assets/arrow_right_white.png";
 import arrow_down from "../../assets/arrow_down.png";
 import studyRoom from "../../assets/studyRoom.jpg";
 import living_room from "../../assets/living_room.png";
-import bathroom from "../../assets/bathroom.png";
+import bathroom from "../../assets/bathroom.jpg";
 import kitchen from "../../assets/kitchen.png";
 import city from "../../assets/city.png"
 import todo from "../../assets/todo.png";
 import virus from "../../assets/virus.png";
-import play from "../../assets/play.png";
+//import play from "../../assets/play.png";
 import studyText from "../../assets/studyText.png";
 import depGuy from "../../assets/depGuy.png";
 import hands from "../../assets/hands.png";
@@ -50,6 +50,24 @@ import name16 from "../../assets/name16.png";
 import angryBoss from "../../assets/angryBoss.png"; 
 import pot from "../../assets/pot.png"; 
 import sleeping from "../../assets/sleeping.jpg"; 
+import graduation from "../../assets/graduation.png"; 
+import pokal from "../../assets/pokal.png"; 
+import cloud_brainfog from "../../assets/cloud_brainfog.png";
+import cloud_late from "../../assets/cloud_late.png";
+import cloud_focus from "../../assets/cloud_focus.png";
+import cloud_focus2 from "../../assets/cloud_focus2.png";
+import cloud_class from "../../assets/cloud_class.png";
+import cloud_intelligent from "../../assets/cloud_intelligent.png";
+import cloud_failure from "../../assets/cloud_failure.png";
+import cloud_lazy from "../../assets/cloud_lazy.png";
+import cloud_stared from "../../assets/cloud_stared.png";
+import sleeping2 from "../../assets/sleeping2.png";
+import sheep1 from "../../assets/sheep1.png";
+import sheep2 from "../../assets/sheep2.png";
+import sheep3 from "../../assets/sheep3.png";
+import dot from "../../assets/dot.png";
+import bills from "../../assets/bills.png";
+import bills_blurred from "../../assets/bills_blurred.png";
 
 export default class preload_scene extends Phaser.Scene {
     constructor() {
@@ -58,11 +76,9 @@ export default class preload_scene extends Phaser.Scene {
     
     preload() {
        //console.log(require("../../audio/gnMusic2mod.mp3"));
-        this.load.audio("gnMusic", [
-          require("../../audio/gnMusic2mod.mp3")
-          ]),
-        //this.load.scenePlugin('PopupPlugin', './popup.js');
-        this.load.image("background", background),
+        this.load.audio("gnMusic", [require("../../audio/gnMusic2mod.mp3")]),
+          //this.load.scenePlugin('PopupPlugin', './popup.js');
+          this.load.image("background", background),
           this.load.image("studyRoom", studyRoom),
           //this.load.image("play", play),
           this.load.image("prePlay", prePlay),
@@ -82,7 +98,7 @@ export default class preload_scene extends Phaser.Scene {
           this.load.image("todo", todo),
           this.load.image("virus", virus),
           this.load.image("virus", virus),
-          this.load.image("play", play),
+          //this.load.image("play", play),
           this.load.image("studyText", studyText),
           this.load.image("depGuy", depGuy),
           this.load.image("dolphin_questions", dolphin_questions),
@@ -110,7 +126,24 @@ export default class preload_scene extends Phaser.Scene {
           this.load.image("angryBoss", angryBoss),
           this.load.image("pot", pot),
           this.load.image("sleeping", sleeping),
-
+          this.load.image("graduation", graduation),
+          this.load.image("pokal", pokal),
+          this.load.image("cloud_brainfog", cloud_brainfog),
+          this.load.image("cloud_late", cloud_late),
+          this.load.image("cloud_focus", cloud_focus),
+          this.load.image("cloud_class", cloud_class),
+          this.load.image("cloud_intelligent", cloud_intelligent),
+          this.load.image("cloud_focus2", cloud_focus2),
+          this.load.image("cloud_failure", cloud_failure),
+          this.load.image("cloud_lazy", cloud_lazy),
+          this.load.image("cloud_stared", cloud_stared),
+          this.load.image("sleeping2", sleeping2),
+          this.load.image("sheep1", sheep1),
+          this.load.image("sheep2", sheep2),
+          this.load.image("sheep3", sheep3),
+          this.load.image("dot", dot),
+          this.load.image("bills", bills),
+          this.load.image("bills_blurred", bills_blurred),
           this.load.spritesheet("guy", guy, {
             frameWidth: 123,
             frameHeight: 377,

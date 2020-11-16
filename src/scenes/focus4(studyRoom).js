@@ -3,8 +3,13 @@ import PopupPlugin from "../../dist/pop";
 var initialTime2;
 var timeLeftText;
 var timeLeftRect;
+var billCounter;
+var oH;
+var updated = 0;
+var counter;
+var changed =0;
 
-export default class Focus2 extends Focus_scene {
+export default class Focus4 extends Focus_scene {
   constructor() {
     super(
       "focus4",
@@ -18,8 +23,12 @@ export default class Focus2 extends Focus_scene {
   }
   init(data) {
     super.Init(data);
+    billCounter = data.billCounter;
+    oH = data.oH;
   }
   create() {
+    console.log("oH");
+    console.log(oH);
     super.create();
 
     timeLeftText;
@@ -56,7 +65,7 @@ export default class Focus2 extends Focus_scene {
       );
 
       this.play_btn = this.add
-        .sprite(680, 600, "play")
+        .sprite(680, 600, "borderPlay")
         .setInteractive({ useHandCursor: true })
         .setScale(0.5);
       //this.play_btn.on("clicked2", playRemove, this);
@@ -73,7 +82,6 @@ export default class Focus2 extends Focus_scene {
               //text to read
               this.studyText = this.add
                 .image(683, 384, "studyText")
-                .setScale(0.5)
                 .setDepth(1000);
 
               //countdown for task
@@ -125,12 +133,98 @@ export default class Focus2 extends Focus_scene {
       );
       this.btn1.input.enabled = false;
     });
-
+    this.call = 0;
     this.btn2.on("pointerdown", () => {
-      console.log("pay bills clicked");
-      //this.x serves to check if pay bills is clicked and disable execution of prepexam
-      //set this.x to 0 when finishing pay bills task so that prep for exam can be executed
-      this.x = 1;
+      this.pop_billsCreated = 0;
+      if (billCounter < 3 && !oH) {
+        this.bills_blurred = this.add
+          .image(683, 384, "bills_blurred")
+          .setScale(0.5);
+        this.t =
+          "Oh no! Why do you feel so overwhelmed? The text seems blurred, you can't see a single letter.\n\n" +
+          "Try again later!";
+        this.pop_bills = new PopupPlugin(
+          this,
+          10,
+          "0x907748",
+          300,
+          32,
+          520,
+          1,
+          433,
+          -50,
+          0,
+          "28px",
+          true
+        );
+        this.pop_bills.setText(this.t, true);
+        this.pop_billsCreated = 1;
+
+        this.call = this.call + 1;
+        updateCounter(this);
+      } else if (oH && this.call < 3 && this.x != 1) {
+        this.bills_blurred2 = this.add.image(683, 384, "bills").setScale(0.5);
+        this.tHob =
+          "You forgot the rice\n" +
+          "in the kitchen and it smells burned. Go rescue your meal and do the bills later!";
+
+        this.popHob = new PopupPlugin(
+          this,
+          6,
+          "0xff0000",
+          150,
+          16,
+          320,
+          1,
+          523,
+          -400,
+          0,
+          "16px",
+          false
+        );
+        this.popHob.setText(this.tHob, true);
+      } else {
+        //if medication
+        console.log("pay bills clicked");
+        this.bills = this.add
+          .image(683, 384, "bills")
+          .setScale(0.5)
+          .setDepth(950);
+        var rt = this.add.renderTexture(260, 10, 800, 730).setDepth(1000);
+
+        this.input.on(
+          "pointermove",
+          function (pointer) {
+            if (pointer.isDown) {
+              rt.draw("dot", pointer.x - 255, pointer.y - 5);
+              updateScore(this);
+              BatteryUpdate();
+            }
+
+          },
+          this
+        );
+        
+        this.input.on("pointerup", function (pointer){
+          if(counter == 1){
+          this.scene.bills.setVisible(false);
+          rt.setVisible(false);
+          billCounter = 0;
+          }
+          counter = 1;
+        })
+        //this.x serves to check if pay bills is clicked and disable execution of prepexam
+        //set this.x to 0 when finishing pay bills task so that prep for exam can be executed
+        this.x = 1;
+      }
+      function updateCounter(d) {
+        if (d.call < 3) {
+          d.callSuper();
+        }
+      }
+      function updateScore(d) {
+        d.updateScore();
+      }
     });
   }
 
@@ -159,6 +253,15 @@ export default class Focus2 extends Focus_scene {
     this.pop.setText(this.t, true);
   }
 
+  callSuper() {
+    super.updateBills();
+  }
+  updateScore() {
+    if (updated == 0) {
+      super.updatescore(10);
+      updated = 1;
+    }
+  }
   //countdown for task
 
   onEvent() {
@@ -413,7 +516,7 @@ export default class Focus2 extends Focus_scene {
       }
       this.allEmpties.push(this.emptyName);
     }
-    this.Right =[];
+    this.Right = [];
     this.Wrong = [];
     this.done = this.add
       .image(1050, 710, "done")
@@ -425,10 +528,10 @@ export default class Focus2 extends Focus_scene {
           this.allEmpties[i].input.enabled = false;
           this.allEmpties[i].setVisible(false);
           this.dolphinsQ.setVisible(false);
-          for(var j=0; j< this.Right.length; j++){
+          for (var j = 0; j < this.Right.length; j++) {
             this.Right[j].setVisible(false);
           }
-          for(var j=0; j< this.Wrong.length; j++){
+          for (var j = 0; j < this.Wrong.length; j++) {
             this.Wrong[j].setVisible(false);
           }
           this.done.setVisible(false);
@@ -459,6 +562,11 @@ export default class Focus2 extends Focus_scene {
       .setScale(0.6)
       .setDepth(1000);
   }
+  BatteryUpdate(){
+    super.updateB1("-1");
+    super.updateB2("-1");
+    super.updateB3("-1");
+  }
 
   update() {
     super.update();
@@ -481,18 +589,51 @@ export default class Focus2 extends Focus_scene {
           this.btn1.input.enabled = false;
           this.play_btn.input.enable = false;
           timeLeftText.frame.glTexture = 0;
-          //recreate Taskbar because deleting timeLeftRect inevitably deletes all graphics
-          //prevent from running with every update
+          this.BatteryUpdate();
         }
         this.nowCreate = 1;
       }
-      if (this.nowCreate == 1 && this.created == 0) {
+      if (
+        this.nowCreate == 1 &&
+        this.created == 0 &&
+        this.allObjects.length == 50
+      ) {
         this.createQuestionnaire();
         this.nowCreate = 0;
         this.created = 1;
       }
     }
-
+    /*if (this.bills_blurred && this.pop_billsCreated != 1) {
+      this.t =
+        "Oh no! Why do you feel so overwhelmed? The text seems blurred, you can't see a single letter.\n\n" +
+        "Try again later!";
+      this.pop_bills = new PopupPlugin(
+        this,
+        10,
+        "0x907748",
+        300,
+        32,
+        520,
+        1,
+        433,
+        -50,
+        0,
+        "28px",
+        true
+      );
+      this.pop_bills.setText(this.t, true);
+      this.pop_billsCreated = 1;
+    }*/
+    if (this.pop_bills) {
+      if (this.pop_bills.closeBtn.closedFlag == 1) {
+        this.bills_blurred.setVisible(false);
+      }
+    }
+    if (this.popHob) {
+      if (this.popHob.closeBtn.closedFlag == 1) {
+        this.bills_blurred2.setVisible(false);
+      }
+    }
     //remove button when pop-up is closed
     if (this.pop) {
       if (this.pop.closeBtn.closedFlag == 1) {

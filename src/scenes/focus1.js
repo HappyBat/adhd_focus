@@ -22,6 +22,7 @@ export default class Focus1 extends Focus_scene {
     init(data){
     super.Init(data);
     console.log("super init")
+    console.log(data.oH)
     /*super.scoreValue = data.sv;
     super.cup = data.cup;
     super.pill = data.pill;

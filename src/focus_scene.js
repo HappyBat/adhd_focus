@@ -2,6 +2,14 @@ import { Tilemaps } from 'phaser';
 import PopupPlugin from '../dist/pop';
 var initialTime;
 var countdownText;
+var scoreAnimation;
+var scoreValue;
+var scoreText;
+var colour;
+var sign;
+var tween;
+var call =0;
+
 
 //var combo;
 export default class Focus_scene extends Phaser.Scene {
@@ -16,8 +24,7 @@ export default class Focus_scene extends Phaser.Scene {
     this.battery1;
     this.battery2;
     this.battery3;
-    this.scoreText;
-    this.scoreValue;
+    //scoreValue;
     this.draggable1;
     this.draggable2;
     this.medication;
@@ -37,6 +44,7 @@ export default class Focus_scene extends Phaser.Scene {
     this.notClicked = 1;
     this.executed = 0;
     this.executed2 = 0;
+    this.ovw_executed = 0;
     this.depGuy;
     this.depressionTime;
     this.hands;
@@ -48,12 +56,27 @@ export default class Focus_scene extends Phaser.Scene {
     this.b1Frame;
     this.b2Frame;
     this.b3Frame;
+    this.oH;
+    this.col3Collided = 0;
+    this.billCounter;
+    this.depression;
+    this.ovw;
+    this.ovwName;
+    this.bG;
   }
 
   create() {
     console.log(this.name);
-    this.add.image(683, 384, this.background).setDepth(-1200);
 
+    this.bG = this.add.image(683, 384, this.background).setDepth(-1200);
+    if (this.ovw) {
+      this.bG.setAngle(180);
+    } 
+    if(!this.ovw){
+      this.bG.setAngle(0);
+    }
+
+    this.pot2Created = 0;
     //background for items
     this.add.graphics().fillStyle(0x303030, 0.8);
     this.add.graphics().fillRect(20, 100, 100, 500);
@@ -61,11 +84,9 @@ export default class Focus_scene extends Phaser.Scene {
     //taskbar
     if (this.name != "focus1") {
       console.log(this.scene);
-      this.add.graphics().fillStyle(0x907748, 0.9).setDepth(900);
-      this.add
-        .graphics()
-        .fillRoundedRect(280, 700, 800, 50, [32])
-        .setDepth(900);
+      this.add.graphics().fillStyle(0x907748, 0.9); //.setDepth(900);
+      this.add.graphics().fillRoundedRect(280, 700, 800, 50, [32]);
+      //.setDepth(900);
 
       this.add.graphics().lineStyle(1, 0xffffff, 1.0);
       this.add.graphics().strokeRoundedRect(280, 700, 800, 50, [32]);
@@ -119,6 +140,7 @@ export default class Focus_scene extends Phaser.Scene {
     this.player = this.physics.add
       .sprite(this.guyvalues.x, this.guyvalues.y, "guy")
       .setScale(this.guyvalues.scale);
+    //.setAngle(180);
     this.physics.world.bounds.setTo(
       this.bounds.x,
       this.bounds.y,
@@ -161,6 +183,20 @@ export default class Focus_scene extends Phaser.Scene {
       this.b2Frame = 7;
       this.b3Frame = 13;
     }
+    if (initialTime > 600) {
+      this.billCounter = 0;
+    }
+    this.Monday = this.add
+      .graphics()
+      .fillStyle(0xffffff, 0.8)
+      .fillRect(1150, 15, 180, 80)
+      .lineStyle(1, 0x000000, 1.0)
+      .strokeRect(1150, 15, 180, 80);
+    this.MondayText = this.add.text(1180, 40, "Monday", {
+      fontSize: "34px",
+      fill: "black",
+      fontStyle: "bold",
+    });
     if (initialTime > 600 || this.b1) {
       this.battery1 = this.physics.add.sprite(450.5, 50, "battery_focus");
 
@@ -251,18 +287,17 @@ export default class Focus_scene extends Phaser.Scene {
       this.battery3.anims.play(this.b3Frame.toString(), true);
     }
     //######################### BATTERY END ############################
-    if (!this.scoreValue) {
-      this.scoreValue = 0;
+    if (!scoreValue) {
+      scoreValue = 0;
     }
-    this.scoreText = this.add.text(20, 20, "Score: " + this.scoreValue, {
-      fontSize: "32px",
+    scoreText = this.add.text(20, 20, "Score: " + scoreValue, {
+      fontSize: "34px",
       fill: "white",
     });
 
     //######################## ADDING ITEMS ###################################
     //CUP
 
-    console.log(initialTime);
     if (initialTime > 600 || this.cup) {
       this.draggable1 = this.add
         .sprite(65, 500, "cup")
@@ -270,7 +305,7 @@ export default class Focus_scene extends Phaser.Scene {
       this.draggable1.on("pointerover", () => {
         if (this.draggable1.dragged == 0 && this.draggable1.x <= 70) {
           this.t =
-            "Coffee can help you to refill your focus and energy battery a bit.";
+            "Coffee can help you to recharge your focus and energy battery a bit.";
 
           this.pop1 = new PopupPlugin(
             this,
@@ -384,7 +419,7 @@ export default class Focus_scene extends Phaser.Scene {
       this.draggable2.on("pointerover", () => {
         if (this.draggable2.dragged == 0 && this.draggable2.x <= 70) {
           this.t =
-            "Medication can help you to refill your focus and energy battery.\n" +
+            "Medication can help you to recharge your focus and energy battery.\n" +
             "However, it might sometimes leave you depressive when it wears out.";
           this.pop2 = new PopupPlugin(
             this,
@@ -484,14 +519,16 @@ export default class Focus_scene extends Phaser.Scene {
         64,
         "Countdown: " + this.formatTime(initialTime),
         {
-          fontSize: "32px",
+          fontSize: "34px",
           fill: "white",
+          //fontStyle: "bold",
         }
       );
     } else {
       countdownText = this.add.text(20, 64, "Countdown: ", {
-        fontSize: "32px",
+        fontSize: "34px",
         fill: "white",
+        //fontStyle: "bold",
       });
     }
     //this.timer = this.time.addEvent({ delay: 1000, callback: this.onEvent(), callbackScope: this , repeat: 10 });
@@ -506,8 +543,8 @@ export default class Focus_scene extends Phaser.Scene {
     //this.createTimer2();
     this.closedFlag = 0;
 
-    this.depressionTime = Phaser.Math.Between(500, 400);
-    this.ocdTime = Phaser.Math.Between(600,598);//(200, 100);
+    this.depressionTime = Phaser.Math.Between(500, 400); //;
+    this.ocdTime = Phaser.Math.Between(200, 100); //(200, 100);
 
     this.anims.create({
       key: "20",
@@ -528,27 +565,27 @@ export default class Focus_scene extends Phaser.Scene {
 
     this.triggered = 1;
   }
-  createTaskbarButton(number, x,y,width,text){
-    this.add.graphics().fillStyle(0xffffff, 0.8).setDepth(900);
-    this.add.graphics().fillRoundedRect(x, y, width, 20, [5]).setDepth(900);
+  createTaskbarButton(number, x, y, width, text) {
+    this.add.graphics().fillStyle(0xffffff, 0.8); //.setDepth(900);
+    this.add.graphics().fillRoundedRect(x, y, width, 20, [5]); //.setDepth(900);
     var text1 = {
-      x: x+5,
-      y: y+2,
+      x: x + 5,
+      y: y + 2,
       text: text,
       style: { color: "#000000" },
     };
-    if(number == 1){
-    this.btn1 = this.make.text(text1);
-    this.btn1.setInteractive({ useHandCursor: true });
-    this.btn1.setDepth(900);
+    if (number == 1) {
+      this.btn1 = this.make.text(text1);
+      this.btn1.setInteractive({ useHandCursor: true });
+      //this.btn1.setDepth(900);
     }
-    if(number == 2){
-    this.btn2 = this.make.text(text1);
-    this.btn2.setInteractive({ useHandCursor: true });
-    this.btn2.setDepth(900);
+    if (number == 2) {
+      this.btn2 = this.make.text(text1);
+      this.btn2.setInteractive({ useHandCursor: true });
+      //this.btn2.setDepth(900);
     }
   }
-  Init(data){
+  Init(data) {
     super.scoreValue = data.sv;
     super.cup = data.cup;
     super.pill = data.pill;
@@ -558,6 +595,11 @@ export default class Focus_scene extends Phaser.Scene {
     super.b1 = data.b1;
     super.b2 = data.b2;
     super.b3 = data.b3;
+    super.oH = data.oH;
+    super.pot = data.pot;
+    super.billCounter = data.billCounter;
+    super.depression = data.depression;
+    super.ovw = data.ovw;
   }
 
   createDone(x, y) {
@@ -604,7 +646,7 @@ export default class Focus_scene extends Phaser.Scene {
         }
       }
       if (this.scene.hands.washingCounter == 6) {
-        this.scene.battery3.anims.play("13", true);       
+        this.scene.battery3.anims.play("13", true);
         this.scene.hands.setVisible(false);
         this.scene.hands.washingCounter = 0;
       }
@@ -613,7 +655,7 @@ export default class Focus_scene extends Phaser.Scene {
       //+ pictures of the word wash with letters typed as green
     });
   }
-  
+
   /*triggerOCD(){
     if(this.triggered == 0){
     //trigger event every 20 seconds
@@ -681,7 +723,7 @@ export default class Focus_scene extends Phaser.Scene {
     return `${this.minutes}:${this.partInSeconds}`;
   }
   /*setScoreValue(sv){
-        this.scoreValue = sv;
+        scoreValue = sv;
     }
     setInitialTime(it){
         initialTime = it;
@@ -738,44 +780,92 @@ export default class Focus_scene extends Phaser.Scene {
     }
     //should sometimes lead to depressive phase
     if (Draggable == this.draggable1) {
-      if(this.b1Frame < 6){
-      this.battery1.anims.play("2", true);}
-      if(this.b3Frame > 12){
-      this.battery2.anims.play("8", true);}
-      if(this.b3Frame < 18){
-      this.battery3.anims.play("14", true);}
+      if (this.b1Frame < 6) {
+        this.battery1.anims.play("2", true);
+      }
+      if (this.b3Frame > 12) {
+        this.battery2.anims.play("8", true);
+      }
+      if (this.b3Frame < 18) {
+        this.battery3.anims.play("14", true);
+      }
     }
+    this.updatescore(10);
     //this.updatescore(10);
   }
   updatescore(value) {
-    this.scoreValue += value;
-    this.scoreText.setText("Score: " + this.scoreValue);
-  }
-  updateB1(frame){
-    console.log(this.b1Frame);
-    if(frame == -2 && this.b1Frame != 1){
-     this.battery1.anims.play(this.b1Frame-1, true); 
+    if (value < 0) {
+      colour = "#ff6666";
+      sign = "";
     }
-    else if(frame != -2){
-    this.battery1.anims.play(frame, true);
+    if (value > 0) {
+      colour = "#39d179";
+      sign = "+";
+    }
+    scoreAnimation = this.add
+      .text(400, 200, sign + value, {
+        fontFamily: "Arial",
+        fontSize: "60px",
+        color: colour,
+        stroke: "#ffffff",
+        strokeThickness: 2,
+      })
+      .setDepth(3000);
+
+    tween = this.tweens.add({
+      targets: scoreAnimation,
+      x: scoreText.x + 100,
+      y: scoreText.y - 10,
+      ease: "Linear",
+      duration: 1000,
+      repeat: 0,
+      onComplete: function () {
+        scoreAnimation.setVisible(false);
+        scoreValue += value;
+        scoreText.setText("Score: " + scoreValue);
+      },
+    });
+  }
+  updateB1(frame) {
+    console.log(this.b1Frame);
+    if (frame == -2 && this.b1Frame != 1) {
+      this.battery1.anims.play(parseInt(this.b1Frame) - 1, true);
+    } else if (frame == -1 && this.b1Frame != 6) {
+      this.battery1.anims.play(parseInt(this.b1Frame) + 1, true);
+    } else if (frame != -2) {
+      this.battery1.anims.play(frame, true);
     }
   }
 
-  updateB2(frame){
+  updateB2(frame) {
     console.log(this.b2Frame);
     if (frame == -2 && this.b2Frame != 7) {
-      this.battery2.anims.play(this.b2Frame - 1, true);
+      this.battery2.anims.play(parseInt(this.b2Frame) - 1, true);
+    } else if (frame == -1 && this.b2Frame != 12) {
+      this.battery2.anims.play(parseInt(this.b2Frame) + 1, true);
+    }else if (frame != -2) {
+      this.battery2.anims.play(frame, true);
     }
-    else if(frame != -2){
-    this.battery2.anims.play(frame,true);}
   }
-  updateB3(frame){
+  updateB3(frame) {
     console.log(this.b3Frame);
-     if(frame == -2 && this.b3Frame != 13){
-     this.battery3.anims.play(this.b3Frame-1, true); 
+    if (frame == -2 && this.b3Frame != 13) {
+      this.battery3.anims.play(parseInt(this.b3Frame) - 1, true);
+    } else if (frame == -1 && this.b3Frame != 18) {
+      this.battery3.anims.play(parseInt(this.b3Frame) + 1, true);
+    } else if (frame != -2) {
+      this.battery3.anims.play(frame, true);
     }
-    else if(frame != -2){
-    this.battery3.anims.play(frame, true)}
+  }
+  updateHob() {
+    this.oH = true;
+    this.pot = true;
+  }
+  updateBills() {
+    if (typeof this.billCounter == "undefined") {
+      this.billCounter = 0;
+    }
+    this.billCounter = this.billCounter + 1;
   }
   removeDrag(drag) {
     //console.log(drag);
@@ -809,6 +899,18 @@ export default class Focus_scene extends Phaser.Scene {
     this.b1 = false;
     this.b2 = false;
     this.b3 = false;
+    this.depression = false;
+    this.ovw = false;
+    // this.popUP = false;
+    if (this.ovw_executed == 1 && this.ovw_executed ==1) {
+      this.ovw = true;
+      this.ovw_executed = 0;
+    }
+    if (this.executed == 1) {
+      this.depression = true;
+      this.executed = 0;
+      //this.popUp = true;
+    }
     if (this.draggable1) {
       if (typeof this.draggable1.scene !== "undefined") {
         this.cup = true;
@@ -832,8 +934,9 @@ export default class Focus_scene extends Phaser.Scene {
       if (this.battery3) {
         this.b3Frame = this.battery3.anims.currentAnim.key;
       }
+
       this.scene.start(next, {
-        sv: this.scoreValue,
+        sv: scoreValue,
         it: initialTime,
         p: this.player,
         b1: this.b1,
@@ -845,6 +948,11 @@ export default class Focus_scene extends Phaser.Scene {
         cup: this.cup,
         pill: this.pill,
         done: this.done,
+        oH: this.oH,
+        pot: this.pot,
+        billCounter: this.billCounter,
+        depression: this.depression,
+        ovw: this.ovw,
       });
       console.log("battery");
       console.log(this.battery1);
@@ -854,12 +962,37 @@ export default class Focus_scene extends Phaser.Scene {
   getPlayer() {
     return this.player;
   }
-  
 
   update() {
     if (initialTime == 0) {
       this.showMessageBox();
       //this.sys.game.destroy(true);
+      this.timedEvent = this.time.addEvent({
+        delay: 2000,
+        callback: toResults,
+        callbackScope: this,
+      });
+    }
+    if (initialTime == 300) {
+      if (this.TuesdayCreated != 1) {
+        this.Monday.setVisible(false);
+        this.MondayText.setVisible(false);
+        this.Tuesday = this.add
+          .graphics()
+          .fillStyle(0xffffff, 0.8)
+          .fillRect(1140, 15, 195, 80)
+          .lineStyle(1, 0x000000, 1.0)
+          .strokeRect(1140, 15, 195, 80);
+        this.TuesdayText = this.add.text(1165, 40, "Tuesday", {
+          fontSize: "34px",
+          fill: "black",
+          fontStyle: "bold",
+        });
+        this.TuesdayCreated = 1;
+      }
+    }
+    function toResults() {
+      this.changeScene("results");
     }
     if (this.pop) {
       if (this.pop.closeBtn) {
@@ -870,29 +1003,29 @@ export default class Focus_scene extends Phaser.Scene {
         }
       }
     }
-
-    //Random event (depression)
-    //export depressed variable to check for during study task?
-    if (this.executed == 0) {
+    if (this.executed == 0 ) {
+      //Random event (depression)
+      //export depressed variable to check for during study task?
+      if(initialTime == this.depressionTime || this.depression){
+          this.dep_layer = this.add
+            .graphics()
+            .fillStyle(0x303030, 0.8)
+            .fillRect(0, 0, 1366, 768)
+            .setDepth(-1000);
+      }
       if (this.battery3.anims.currentAnim) {
         //random depression or if wellbeing to low
         if (
-          initialTime == this.depressionTime ||
-          this.battery3.anims.currentAnim.key == 18
+          initialTime == this.depressionTime 
         ) {
           console.log("hello depression");
 
-          this.dep_layer = this.add
-          .graphics()
-          .fillStyle(0x303030, 0.8)
-          .fillRect(0, 0, 1366, 768)
-          .setDepth(-1000);
-
+          if(!this.depression){
           this.t =
             "Uhhh...ohhhh. How unlucky can anyone be?\n" +
             "Depression can often occur with AD(H)D, and of course, it had to hit you.\n\n" +
             "Doing nothing might have long term adverse affects. Studying will probably be impossible.\n\n" +
-            "Try to refill your batteries instead!";
+            "Try to recharge your batteries instead!";
           this.pop_dep = new PopupPlugin(
             this,
             10,
@@ -910,26 +1043,27 @@ export default class Focus_scene extends Phaser.Scene {
 
           this.pop_dep.setText(this.t, true);
           this.depGuy = this.add.image(500, 384, "depGuy").setScale(0.75);
-          console.log("adjusting batteries due to depression")
-          console.log(this)
+
           this.battery1.anims.play("6", true);
           this.battery2.anims.play("12", true);
           this.battery3.anims.play("18", true);
-
+          }
           this.executed = 1;
           if (this.executed == 1) {
             this.timedEvent = this.time.addEvent({
-              delay: 20000,
+              delay: 60000,
               callback: onEvent2,
               callbackScope: this,
             });
 
             function onEvent2() {
               console.log("depression deleted");
+              this.executed = 0;
+              this.depression = false;
               this.add.graphics().clear();
             }
           }
-          this.depression;
+          this.depression = true;
         }
       }
     }
@@ -938,6 +1072,58 @@ export default class Focus_scene extends Phaser.Scene {
       if (this.pop_dep.closedFlag == 1) {
         if (this.depGuy) {
           this.depGuy.setVisible(false);
+        }
+      }
+    }
+
+    //feeling overwhelmed
+    if (this.ovw_executed == 0) {
+      if (this.battery3.anims.currentAnim) {
+        if (
+          this.battery3.anims.currentAnim.key == 18 && !this.depression ||
+          this.ovw
+        ) {
+          if (!this.ovw) {
+            this.tO =
+              "BEING OVERWHELMED.\n\n" +
+              "This paralysing feeling when you want to do everything but you just cannot get anything done.\n\n" +
+              "Like a wall that repels you every time you try to climb it.\n\n" +
+              "Like trying to swim in cement - A body and a mind that are shut down.\n\n" +
+              "How can you ever get hold of your life??? ";
+            this.pop_ovw = new PopupPlugin(
+              this,
+              10,
+              "0x907748",
+              560,
+              32,
+              800,
+              1,
+              280,
+              -50,
+              0,
+              "28px",
+              true
+            );
+            this.pop_ovw.setText(this.tO, true);
+            this.bG.setAngle(180);
+            this.ovw = true;
+          }
+          this.ovw_executed = 1;
+          if (this.ovw_executed == 1) {
+            this.timedEventOvw = this.time.addEvent({
+              delay: 60000,
+              callback: onEvent2,
+              callbackScope: this,
+            });
+
+            function onEvent2() {
+              console.log("ovw deleted");
+              this.ovw_executed = 0;
+              this.executed = 0;
+              this.ovw = false;
+              this.bG.setAngle(0);
+            }
+          }
         }
       }
     }
@@ -988,7 +1174,7 @@ export default class Focus_scene extends Phaser.Scene {
 
         function washCall() {
           console.log("washCall");
-          
+
           this.layer = this.add.graphics().fillStyle(0x303030, 0.8);
 
           this.bigWhiteLayer = this.add
@@ -1033,7 +1219,6 @@ export default class Focus_scene extends Phaser.Scene {
             this.callThere = 0;
 
             function notificationDelete() {
-              console.log(this);
               //depression not working? => this.graphics instead of this.add
               this.bigWhiteLayer.clear();
               this.notification.setVisible(false);
@@ -1044,6 +1229,34 @@ export default class Focus_scene extends Phaser.Scene {
     }
 
     //######################## PLAYER ########################
+    if(this.ovw){
+    this.cursors = this.input.keyboard.createCursorKeys();
+    if (this.cursors.right.isDown) {
+      this.player.setVelocityX(-160);
+      this.player.anims.play("left", true);
+      this.left_down = false;
+    } else if (this.cursors.left.isDown) {
+      this.player.setVelocityX(160);
+      this.player.anims.play("right", true);
+      this.left_down = false;
+    } else if (this.cursors.down.isDown) {
+      this.player.setVelocityY(-160);
+      this.player.anims.play("up");
+      this.left_down = true;
+    } else if (this.cursors.up.isDown) {
+      this.player.setVelocityY(160);
+      this.player.anims.play("down");
+      this.left_down = false;
+    } else {
+      this.player.setVelocityX(0);
+      this.player.setVelocityY(0);
+      if (this.left_down) {
+        this.player.anims.play("up");
+      } else {
+        this.player.anims.play("down");
+      }
+    }
+    }else{
     this.cursors = this.input.keyboard.createCursorKeys();
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-160);
@@ -1070,33 +1283,21 @@ export default class Focus_scene extends Phaser.Scene {
         this.player.anims.play("down");
       }
     }
+    }
 
     //################# change battery on timer ##########################
-    /*if (initialTime == 550) {
-      this.battery1.anims.play("2", true);
-      this.battery2.anims.play("8", true);
-      this.battery3.anims.play("14", true);
+    if (
+      initialTime == 500 ||
+      initialTime == 400 ||
+      initialTime == 300 ||
+      initialTime == 200 ||
+      initialTime == 100
+    ) {
+      this.updateB1(-1);
+      this.updateB2(-1);
+      this.updateB3(-1);
     }
-    if (initialTime == 130) {
-      this.battery1.anims.play("3", true);
-      this.battery2.anims.play("9", true);
-      this.battery3.anims.play("15", true);
-    }
-    if (initialTime == 120) {
-      this.battery1.anims.play("4", true);
-      this.battery2.anims.play("10", true);
-      this.battery3.anims.play("16", true);
-    }
-    if (initialTime == 110) {
-      this.battery1.anims.play("5", true);
-      this.battery2.anims.play("11", true);
-      this.battery3.anims.play("17", true);
-    }
-    if (initialTime == 100) {
-      this.battery1.anims.play("6", true);
-      this.battery2.anims.play("12", true);
-      this.battery3.anims.play("18", true);
-    }*/
+    
 
     //####################################################################
     /*if (this.input.pointer1.isDown) {
@@ -1132,8 +1333,31 @@ export default class Focus_scene extends Phaser.Scene {
 
     try {
       this.col3 = this.arrowCollision(this.player, this.arrow_up3);
-      if (this.col3 && this.cursors.up.isDown) {
-        this.changeScene("focus6");
+      if (this.col3 && this.cursors.up.isDown && this.col3Collided == 0) {
+        //function to contai if and else?
+        if (this.oH) {
+          this.tHob =
+            "Oh, you forgot the pot\non the hob! Go quick and turn the hob off, your food might be burned already!";
+
+          this.popHob = new PopupPlugin(
+            this,
+            6,
+            "0xff0000",
+            150,
+            16,
+            320,
+            1,
+            925,
+            -400,
+            0,
+            "16px",
+            false
+          );
+          this.popHob.setText(this.tHob, true);
+        } else {
+          this.changeScene("focus6");
+        }
+        this.col3Collided = 1;
       }
     } catch (e) {}
 
@@ -1174,11 +1398,38 @@ export default class Focus_scene extends Phaser.Scene {
         this.changeScene("focus1");
       }
     } catch (e) {}
+    if (this.pot && this.name == "focus5" && this.pot2Created == 0) {
+      this.pot2 = this.add
+        .sprite(500, 310, "pot")
+        .setInteractive({ useHandCursor: true, draggable: true })
+        .setScale(1.5)
+        .setDepth(-100);
+
+      this.pot2.on("drag", function (pointer, dragX, dragY) {
+        this.pointer = pointer;
+        this.x = dragX;
+        this.y = dragY;
+      });
+
+      this.pot2.on("dragend", function () {
+        console.log(this.x);
+        console.log(this.y);
+        if (this.x > 1057 && this.x < 1300 && this.y > 400 && this.y < 740) {
+          this.setVisible(false);
+          call = 1;
+        } else {
+          this.x = 500;
+          this.y = 310;
+        }
+      });
+      this.pot2Created = 1;
+      this.oH = false;
+      this.pot = false;
+    }
+    if ((call == 1) & (this.called2 != 1)) {
+      this.called2 = 1;
+      this.updatescore(10);
+    }
   }
 }
-    
-    
-    
-    
-
-    
+  

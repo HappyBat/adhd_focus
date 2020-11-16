@@ -9,17 +9,16 @@ export default class intermediate extends Phaser.Scene {
 
     create() {
            
-        this.t = 'Focus! is a game developed to allow you to experience the world as someone with Attention Deficit (Hyperactivity) Disorder (AD(H)D.)[i] The game is based on interviews & surveys within the AD(H)D community & experts.\n\n' 
-        this.t += 'You will play FOCUS! twice, once under the conditions of a normally functioning adult ("neurotypical" person) & once as someone with AD(H)D. Can you beat AD(H)D & do as well in the second round as in the first?\n\n'
+        this.t = 'Focus! is a game developed to allow you to experience the world as someone with Attention Deficit (Hyperactivity) Disorder (AD(H)D.)[i] The game is based on science & interviews within the AD(H)D community & experts.\n\n' 
+        this.t += 'You will play as a student with AD(H)D who has two days left until his final exam. Can you prepare the exam & do your daily chores without ruining your mental health?\n\n'
         this.t += 'In the community of people with AD(H)D the phrase "just focus!" is a neurotypical nuisance: As if it was that easy! See how well you can regulate attention with attention regulation problems & FOCUS!'
         this.pop = new PopupPlugin(this, 10, "0x005e58", 700, 32, 1366, 0, 0, 0, 0, "28px", true);
         this.pop.setText(this.t,true),
         btn = this.add.sprite(Config.width / 2, Config.height - 170, "prePlay")
         .setInteractive({useHandCursor: true })
-        .setScale(0.05)
+        .setScale(1)
         .setDepth(2000);        
         btn.on('pointerdown', () => {
-            btn.setScale(0.5);
             this.scene.start('focus1');
         });
 
@@ -65,9 +64,8 @@ export default class intermediate extends Phaser.Scene {
         
                 if (this.pop.timedEvent.hasDispatched){
                     btn.destroy();
-                    this.btn2 = this.add.sprite(Config.width / 2, Config.height-170, "borderPlay").setScale(0.05).setInteractive({ useHandCursor: true });            
+                    this.btn2 = this.add.sprite(Config.width / 2, Config.height-170, "borderPlay").setInteractive({ useHandCursor: true });            
                     this.btn2.on('pointerdown', () => {
-                        this.btn2.setScale(0.5);
                         this.scene.start('focus1');
                     });
                 }
@@ -80,10 +78,8 @@ export default class intermediate extends Phaser.Scene {
             Config.height - 170,
             "borderPlay"
           )
-            .setScale(0.05)
             .setInteractive({ useHandCursor: true });
           this.btn2.on("pointerdown", () => {
-            this.btn2.setScale(0.5);
             this.scene.start("focus1");
           });
         }     
