@@ -8,31 +8,31 @@
   "main": "/src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "heroku-prebuild": "npm install",
-    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress",
+    "heroku-prebuild": "npm install --dev",
+    "heroku-postbuild": "webpack -p --config ./webpack.prod.config.js --progress",
     "build": "webpack",
-    "develop": "webpack --mode development --watch"
+    "develop": "webpack --mode development --watch",
+    "start": "webpack-dev-server --open"
   },
   "keywords": [],
   "author": "Rahel Golub",
   "license": "ISC",
   "devDependencies": {
-  },
-  "dependencies": {    
     "file-loader": "^4.3.0",
     "phaser": "^3.24.1",
     "webpack": "^4.44.2",
-    "webpack-dev-server": "^3.11.0",
-    "express": "4.13.4"
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   },
+  "dependencies": {},
   "heroku-run-build-script": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HappyBat/adhd_focus.git"
+    "url": "git+https://github.com/Dauriel/add.git"
   },
   "bugs": {
-    "url": "https://github.com/HappyBat/adhd_focus/issues"
+    "url": "https://github.com/Dauriel/add/issues"
   },
-  "homepage": "https://github.com/HappyBat/adhd_focus#readme",
-  "description": "a"
+  "homepage": "https://github.com/Dauriel/add#readme",
+  "description": ""
 }

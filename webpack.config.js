@@ -8,6 +8,11 @@ const config = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
   },
+  devServer:  {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 8000
+  },
   module: {
     rules: [{
       test: /\.(png|jpg|mp3)$/,
