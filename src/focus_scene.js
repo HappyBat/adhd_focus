@@ -9,6 +9,8 @@ var colour;
 var sign;
 var tween;
 var call =0;
+var pointer;
+var arrow_up1Tween;
 
 
 //var combo;
@@ -67,6 +69,7 @@ export default class Focus_scene extends Phaser.Scene {
 
   create() {
     console.log(this.name);
+    pointer = this.input.activePointer;
 
     this.bG = this.add.image(683, 384, this.background).setDepth(-1200);
     if (this.ovw) {
@@ -97,43 +100,80 @@ export default class Focus_scene extends Phaser.Scene {
         this.arrows[0].x,
         this.arrows[0].y,
         this.arrows[0].img
-      );
+      ).setInteractive();
+      
+      this.arrow_up1.on("pointerdown",  () => {
+        this.tweenPlayer(this, this.arrow_up1,0, -100, "focus2", 1500);
+      })
     } catch (e) {}
     try {
       this.arrow_up2 = this.add.image(
         this.arrows[1].x,
         this.arrows[1].y,
         this.arrows[1].img
-      );
+      ).setInteractive();
+        this.arrow_up2.on("pointerdown",  () => {
+        this.tweenPlayer(this, this.arrow_up2, 0, -100, "focus3", 1100);
+      })
     } catch (e) {}
     try {
       this.arrow_up3 = this.add.image(
         this.arrows[2].x,
         this.arrows[2].y,
         this.arrows[2].img
-      );
+      ).setInteractive();
+        this.arrow_up3.on("pointerdown",  () => {
+        this.tweenPlayer(this, this.arrow_up3,0, -100, "focus6", 900);
+      })
     } catch (e) {}
     try {
       this.arrow_left = this.add.image(
         this.arrows[3].x,
         this.arrows[3].y,
         this.arrows[3].img
-      );
+      ).setInteractive();
+        if(this.name == "focus5" || this.name == "focus3"){
+          this.myScene2 = "focus1";
+          this.duration = 850;
+          this.Yvalue = -180;
+        }else {
+          this.myScene2 = "focus4"
+          this.duration = 1600;
+          this.Yvalue = -100;
+        }
+        this.arrow_left.on("pointerdown",  () => {
+        this.tweenPlayer(this, this.arrow_left, +200, this.Yvalue, this.myScene2, this.duration);
+      })
     } catch (e) {}
     try {
       this.arrow_right = this.add.image(
         this.arrows[4].x,
         this.arrows[4].y,
         this.arrows[4].img
-      );
+      ).setInteractive();
+        if(this.name == "focus4" ||
+          this.name == "focus3"
+      ) {
+        this.myScene = "focus1"
+        this.Yvalue = -180;
+      } else  {
+        this.myScene = "focus5";
+        this.Yvalue = -100;
+      }
+        this.arrow_right.on("pointerdown",  () => {
+        this.tweenPlayer(this, this.arrow_right, -200, this.Yvalue, this.myScene, 800);
+      })
     } catch (e) {}
     try {
       this.arrow_down = this.add.image(
         this.arrows[5].x,
         this.arrows[5].y,
         this.arrows[5].img
-      );
+      ).setInteractive();
       this.arrow_down.setDepth(950);
+      this.arrow_down.on("pointerdown",  () => {
+      this.tweenPlayer(this, this.arrow_down,0, -200, "focus1", 750);
+      })
     } catch (e) {}
 
     //this.physics.add.sprite(this.guyvalues.x,this.guyvalues.y, "guy").setScale(this.guyvalues.scale);
@@ -601,6 +641,20 @@ export default class Focus_scene extends Phaser.Scene {
     super.depression = data.depression;
     super.ovw = data.ovw;
   }
+  tweenPlayer(D, arrow, Xchange, Ychange, TheScene, duration){   
+    console.log("tweenPlayer executed")     
+    arrow_up1Tween = this.tweens.add({
+    targets: this.player,
+    x: arrow.x + Xchange,
+    y: arrow.y + Ychange,
+    ease: "Linear",
+    duration: duration,
+    repeat: 0,
+    onComplete: function () {
+      D.changeScene(TheScene);
+    },
+  });
+};
 
   createDone(x, y) {
     this.done = this.add
@@ -1367,7 +1421,6 @@ export default class Focus_scene extends Phaser.Scene {
         this.col4 &&
         this.cursors.right.isDown &&
         (this.name == "focus4" ||
-          this.name == "focus5" ||
           this.name == "focus3")
       ) {
         this.changeScene("focus1");

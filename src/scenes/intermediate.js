@@ -30,6 +30,7 @@ export default class intermediate extends Phaser.Scene {
       "28px",
       true
     );
+    //MAKE QUESTION MARKS GREY AFTER HOVER AND TELL TO "HOVER OVER QUESTION MARK AND READ THE INSTRUCTION" INSTEAD OF "READ INSTRUCTIONS" ONLY
     this.pop.setText(this.t, true),
       (btn = this.add
         .sprite(Config.width / 2, Config.height - 170, "prePlay")
@@ -49,7 +50,7 @@ export default class intermediate extends Phaser.Scene {
       btn.setVisible(false);
 
       this.instructionsText =
-        'Almost ready to go! Read the instructions and press "FOUCS" if you are done.\n\n"Ah sorry, "FOCUS"' +
+        'Almost ready to go! Read the instructions and press "FOUCS" if you are done.\n\nAh sorry, "FOCUS"' +
         " - can't get it right!";
       this.instructions = new PopupPlugin(
         this,
