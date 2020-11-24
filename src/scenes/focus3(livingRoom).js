@@ -1,10 +1,15 @@
 import Focus_scene from "../focus_scene";
+import PopupPlugin from "../../dist/pop";
+
 var sleep;
 var layer;
 var sleep2;
 var imageArray;
 var imageArray2;
 var executed;
+var counter = 0;
+var updated = 0;
+
 export default class Focus3 extends Focus_scene {
   constructor() {
     super(
@@ -31,7 +36,7 @@ export default class Focus3 extends Focus_scene {
     imageArray2 = ["sheep1","sheep2","sheep2","sheep3"]
 
     this.sleepObjects = [];
-    super.createTaskbarButton(1, 300, 715, 105, "Go to bed");
+    super.createTaskbarButton(1, 320, 715, 105, "Go to bed",0);
     this.btn1.on("pointerdown", () => {
         executed = 0;
         layer = this.add
@@ -55,6 +60,58 @@ export default class Focus3 extends Focus_scene {
         this.sleepObjects.push(this.sleepObject);
       }
     });
+    super.createTaskbarButton(2, 550, 715, 105, "Exercise!",0);
+    this.exercise = false;
+
+    this.btn2.on("pointerdown", () => {
+      this.player.setVisible(false);
+
+      
+      this.t =
+        "Do at least 30 push ups to increase your overall wellbeing.";
+
+      this.explainPushup = new PopupPlugin(
+        this,
+        3,
+        "0x907748",
+        120,
+        16,
+        300,
+        0,
+        530,
+        -330,
+        0,
+        "16px",
+        false
+      );
+      this.explainPushup.setText(this.t, true);
+                  
+      this.pushupCounter = this.add
+        .graphics()
+        .fillStyle(0x8b0000, 1)
+        .setDepth(1200)
+        .fillRoundedRect(810, 290, 51, 50, [20]);
+
+      this.pushupCounterText = this.add.text(821, 303, "0", {
+        fontSize: "25px",
+        fill: "white",
+
+      }).setDepth(2000);
+
+      this.pushup = this.physics.add.sprite(650, 580, "pushup");
+      this.anims.create({
+      key: "pushUp",
+      frames: [{ key: "pushup", frame:0 }],
+     });
+      this.anims.create({
+        key: "pushDown",
+        frames: [{ key: "pushup", frame: 1 }],
+      });
+      this.exercise = true;
+      this.pushup.anims.play("pushDown", true);
+
+      updated = 0;
+    });
   }
   onEvent() {}
   updateBatteries() {
@@ -65,6 +122,40 @@ export default class Focus3 extends Focus_scene {
 
   update() {
     super.update();
+    if (this.exercise) {
+      this.cursors2 = this.input.keyboard.createCursorKeys();
+      if (
+        this.cursors2.up.isDown &&
+        this.pushup.anims.currentAnim.key == "pushDown" &&
+        updated == 0
+      ) {
+        this.pushup.anims.play("pushUp", true);
+        counter = counter + 1;
+      } else if (
+        this.cursors.down.isDown &&
+        this.pushup.anims.currentAnim.key == "pushUp" &&
+        updated == 0
+      ) {
+        this.pushup.anims.play("pushDown", true);
+        counter = counter + 1;
+      }
+      if(counter == 30 && updated != 1){
+        super.updateB1(-2);
+        super.updateB2(-2);
+        super.updateB3(-2);
+        updated = 1;
+        this.explainPushup.toggleWindow();
+        this.pushup.setVisible(false);
+        this.player.setVisible(true);
+        this.add.graphics().clear;
+        this.pushupCounter.clear();
+        this.pushupCounterText.setVisible(false);
+        counter = 0;
+      }
+      this.pushupCounterText.setText(counter);
+      console.log(counter)
+    }
+    
       if (sleep && executed != 1) {
       this.timedEvent1 = this.time.addEvent({
         delay: 18000,

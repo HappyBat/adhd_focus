@@ -75,8 +75,8 @@ export default class Focus6 extends Focus_scene {
     super.create();
 
     //this.createTaskbar();
-    super.createTaskbarButton(1,300, 715, 115, "Go to work");
-    super.createTaskbarButton(2,500, 715, 115, "Go running");
+    super.createTaskbarButton(1,300, 715, 115, "Go to work",160);
+    super.createTaskbarButton(2,570, 715, 110, "Go running",0);
 
     this.btn1.on("pointerdown", () => {
       this.btn1_create();
@@ -94,7 +94,7 @@ export default class Focus6 extends Focus_scene {
           this.pop.toggleWindow();
           this.angryBoss.x=1190;
           timer = this.time.addEvent({
-            delay: 9000,
+            delay: 20000,
             callback: changePosition,
             repeat: 90,
           });
@@ -195,7 +195,7 @@ export default class Focus6 extends Focus_scene {
       '"You are late, again! \n\n' +
       'Today you will be sorting files in the personnel apartment.\n \n' +
       "Sort the names from A to Z, please, and don't make mistakes this time.\n \n" +
-      '"'+"I'll have to fire you, if you don't submit your work in time. It's your final chance!" +'"'+"\n \n";
+      "I'll have to fire you, if you don't submit your work in time. It's your final chance!" +'"'+"\n \n";
     this.pop = new PopupPlugin(
       this,
       10,

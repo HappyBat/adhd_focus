@@ -45,8 +45,8 @@ export default class Focus4 extends Focus_scene {
     this.executed2 = 0;
     this.x = 0;
 
-    super.createTaskbarButton(1, 300, 715, 140, "Prep for exam");
-    super.createTaskbarButton(2, 500, 715, 100, "Pay bills");
+    super.createTaskbarButton(1, 310, 715, 140, "Prep for exam", 50);
+    super.createTaskbarButton(2, 560, 715, 100, "Pay bills",50);
 
     //open instructions on click
     this.btn1.on("pointerdown", () => {
@@ -198,7 +198,6 @@ export default class Focus4 extends Focus_scene {
             if (pointer.isDown) {
               rt.draw("dot", pointer.x - 255, pointer.y - 5);
               updateScore(this);
-              BatteryUpdate();
             }
 
           },
@@ -224,6 +223,7 @@ export default class Focus4 extends Focus_scene {
       }
       function updateScore(d) {
         d.updateScore();
+        d.BatteryUpdate();
       }
     });
   }

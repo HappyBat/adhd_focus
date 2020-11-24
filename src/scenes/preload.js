@@ -70,6 +70,39 @@ import bills from "../../assets/bills.png";
 import bills_blurred from "../../assets/bills_blurred.png";
 import intro from "../../assets/intro.png";
 import qMark from "../../assets/qMark.png";
+import pushup from "../../assets/pushup.png";
+import shirt from  "../../assets/shirt.png";
+import sock1 from "../../assets/sock1.png";
+import sock2 from "../../assets/sock2.png";
+import stuff1 from "../../assets/stuff1.png";
+import stuff2 from "../../assets/stuff2.png";
+import stuff3 from "../../assets/stuff3.png";
+import scarf from "../../assets/scarf.png";
+import pantsOrange from "../../assets/pantsOrange.png";
+import pantsBlue from "../../assets/pantsBlue.png";
+import pantsBlue2 from "../../assets/pantsBlue2.png";
+import pantsBlue3 from "../../assets/pantsBlue3.png";
+import pantsGreen from "../../assets/pantsGreen.png";
+import toiletTowel from "../../assets/toiletTowel.png";
+import light_shirt from "../../assets/light_shirt.png";
+import greenTowel from "../../assets/greenTowel.png";
+import bigBowl from "../../assets/bigBowl.png";
+import plate from "../../assets/plate.png";
+import bowl from "../../assets/bowl.png";
+import pan from "../../assets/pan.png";
+import glass1 from "../../assets/glass1.png";
+import glass2 from "../../assets/glass2.png";
+import bluePot from "../../assets/bluePot.png";
+import cutlery from "../../assets/cutlery.png";
+import mug1 from "../../assets/mug1.png";
+import mug2 from "../../assets/mug2.png";
+import mug3 from "../../assets/mug3.png";
+import giantPot from "../../assets/giantPot.png";
+import brownDirt from "../../assets/brownDirt.png";
+import brownDirt2 from "../../assets/brownDirt2.png";
+import redDirt from "../../assets/redDirt.png";
+import yellowDirt from "../../assets/yellowDirt.png";
+import greyDirt from "../../assets/greyDirt.png";
 
 
 export default class preload_scene extends Phaser.Scene {
@@ -149,6 +182,42 @@ export default class preload_scene extends Phaser.Scene {
           this.load.image("bills_blurred", bills_blurred),
           this.load.image("intro", intro),
           this.load.image("qMark", qMark),
+          this.load.image("shirt", shirt),
+          this.load.image("sock1", sock1),
+          this.load.image("sock2", sock2),
+          this.load.image("stuff1", stuff1),
+          this.load.image("stuff2", stuff2),
+          this.load.image("stuff3", stuff3),
+          this.load.image("scarf", scarf),
+          this.load.image("pantsOrange", pantsOrange),
+          this.load.image("pantsBlue", pantsBlue),
+          this.load.image("pantsBlue2", pantsBlue2),
+          this.load.image("pantsBlue3", pantsBlue3),
+          this.load.image("pantsGreen", pantsGreen),
+          this.load.image("toiletTowel", toiletTowel),
+          this.load.image("greenTowel", greenTowel),
+          this.load.image("light_shirt", light_shirt),
+          this.load.image("plate", plate),
+          this.load.image("bowl", bowl),
+          this.load.image("pan", pan),
+          this.load.image("glass1", glass1),
+          this.load.image("glass2", glass2),
+          this.load.image("bluePot", bluePot),
+          this.load.image("cutlery", cutlery),
+          this.load.image("bigBowl", bigBowl),
+          this.load.image("mug1", mug1),
+          this.load.image("mug2", mug2),
+          this.load.image("mug3", mug3),
+          this.load.image("giantPot", giantPot),
+          this.load.image("brownDirt", brownDirt),
+          this.load.image("brownDirt2", brownDirt2),
+          this.load.image("redDirt", redDirt),
+          this.load.image("yellowDirt", yellowDirt),
+          this.load.image("greyDirt", greyDirt),
+          this.load.spritesheet("pushup", pushup, {
+            frameWidth: 568,
+            frameHeight: 238,
+          });
 
           this.load.spritesheet("guy", guy, {
             frameWidth: 123,
