@@ -19,7 +19,7 @@ export default class Focus4 extends Focus_scene {
       [{}, {}, {}, {}, { x: 1290, y: 650, img: "arrow_right_white" }, {}]
     );
 
-    initialTime2 = 150;
+    initialTime2 = 90;
   }
   init(data) {
     super.Init(data);
@@ -41,8 +41,6 @@ export default class Focus4 extends Focus_scene {
     this.allObjects = new Array();
     this.allEmpties = new Array();
     this.buttonThere = 0;
-    //this.executed = 0;
-    this.executed2 = 0;
     this.x = 0;
 
     super.createTaskbarButton(1, 310, 715, 140, "Prep for exam", 50);
@@ -168,7 +166,7 @@ export default class Focus4 extends Focus_scene {
           "You forgot the rice\n" +
           "in the kitchen and it smells burned. Go rescue your meal and do the bills later!";
 
-        this.popHob = new PopupPlugin(
+        this.popHob2 = new PopupPlugin(
           this,
           6,
           "0xff0000",
@@ -182,7 +180,7 @@ export default class Focus4 extends Focus_scene {
           "16px",
           false
         );
-        this.popHob.setText(this.tHob, true);
+        this.popHob2.setText(this.tHob, true);
       } else {
         //if medication
         console.log("pay bills clicked");
@@ -197,7 +195,8 @@ export default class Focus4 extends Focus_scene {
           function (pointer) {
             if (pointer.isDown) {
               rt.draw("dot", pointer.x - 255, pointer.y - 5);
-              updateScore(this);
+              this.updateScore();
+              this.BatteryUpdate();
             }
 
           },
@@ -221,10 +220,10 @@ export default class Focus4 extends Focus_scene {
           d.callSuper();
         }
       }
-      function updateScore(d) {
+      /*function updateScore(d) {
         d.updateScore();
         d.BatteryUpdate();
-      }
+      }*/
     });
   }
 
@@ -574,7 +573,7 @@ export default class Focus4 extends Focus_scene {
     //create timer for when the task runs out of time
     if (this.allObjects) {
       this.timedEvent = this.time.addEvent({
-        delay: 20000,
+        delay: 90000,
         callback: onEvent2,
         callbackScope: this,
       });
@@ -629,8 +628,8 @@ export default class Focus4 extends Focus_scene {
         this.bills_blurred.setVisible(false);
       }
     }
-    if (this.popHob) {
-      if (this.popHob.closeBtn.closedFlag == 1) {
+    if (this.popHob2) {
+      if (this.popHob2.closeBtn.closedFlag == 1) {
         this.bills_blurred2.setVisible(false);
       }
     }

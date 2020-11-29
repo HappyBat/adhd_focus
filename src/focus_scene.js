@@ -1,5 +1,5 @@
-import { Tilemaps } from 'phaser';
-import PopupPlugin from '../dist/pop';
+import { Tilemaps } from "phaser";
+import PopupPlugin from "../dist/pop";
 var initialTime;
 var countdownText;
 var scoreAnimation;
@@ -8,11 +8,14 @@ var scoreText;
 var colour;
 var sign;
 var tween;
-var call =0;
+var call = 0;
 var pointer;
 var arrow_up1Tween;
-var called2 =0;
-
+var called2 = 0;
+var size;
+var clothes;
+var laundry;
+var depressionTimed;
 
 //var combo;
 export default class Focus_scene extends Phaser.Scene {
@@ -24,7 +27,7 @@ export default class Focus_scene extends Phaser.Scene {
     this.bounds = bounds;
     this.player;
     //this.add.graphics();
-    this.battery1;
+    //this.battery1;
     this.battery2;
     this.battery3;
     //scoreValue;
@@ -53,10 +56,10 @@ export default class Focus_scene extends Phaser.Scene {
     this.hands;
     this.cup;
     this.pill;
-    this.b1;
+    //this.b1;
     this.b2;
     this.b3;
-    this.b1Frame;
+    //this.b1Frame;
     this.b2Frame;
     this.b3Frame;
     this.oH;
@@ -67,17 +70,22 @@ export default class Focus_scene extends Phaser.Scene {
     this.ovwName;
     this.bG;
     this.inSceneExecuted = 0;
+    this.myCol6;
+    this.cloth;
   }
 
   create() {
     console.log(this.name);
     pointer = this.input.activePointer;
-
+    if (typeof clothes == "object") {
+    } else {
+      clothes = [];
+    }
     this.bG = this.add.image(683, 384, this.background).setDepth(-1200);
     if (this.ovw) {
       this.bG.setAngle(180);
-    } 
-    if(!this.ovw){
+    }
+    if (!this.ovw) {
       this.bG.setAngle(0);
     }
 
@@ -98,84 +106,90 @@ export default class Focus_scene extends Phaser.Scene {
     }
     // create arrows
     try {
-      this.arrow_up1 = this.add.image(
-        this.arrows[0].x,
-        this.arrows[0].y,
-        this.arrows[0].img
-      ).setInteractive();
-      
-      this.arrow_up1.on("pointerdown",  () => {
-        this.tweenPlayer(this, this.arrow_up1,0, -100, "focus2", 1500);
-      })
+      this.arrow_up1 = this.add
+        .image(this.arrows[0].x, this.arrows[0].y, this.arrows[0].img)
+        .setInteractive();
+
+      this.arrow_up1.on("pointerdown", () => {
+        this.tweenPlayer(this, this.arrow_up1, 0, -100, "focus2", 1500);
+      });
     } catch (e) {}
     try {
-      this.arrow_up2 = this.add.image(
-        this.arrows[1].x,
-        this.arrows[1].y,
-        this.arrows[1].img
-      ).setInteractive();
-        this.arrow_up2.on("pointerdown",  () => {
+      this.arrow_up2 = this.add
+        .image(this.arrows[1].x, this.arrows[1].y, this.arrows[1].img)
+        .setInteractive();
+      this.arrow_up2.on("pointerdown", () => {
         this.tweenPlayer(this, this.arrow_up2, 0, -100, "focus3", 1100);
-      })
+      });
     } catch (e) {}
     try {
-      this.arrow_up3 = this.add.image(
-        this.arrows[2].x,
-        this.arrows[2].y,
-        this.arrows[2].img
-      ).setInteractive();
-        this.arrow_up3.on("pointerdown",  () => {
-        this.tweenPlayer(this, this.arrow_up3,0, -100, "focus6", 900);
-      })
-    } catch (e) {}
-    try {
-      this.arrow_left = this.add.image(
-        this.arrows[3].x,
-        this.arrows[3].y,
-        this.arrows[3].img
-      ).setInteractive();
-        if(this.name == "focus5" || this.name == "focus3"){
-          this.myScene2 = "focus1";
-          this.duration = 850;
-          this.Yvalue = -180;
-        }else {
-          this.myScene2 = "focus4"
-          this.duration = 1600;
-          this.Yvalue = -100;
+      this.arrow_up3 = this.add
+        .image(this.arrows[2].x, this.arrows[2].y, this.arrows[2].img)
+        .setInteractive();
+      this.arrow_up3.on("pointerdown", () => {
+        if (!this.oH && laundry) {
+          this.popLaundry();
+        } else if (this.oH) {
+          this.popHob();
+        } else {
+          this.tweenPlayer(this, this.arrow_up3, 0, -100, "focus6", 900);
         }
-        this.arrow_left.on("pointerdown",  () => {
-        this.tweenPlayer(this, this.arrow_left, +200, this.Yvalue, this.myScene2, this.duration);
-      })
+      });
     } catch (e) {}
     try {
-      this.arrow_right = this.add.image(
-        this.arrows[4].x,
-        this.arrows[4].y,
-        this.arrows[4].img
-      ).setInteractive();
-        if(this.name == "focus4" ||
-          this.name == "focus3"
-      ) {
-        this.myScene = "focus1"
+      this.arrow_left = this.add
+        .image(this.arrows[3].x, this.arrows[3].y, this.arrows[3].img)
+        .setInteractive();
+      if (this.name == "focus5" || this.name == "focus3") {
+        this.myScene2 = "focus1";
+        this.duration = 850;
         this.Yvalue = -180;
-      } else  {
+      } else {
+        this.myScene2 = "focus4";
+        this.duration = 1600;
+        this.Yvalue = -100;
+      }
+      this.arrow_left.on("pointerdown", () => {
+        this.tweenPlayer(
+          this,
+          this.arrow_left,
+          +200,
+          this.Yvalue,
+          this.myScene2,
+          this.duration
+        );
+      });
+    } catch (e) {}
+    try {
+      this.arrow_right = this.add
+        .image(this.arrows[4].x, this.arrows[4].y, this.arrows[4].img)
+        .setInteractive();
+      if (this.name == "focus4" || this.name == "focus3") {
+        this.myScene = "focus1";
+        this.Yvalue = -180;
+      } else {
         this.myScene = "focus5";
         this.Yvalue = -100;
       }
-        this.arrow_right.on("pointerdown",  () => {
-        this.tweenPlayer(this, this.arrow_right, -200, this.Yvalue, this.myScene, 800);
-      })
+      this.arrow_right.on("pointerdown", () => {
+        this.tweenPlayer(
+          this,
+          this.arrow_right,
+          -200,
+          this.Yvalue,
+          this.myScene,
+          800
+        );
+      });
     } catch (e) {}
     try {
-      this.arrow_down = this.add.image(
-        this.arrows[5].x,
-        this.arrows[5].y,
-        this.arrows[5].img
-      ).setInteractive();
+      this.arrow_down = this.add
+        .image(this.arrows[5].x, this.arrows[5].y, this.arrows[5].img)
+        .setInteractive();
       this.arrow_down.setDepth(950);
-      this.arrow_down.on("pointerdown",  () => {
-      this.tweenPlayer(this, this.arrow_down,0, -200, "focus1", 750);
-      })
+      this.arrow_down.on("pointerdown", () => {
+        this.tweenPlayer(this, this.arrow_down, 0, -200, "focus1", 750);
+      });
     } catch (e) {}
 
     //this.physics.add.sprite(this.guyvalues.x,this.guyvalues.y, "guy").setScale(this.guyvalues.scale);
@@ -220,8 +234,8 @@ export default class Focus_scene extends Phaser.Scene {
     //######################## Player END ###############################
 
     //####################### Create Batteries ##########################
-    if (!this.b1Frame) {
-      this.b1Frame = 1;
+    if (!this.b2Frame) {
+      //this.b1Frame = 1;
       this.b2Frame = 7;
       this.b3Frame = 13;
     }
@@ -239,7 +253,7 @@ export default class Focus_scene extends Phaser.Scene {
       fill: "black",
       fontStyle: "bold",
     });
-    if (initialTime > 600 || this.b1) {
+    /*if (initialTime > 600 || this.b1) {
       this.battery1 = this.physics.add.sprite(450.5, 50, "battery_focus");
 
       this.anims.create({
@@ -268,39 +282,39 @@ export default class Focus_scene extends Phaser.Scene {
       });
 
       this.battery1.anims.play(this.b1Frame.toString(), true);
-    }
+    }*/
 
     if (initialTime > 595 || this.b2) {
-      this.battery2 = this.physics.add.sprite(655.5, 50, "battery_energy");
+      this.battery2 = this.physics.add.sprite(605.5, 50, "battery_focus");
 
       this.anims.create({
         key: "7",
-        frames: [{ key: "battery_energy", frame: 0 }],
+        frames: [{ key: "battery_focus", frame: 0 }],
       });
       this.anims.create({
         key: "8",
-        frames: [{ key: "battery_energy", frame: 1 }],
+        frames: [{ key: "battery_focus", frame: 1 }],
       });
       this.anims.create({
         key: "9",
-        frames: [{ key: "battery_energy", frame: 2 }],
+        frames: [{ key: "battery_focus", frame: 2 }],
       });
       this.anims.create({
         key: "10",
-        frames: [{ key: "battery_energy", frame: 3 }],
+        frames: [{ key: "battery_focus", frame: 3 }],
       });
       this.anims.create({
         key: "11",
-        frames: [{ key: "battery_energy", frame: 4 }],
+        frames: [{ key: "battery_focus", frame: 4 }],
       });
       this.anims.create({
         key: "12",
-        frames: [{ key: "battery_energy", frame: 5 }],
+        frames: [{ key: "battery_focus", frame: 5 }],
       });
       this.battery2.anims.play(this.b2Frame.toString(), true);
     }
     if (initialTime > 600 || this.b3) {
-      this.battery3 = this.physics.add.sprite(860.5, 50, "battery_efficiency");
+      this.battery3 = this.physics.add.sprite(810.5, 50, "battery_efficiency");
 
       this.anims.create({
         key: "13",
@@ -585,8 +599,8 @@ export default class Focus_scene extends Phaser.Scene {
     //this.createTimer2();
     this.closedFlag = 0;
 
-    this.depressionTime = Phaser.Math.Between(500, 400); //;
-    this.ocdTime = Phaser.Math.Between(200, 100); //(200, 100);
+    this.depressionTime = Phaser.Math.Between(120, 60); //;
+    //this.ocdTime = Phaser.Math.Between(500, 400); //(200, 100);
 
     this.anims.create({
       key: "20",
@@ -607,20 +621,20 @@ export default class Focus_scene extends Phaser.Scene {
 
     this.triggered = 1;
 
-    if(this.depression){
-      this.add
+    if (this.depression) {
+      this.depression_layer = this.add
         .graphics()
         .fillStyle(0x303030, 0.8)
         .fillRect(0, 0, 1366, 768)
         .setDepth(-1000);
-        this.executed = 1;
+      this.executed = 1;
     }
   }
-  createTaskbarButton(number, x, y, width, text,points) {
+  createTaskbarButton(number, x, y, width, text, points) {
     this.add.graphics().fillStyle(0xffffff, 0.8); //.setDepth(900);
-    this.add.graphics().fillRoundedRect(x +160, y, width, 20, [5]); //.setDepth(900);
+    this.add.graphics().fillRoundedRect(x + 160, y, width, 20, [5]); //.setDepth(900);
     var text1 = {
-      x: x + 5 +160,
+      x: x + 5 + 160,
       y: y + 2,
       text: text,
       style: { color: "#000000" },
@@ -639,22 +653,22 @@ export default class Focus_scene extends Phaser.Scene {
       .graphics()
       .fillStyle(0x0086b3, 1)
       .fillRoundedRect(x + width + 165, y - 10, 65, 40, [20]);
-    if(points == 160){
+    if (points == 160) {
       this.points.fillRoundedRect(x + width + 165, y - 10, 80, 40, [20]);
     }
-    this.pointsText = this.add.text(x + width + 170, y -3, points+"p.", {
-        fontSize: "25px",
-        fill: "white",
-  });
-}
+    this.pointsText = this.add.text(x + width + 170, y - 3, points + "p.", {
+      fontSize: "25px",
+      fill: "white",
+    });
+  }
   Init(data) {
     super.scoreValue = data.sv;
     super.cup = data.cup;
     super.pill = data.pill;
-    super.b1Frame = data.b1Frame;
+    //super.b1Frame = data.b1Frame;
     super.b2Frame = data.b2Frame;
     super.b3Frame = data.b3Frame;
-    super.b1 = data.b1;
+    //super.b1 = data.b1;
     super.b2 = data.b2;
     super.b3 = data.b3;
     super.oH = data.oH;
@@ -662,21 +676,63 @@ export default class Focus_scene extends Phaser.Scene {
     super.billCounter = data.billCounter;
     super.depression = data.depression;
     super.ovw = data.ovw;
+    super.clothes = data.cl;
+    super.laundry = data.lau;
   }
-  tweenPlayer(D, arrow, Xchange, Ychange, TheScene, duration){   
-    //console.log("tweenPlayer executed")     
+  tweenPlayer(D, arrow, Xchange, Ychange, TheScene, duration) {
+    //console.log("tweenPlayer executed")
     arrow_up1Tween = this.tweens.add({
-    targets: this.player,
-    x: arrow.x + Xchange,
-    y: arrow.y + Ychange,
-    ease: "Linear",
-    duration: duration,
-    repeat: 0,
-    onComplete: function () {
-      D.changeScene(TheScene);
-    },
-  });
-};
+      targets: this.player,
+      x: arrow.x + Xchange,
+      y: arrow.y + Ychange,
+      ease: "Linear",
+      duration: duration,
+      repeat: 0,
+      onComplete: function () {
+        D.changeScene(TheScene);
+      },
+    });
+  }
+  popLaundry() {
+    this.tLaundry =
+      "Oh, you forgot the\nlaundry! You need to put it, otherwise you will not have clothes tomorrow!";
+
+    this.popLaundry = new PopupPlugin(
+      this,
+      6,
+      "0xff0000",
+      150,
+      16,
+      320,
+      1,
+      925,
+      -400,
+      0,
+      "16px",
+      false
+    );
+    this.popLaundry.setText(this.tLaundry, true);
+  }
+  popHob() {
+    this.tHob =
+      "Oh, you forgot the pot\non the hob! Go quick and turn the hob off, your food might be burned already!";
+
+    this.popHob = new PopupPlugin(
+      this,
+      6,
+      "0xff0000",
+      150,
+      16,
+      320,
+      1,
+      925,
+      -400,
+      0,
+      "16px",
+      false
+    );
+    this.popHob.setText(this.tHob, true);
+  }
 
   createDone(x, y) {
     this.done = this.add
@@ -687,14 +743,14 @@ export default class Focus_scene extends Phaser.Scene {
   }
 
   washHands() {
-    this.hands = this.physics.add.sprite(650, 390, "hands").setVisible(false);
+    this.hands = this.physics.add.sprite(650, 390, "hands").setDepth(3000).setVisible(false);
     //console.log("hello");
     this.hands.washingCounter = 0;
 
     this.input.keyboard.on("keycombomatch", function (event) {
       this.scene.hands.setVisible(true);
       this.scene.hands.justChanged = 0;
-     // console.log("hands washed");
+      // console.log("hands washed");
 
       if (this.scene.hands.washingCounter < 6) {
         if (!this.scene.hands.anims.currentAnim) {
@@ -722,7 +778,7 @@ export default class Focus_scene extends Phaser.Scene {
         }
       }
       if (this.scene.hands.washingCounter == 6) {
-        this.scene.battery3.anims.play("13", true);
+        this.scene.updateB3("-2");
         this.scene.hands.setVisible(false);
         this.scene.hands.washingCounter = 0;
       }
@@ -759,31 +815,31 @@ export default class Focus_scene extends Phaser.Scene {
       "> cook \v\v\v\v\v\v\v\v\v\v\v/20p. \n \n" +
       "> do the dishes\v\v\v/20p.\n \n";
 
-       this.pop = new PopupPlugin(
-         this,
-         10,
-         "0x907748",
-         600,
-         32,
-         500,
-         1,
-         100,
-         0,
-         0,
-         "24px",
-         false
-       );
+    this.pop = new PopupPlugin(
+      this,
+      10,
+      "0x907748",
+      600,
+      32,
+      500,
+      1,
+      100,
+      0,
+      0,
+      "24px",
+      false
+    );
     this.pop.setText(this.t, true);
   }
 
   showMessageBox() {
     this.add.graphics().fillStyle(0xffffff, 1);
-    this.add.graphics().fillRoundedRect(280, 95, 700, 500, [50]);
-    this.add.graphics().lineStyle(3, 0xff0000, 1.0);
-    this.add.graphics().strokeRoundedRect(280, 95, 700, 500, [50]);
+    this.add.graphics().fillRoundedRect(330, 95, 700, 500, [50]);
+    this.add.graphics().strokeRoundedRect(330, 95, 700, 500, [50]);
+    this.add.graphics().lineStyle(10, 0xff0000, 1.0);
 
     this.GameOver = this.add
-      .text(410, 190, "GAME\n" + "OVER", {
+      .text(460, 190, "GAME\n" + "OVER", {
         fontSize: "180px",
         fill: "black",
         fontStyle: "bold",
@@ -830,27 +886,36 @@ export default class Focus_scene extends Phaser.Scene {
   }
 
   collision(s1, s2) {
+    console.log(s1.getBounds().x)
+    console.log(s1.x - s1.getBounds().width / 2);
     let r1 = [
-      s1.getBounds().x + s1.getBounds().width,
-      s1.getBounds().y - s1.getBounds().height,
+      s1.x + s1.getBounds().width / 2,
+      s1.x - s1.getBounds().width / 2,
+      s1.y + s1.getBounds().height / 2,
+      s1.y - s1.getBounds().height / 2,
     ];
     let r2 = [
-      s2.getBounds().x + s2.getBounds().width,
-      s2.getBounds().y - s2.getBounds().height,
+      s2.x + s2.getBounds().width / 2,
+      s2.x - s2.getBounds().width / 2,
+      s2.y + s2.getBounds().height / 2,
+      s2.y - s2.getBounds().height / 2,
     ];
-    if (s1.getBounds().x >= r2[0] || s2.getBounds().x >= r1[0]) {
-      return false;
+    if (
+      s2.x >= [r1[0]] ||
+      s2.x <= [r1[1]] ||
+      s2.y >= [r1[2]] ||
+      s2.y <= [r1[3]]
+    ){
+      return false
     }
-    if (s1.getBounds().y <= r2[1] || s2.getBounds().y <= r1[1]) {
-      return false;
-    }
+
     return true;
   }
 
   applyeffect(Draggable) {
     this.removeDrag(Draggable);
     if (Draggable == this.draggable2) {
-      this.battery1.anims.play("1", true);
+      //this.battery1.anims.play("1", true);
       this.battery2.anims.play("7", true);
     }
     //should sometimes lead to depressive phase
@@ -858,15 +923,6 @@ export default class Focus_scene extends Phaser.Scene {
       this.updateB1("-2");
       this.updateB2("-2");
       this.updateB3("-2");
-      /*if (this.b1Frame < 6) {
-        this.battery1.anims.play("2", true);
-      }
-      if (this.b2Frame < 12) {
-        this.battery2.anims.play("8", true);
-      }
-      if (this.b3Frame < 18) {
-        this.battery3.anims.play("14", true);
-      }*/
     }
   }
   updatescore(value) {
@@ -878,6 +934,7 @@ export default class Focus_scene extends Phaser.Scene {
       colour = "#39d179";
       sign = "+";
     }
+
     scoreAnimation = this.add
       .text(400, 200, sign + value, {
         fontFamily: "Arial",
@@ -886,7 +943,7 @@ export default class Focus_scene extends Phaser.Scene {
         stroke: "#ffffff",
         strokeThickness: 2,
       })
-      .setDepth(3000);
+      .setDepth(4000);
 
     tween = this.tweens.add({
       targets: scoreAnimation,
@@ -904,14 +961,13 @@ export default class Focus_scene extends Phaser.Scene {
   }
   updateB1(frame) {
     //console.log(this.b1Frame);
-    if (frame == -2 && this.b1Frame != 1) {
+    /*if (frame == -2 && this.b1Frame != 1) {
       this.battery1.anims.play(parseInt(this.b1Frame) - 1, true);
     } else if (frame == -1 && this.b1Frame != 6) {
-      console.log("updating battery 1 with -1")
       this.battery1.anims.play(parseInt(this.b1Frame) + 1, true);
-    } else if (frame != -2) {
+    } else if (frame != -2 && frame != -1) {
       this.battery1.anims.play(frame, true);
-    }
+    }else{};*/
   }
 
   updateB2(frame) {
@@ -920,24 +976,49 @@ export default class Focus_scene extends Phaser.Scene {
       this.battery2.anims.play(parseInt(this.b2Frame) - 1, true);
     } else if (frame == -1 && this.b2Frame != 12) {
       this.battery2.anims.play(parseInt(this.b2Frame) + 1, true);
-    }else if (frame != -2) {
+    } else if (frame != -2 && frame != -1) {
       this.battery2.anims.play(frame, true);
-    }
+    }else{};
   }
   updateB3(frame) {
-    //console.log(this.b3Frame);
+    console.log(this.b3Frame);
     if (frame == -2 && this.b3Frame != 13) {
+      console.log("1st elsif");
       this.battery3.anims.play(parseInt(this.b3Frame) - 1, true);
     } else if (frame == -1 && this.b3Frame != 18) {
+      console.log("2nd elsif");
       this.battery3.anims.play(parseInt(this.b3Frame) + 1, true);
-    } else if (frame != -2) {
+    } else if (frame != -2 && frame != -1) {
+      console.log("3rd elsif");
       this.battery3.anims.play(frame, true);
-    }
+    }else{};
   }
   updateHob() {
     this.oH = true;
     this.pot = true;
   }
+  updateLaundry(d, n) {
+    if (!this.laundryUpdated) {
+      laundry = true;
+      this.cloth = true;
+      this.laundryUpdated = true;
+    }
+    if (n == 1) {
+      clothes.push(d);
+    }
+    if (n == 2) {
+      clothes = [];
+      clothes.push(d);
+    } else if (n == 3) {
+      clothes.push(d);
+    }
+  }
+  updatelaundry2() {
+    console.log("updateLaundry2");
+    laundry = false;
+    this.cloth = 2;
+  }
+
   updateBills() {
     if (typeof this.billCounter == "undefined") {
       this.billCounter = 0;
@@ -971,95 +1052,95 @@ export default class Focus_scene extends Phaser.Scene {
     return true;
   }
   changeScene(next) {
-    this.done = false;
-    this.pill = false;
-    this.b1 = false;
-    this.b2 = false;
-    this.b3 = false;
-    this.depression = false;
-    this.ovw = false;
-    // this.popUP = false;
-    if (this.ovw_executed == 1) { 
-      this.ovw = true;
-      this.ovw_executed = 0;
-    }
-    console.log("this.executed");
-    console.log(this.executed)
-    if (this.executed == 1) {
-      this.depression = true;
-      this.executed = 0;
-      //this.popUp = true;
-    }
-    console.log("this.depression")
-    console.log(this.depression)
-    if (this.draggable1) {
-      if (typeof this.draggable1.scene !== "undefined") {
-        this.cup = true;
+    if ((next == "focus5" || next == "focus2") && this.ovw) {
+      this.t =
+        "No, it wasn't this room you wanted to go to, was it?\n\n" +
+        "Thoughts fly so fast, how are you supposed to ever catch one?";
+      this.stop = new PopupPlugin(
+        this,
+        10,
+        "0x907748",
+        200,
+        10,
+        800,
+        1,
+        280,
+        -50,
+        0,
+        "28px",
+        true
+      );
+      this.stop.setText(this.t, true);
+    } else {
+      this.done = false;
+      this.pill = false;
+      this.cup = false;
+      //this.b1 = false;
+      this.b2 = false;
+      this.b3 = false;
+      this.depression = false;
+      this.ovw = false;
+      // this.popUP = false;
+      if (this.ovw_executed == 1) {
+        this.ovw = true;
+        this.ovw_executed = 0;
       }
-    }
-    if (this.draggable2) {
-      if (typeof this.draggable2.scene !== "undefined") {
-        this.pill = true;
+      if (this.executed == 1) {
+        this.depression = true;
+        this.executed = 0;
+        //this.popUp = true;
       }
-      if (this.battery1) {
-        if (typeof this.battery1.scene !== "undefined") {
-          this.b1 = true;
+      if (this.draggable1) {
+        if (typeof this.draggable1.scene !== "undefined") {
+          this.cup = true;
+        }
+      }
+      if (this.draggable2) {
+        if (typeof this.draggable2.scene !== "undefined") {
+          this.pill = true;
+        }
+        /*if (this.battery1) {
+          if (typeof this.battery1.scene !== "undefined") {
+            this.b1 = true;
+            this.b2 = true;
+            this.b3 = true;
+          }
+          this.b1Frame = this.battery1.anims.currentAnim.key;
+        }*/
+        if (this.battery2) {
+          if (typeof this.battery2.scene !== "undefined") {
           this.b2 = true;
           this.b3 = true;
-        }
-        this.b1Frame = this.battery1.anims.currentAnim.key;
-      }
-      if (this.battery2) {
-        this.b2Frame = this.battery2.anims.currentAnim.key;
-      }
-      if (this.battery3) {
-        this.b3Frame = this.battery3.anims.currentAnim.key;
-      }
-        if ((next == "focus5" || next == "focus2") && this.ovw) {
-
-            this.t =
-              "No, it wasn't this room you wanted to go to, was it?\n\n" +
-              "Thoughts fly so fast, how are you supposed to ever catch one?";
-            this.stop = new PopupPlugin(
-              this,
-              10,
-              "0x907748",
-              200,
-              10,
-              800,
-              1,
-              280,
-              -50,
-              0,
-              "28px",
-              true
-            );
-            this.stop.setText(this.t, true);
           }
-         else {
-          this.scene.start(next, {
-            sv: scoreValue,
-            it: initialTime,
-            p: this.player,
-            b1: this.b1,
-            b2: this.b2,
-            b3: this.b3,
-            b1Frame: this.b1Frame,
-            b2Frame: this.b2Frame,
-            b3Frame: this.b3Frame,
-            cup: this.cup,
-            pill: this.pill,
-            done: this.done,
-            oH: this.oH,
-            pot: this.pot,
-            billCounter: this.billCounter,
-            depression: this.depression,
-            ovw: this.ovw,
-          });
-          console.log("battery");
-          console.log(this.battery1);
-          console.log(this.b1);
+          this.b2Frame = this.battery2.anims.currentAnim.key;
         }
+        if (this.battery3) {
+          this.b3Frame = this.battery3.anims.currentAnim.key;
+        }
+        this.scene.start(next, {
+          sv: scoreValue,
+          it: initialTime,
+          p: this.player,
+          //b1: this.b1,
+          b2: this.b2,
+          b3: this.b3,
+          //b1Frame: this.b1Frame,
+          b2Frame: this.b2Frame,
+          b3Frame: this.b3Frame,
+          cup: this.cup,
+          pill: this.pill,
+          done: this.done,
+          oH: this.oH,
+          pot: this.pot,
+          lau: laundry,
+          cloth: this.cloth,
+          myCol6: this.myCol6,
+          billCounter: this.billCounter,
+          depression: this.depression,
+          ovw: this.ovw,
+          cl: clothes,
+        });
+      }
     }
   }
   getPlayer() {
@@ -1110,74 +1191,73 @@ export default class Focus_scene extends Phaser.Scene {
     //console.log(this.dep_layer)
 
     if (this.executed == 0) {
-
       //Random event (depression)
       //export depressed variable to check for during study task?
-      if(initialTime == this.depressionTime || this.depression){
-          this.add
-            .graphics()
-            .fillStyle(0x303030, 0.8)
-            .fillRect(0, 0, 1366, 768)
-            .setDepth(-1000);
-          console.log("dep_layerCreated")
-          this.executed = 1;
+      if (initialTime == this.depressionTime || this.depression) {
+        this.add
+          .graphics()
+          .fillStyle(0x303030, 0.8)
+          .fillRect(0, 0, 1366, 768)
+          .setDepth(-1000);
+        console.log("dep_layerCreated");
+        this.executed = 1;
       }
-      if (this.battery3.anims.currentAnim) {
-        //random depression or if wellbeing to low
-        if (
-          initialTime == this.depressionTime ||
-          this.battery3.anims.currentAnim == 18
-        ) {
-          console.log("hello depression");
+      //if (this.battery3.anims.currentAnim) {
+      //random depression or if wellbeing to low
+      if (
+        initialTime ==
+        this
+          .depressionTime /*||
+          this.battery3.anims.currentAnim == 18*/
+      ) {
+        console.log("hello depression");
 
-          if (!this.depression) {
-            this.t =
-              "Uhhh...ohhhh. How unlucky can anyone be?\n" +
-              "Depression can often occur with AD(H)D, and of course, it had to hit you.\n\n" +
-              "Doing nothing might have long term adverse affects. Studying will probably be impossible.\n\n" +
-              "Try to recharge your batteries instead!";
-            this.pop_dep = new PopupPlugin(
-              this,
-              10,
-              "0x907748",
-              650,
-              32,
-              800,
-              1,
-              280,
-              -50,
-              -350,
-              "28px",
-              true
-            );
+        if (this.depression != true) {
+          this.t =
+            "Uhhh...ohhhh. How unlucky can anyone be?\n" +
+            "Depression can often occur with AD(H)D, and of course, it had to hit you.\n\n" +
+            "Doing nothing might have long term adverse affects. Studying will probably be impossible.\n\n" +
+            "Try to recharge your batteries instead!";
+          this.pop_dep = new PopupPlugin(
+            this,
+            10,
+            "0x907748",
+            650,
+            32,
+            800,
+            1,
+            280,
+            -50,
+            -350,
+            "28px",
+            true
+          );
 
-            this.pop_dep.setText(this.t, true);
-            this.depGuy = this.add.image(500, 384, "depGuy").setScale(0.75);
+          this.pop_dep.setText(this.t, true);
+          this.depGuy = this.add.image(500, 384, "depGuy").setScale(0.75);
 
-            this.battery1.anims.play("6", true);
-            this.battery2.anims.play("12", true);
-            this.battery3.anims.play("18", true);
-          }
-
-          if (this.executed == 1) {
-            this.timedEvent = this.time.addEvent({
-              delay: 60000,
-              callback: onEvent2,
-              callbackScope: this,
-            });
-
-            function onEvent2() {
-              console.log("depression deleted");
-              this.executed = 0;
-              this.depression = false;
-              this.add.graphics().clear();
-              console.log(scoreValue);
-            }
-          }
+          //this.battery1.anims.play("6", true);
+          this.battery2.anims.play("12", true);
+          this.battery3.anims.play("18", true);
         }
-        
+
+        if (this.executed == 1 /*&& !depressionTimed*/) {
+          console.log("created delete Depression event");
+          this.timedEventDep = this.time.addEvent({
+            delay: 60000,
+            callback: deleteDepression,
+            callbackScope: this,
+          });
+          //depressionTimed = true;
+        }
       }
-     
+      function deleteDepression() {
+        console.log("depression deleted");
+        this.executed = 0;
+        this.depression = false;
+        console.log(scoreValue);
+      }
+      //}
     }
 
     if (this.pop_dep) {
@@ -1189,14 +1269,20 @@ export default class Focus_scene extends Phaser.Scene {
     }
 
     //feeling overwhelmed
-    if (this.ovw_executed == 0) {
-      if (this.battery2.anims.currentAnim ||this.battery1.anims.currentAnim) {
+    if (
+      this.ovw_executed == 0 &&
+      this.name != "focus5" &&
+      this.name != "focus2" &&
+      this.depression != true 
+    ) {
+      if (this.battery2.anims.currentAnim /*|| this.battery1.anims.currentAnim*/) {
         if (
-          ((this.battery1.anims.currentAnim.key == 6 ||
-          this.battery2.anims.currentAnim.key == 12) && !this.pop_dep) ||
+          ((/*this.battery1.anims.currentAnim.key == 6 ||*/
+            this.battery2.anims.currentAnim.key == 12) &&
+            !this.pop_dep) ||
           this.ovw
         ) {
-          if (!this.ovw) {
+          if (!this.ovw && !this.infoGiven) {
             this.tO =
               "BEING OVERWHELMED.\n\n" +
               "This paralysing feeling when you want to do everything but you just cannot get anything done.\n\n" +
@@ -1220,6 +1306,7 @@ export default class Focus_scene extends Phaser.Scene {
             this.pop_ovw.setText(this.tO, true);
             this.bG.setAngle(180);
             this.ovw = true;
+            this.infoGiven = true;
           }
           this.ovw_executed = 1;
           if (this.ovw_executed == 1) {
@@ -1230,8 +1317,8 @@ export default class Focus_scene extends Phaser.Scene {
             });
 
             function onEvent2() {
-              this.ovw_executed = 0;
-              this.executed = 0;
+              //this.ovw_executed = 0;
+              //this.executed = 0;
               this.ovw = false;
               this.bG.setAngle(0);
             }
@@ -1244,96 +1331,97 @@ export default class Focus_scene extends Phaser.Scene {
     if (this.executed2 == 0) {
       //if (this.battery3.anims.currentAnim && !this.depression) {
       //random depression or if wellbeing to low
+      if (this.battery3.anims.currentAnim) {
+        if (
+          //initialTime == this.ocdTime //||
+          this.battery3.anims.currentAnim.key == 18 && this.depression !=true && this.ovw != true
+        ) {
+          console.log("hello ocd");
 
-      if (
-        initialTime == this.ocdTime //||
-        //this.battery3.anims.currentAnim.key == 18
-      ) {
-        console.log("hello ocd");
+          this.t =
+            "Uhhh...ohhhh. You've had this before but this time it feels like a demon.\n\n" +
+            "Obsessive compulsive disorder can often occur with AD(H)D and for some reason the compulsory hand-washing during Corona made you obsess over it.\n\n" +
+            "Although you can try to fight it, you will most likely end up washing your hands every couple minutes.\n\n" +
+            "To do that type 'wash' SIX TIMES when the notification appears.";
+          this.pop_ocd = new PopupPlugin(
+            this,
+            10,
+            "0x907748",
+            650,
+            32,
+            800,
+            1,
+            280,
+            -50,
+            0,
+            "28px",
+            true
+          );
 
-        this.t =
-          "Uhhh...ohhhh. You've had this before but this time it feels like a demon.\n\n" +
-          "Obsessive compulsive disorder can often occur with AD(H)D and for some reason the compulsory hand-washing during Corona made you obsess over it.\n\n" +
-          "Although you can try to fight it, you will most likely end up washing your hands every couple minutes.\n\n" +
-          "To do that type 'wash' SIX TIMES when the notification appears.";
-        this.pop_ocd = new PopupPlugin(
-          this,
-          10,
-          "0x907748",
-          650,
-          32,
-          800,
-          1,
-          280,
-          -50,
-          0,
-          "28px",
-          true
-        );
+          this.pop_ocd.setText(this.t, true);
 
-        this.pop_ocd.setText(this.t, true);
+          this.executed2 = 1;
+          this.triggered = 0;
+          //this.triggerOCD();
 
-        this.executed2 = 1;
-        this.triggered = 0;
-        //this.triggerOCD();
+          this.timedEvent = this.time.addEvent({
+            delay: 30000,
+            callback: washCall,
+            callbackScope: this,
+            repeat: 10,
+          });
 
-        this.timedEvent = this.time.addEvent({
-          delay: 50000,
-          callback: washCall,
-          callbackScope: this,
-          repeat: 10,
-        });
+          function washCall() {
+            console.log("washCall");
+            this.updateB3("-1");
+            this.layer = this.add.graphics().fillStyle(0x303030, 0.8);
 
-        function washCall() {
-          console.log("washCall");
+            this.bigWhiteLayer = this.add
+              .graphics()
+              .fillRect(0, 0, 1366, 768)
+              .setDepth(1000);
 
-          this.layer = this.add.graphics().fillStyle(0x303030, 0.8);
-
-          this.bigWhiteLayer = this.add
-            .graphics()
-            .fillRect(0, 0, 1366, 768)
-            .setDepth(1000);
-
-          var OCD_text = {
-            x: 240,
-            y: 180,
-            text: "I need to wash my hands!!!",
-            style: {
-              fontSize: "140px",
-              fontStyle: "bold",
-              fontFamily: "Aleo",
-              color: "#ff0f0f",
-              align: "center",
-              lineSpacing: 20,
-              stroke: "#000000",
-              stokeThickness: 20,
-              shadow: {
-                offsetX: 2,
-                offsetY: 2,
-                color: "#000",
-                blur: 0,
-                stroke: true,
-                fill: true,
+            var OCD_text = {
+              x: 240,
+              y: 180,
+              text: "I need to wash my hands!!!",
+              style: {
+                fontSize: "140px",
+                fontStyle: "bold",
+                fontFamily: "Aleo",
+                color: "#ff0f0f",
+                align: "center",
+                lineSpacing: 20,
+                stroke: "#000000",
+                stokeThickness: 20,
+                shadow: {
+                  offsetX: 2,
+                  offsetY: 2,
+                  color: "#000",
+                  blur: 0,
+                  stroke: true,
+                  fill: true,
+                },
+                wordWrap: { width: 1000, useAdvancedWrap: true },
               },
-              wordWrap: { width: 1000, useAdvancedWrap: true },
-            },
-          };
+            };
 
-          this.notification = this.make.text(OCD_text).setDepth(1200);
-          this.callThere = 1;
+            this.notification = this.make.text(OCD_text).setDepth(1200);
+            this.callThere = 1;
 
-          if (this.callThere == 1) {
-            this.timedEvent2 = this.time.addEvent({
-              delay: 2000,
-              callback: notificationDelete,
-              callbackScope: this,
-            });
-            this.callThere = 0;
+            if (this.callThere == 1) {
+              this.timedEvent2 = this.time.addEvent({
+                delay: 2000,
+                callback: notificationDelete,
+                callbackScope: this,
+              });
+              this.callThere = 0;
 
-            function notificationDelete() {
-              //depression not working? => this.graphics instead of this.add
-              this.bigWhiteLayer.clear();
-              this.notification.setVisible(false);
+              function notificationDelete() {
+                //depression not working? => this.graphics instead of this.add
+                this.bigWhiteLayer.clear();
+                this.notification.setVisible(false);
+              }
             }
           }
         }
@@ -1344,19 +1432,19 @@ export default class Focus_scene extends Phaser.Scene {
     if (this.ovw) {
       this.cursors = this.input.keyboard.createCursorKeys();
       if (this.cursors.right.isDown) {
-        this.player.setVelocityX(-160);
+        this.player.setVelocityX(-250);
         this.player.anims.play("left", true);
         this.left_down = false;
       } else if (this.cursors.left.isDown) {
-        this.player.setVelocityX(160);
+        this.player.setVelocityX(250);
         this.player.anims.play("right", true);
         this.left_down = false;
       } else if (this.cursors.down.isDown) {
-        this.player.setVelocityY(-160);
+        this.player.setVelocityY(-250);
         this.player.anims.play("up");
         this.left_down = true;
       } else if (this.cursors.up.isDown) {
-        this.player.setVelocityY(160);
+        this.player.setVelocityY(250);
         this.player.anims.play("down");
         this.left_down = false;
       } else {
@@ -1371,19 +1459,19 @@ export default class Focus_scene extends Phaser.Scene {
     } else {
       this.cursors = this.input.keyboard.createCursorKeys();
       if (this.cursors.left.isDown) {
-        this.player.setVelocityX(-160);
+        this.player.setVelocityX(-200);
         this.player.anims.play("left", true);
         this.left_down = false;
       } else if (this.cursors.right.isDown) {
-        this.player.setVelocityX(160);
+        this.player.setVelocityX(200);
         this.player.anims.play("right", true);
         this.left_down = false;
       } else if (this.cursors.up.isDown) {
-        this.player.setVelocityY(-160);
+        this.player.setVelocityY(-200);
         this.player.anims.play("up");
         this.left_down = true;
       } else if (this.cursors.down.isDown) {
-        this.player.setVelocityY(160);
+        this.player.setVelocityY(200);
         this.player.anims.play("down");
         this.left_down = false;
       } else {
@@ -1447,24 +1535,9 @@ export default class Focus_scene extends Phaser.Scene {
       if (this.col3 && this.cursors.up.isDown && this.col3Collided == 0) {
         //function to contai if and else?
         if (this.oH) {
-          this.tHob =
-            "Oh, you forgot the pot\non the hob! Go quick and turn the hob off, your food might be burned already!";
-
-          this.popHob = new PopupPlugin(
-            this,
-            6,
-            "0xff0000",
-            150,
-            16,
-            320,
-            1,
-            925,
-            -400,
-            0,
-            "16px",
-            false
-          );
-          this.popHob.setText(this.tHob, true);
+          this.popHob();
+        } else if (!this.oH && laundry) {
+          this.popLaundry();
         } else {
           this.changeScene("focus6");
         }
@@ -1538,7 +1611,9 @@ export default class Focus_scene extends Phaser.Scene {
     if ((call == 1) & (called2 == 0)) {
       called2 = 1;
       this.updatescore(10);
+      this.updateB1("-1");
+      this.updateB2("-1");
+      this.updateB3("-1");
     }
   }
 }
-  

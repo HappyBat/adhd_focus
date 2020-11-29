@@ -3,8 +3,8 @@ import cup from "../../assets/cup.png";
 import medication from "../../assets/medication.png";
 import guy from "../../assets/guy_sprite.png";
 //import battery1 from "../../assets/battery_sprite_resized.png";
-import battery1 from "../../assets/battery_focus.png";
-import battery2 from "../../assets/battery_energy.png";
+//import battery1 from "../../assets/battery_focus.png";
+import battery2 from "../../assets/battery_focus.png";
 import battery3 from "../../assets/battery_efficiency.png";
 import prePlay from "../../assets/play17.png";
 import borderPlay from "../../assets/play18.png";
@@ -103,6 +103,7 @@ import brownDirt2 from "../../assets/brownDirt2.png";
 import redDirt from "../../assets/redDirt.png";
 import yellowDirt from "../../assets/yellowDirt.png";
 import greyDirt from "../../assets/greyDirt.png";
+import batterySaver from "../../assets/batterySaver.png";
 
 
 export default class preload_scene extends Phaser.Scene {
@@ -112,7 +113,7 @@ export default class preload_scene extends Phaser.Scene {
     
     preload() {
        //console.log(require("../../audio/gnMusic2mod.mp3"));
-        this.load.audio("gnMusic", [require("../../audio/gnMusic2mod.mp3")]),
+        this.load.audio("gnMusic", [require("../../audio/music.mp3")]),
           //this.load.scenePlugin('PopupPlugin', './popup.js');
           this.load.image("background", background),
           this.load.image("studyRoom", studyRoom),
@@ -214,6 +215,7 @@ export default class preload_scene extends Phaser.Scene {
           this.load.image("redDirt", redDirt),
           this.load.image("yellowDirt", yellowDirt),
           this.load.image("greyDirt", greyDirt),
+          this.load.image("batterySaver", batterySaver),
           this.load.spritesheet("pushup", pushup, {
             frameWidth: 568,
             frameHeight: 238,
@@ -223,16 +225,16 @@ export default class preload_scene extends Phaser.Scene {
             frameWidth: 123,
             frameHeight: 377,
           });
-        this.load.spritesheet("battery_focus",battery1,
+        /*this.load.spritesheet("battery_focus",battery1,
         {frameWidth:155.5, frameHeight:57 }
-        );
-        this.load.spritesheet("battery_energy", battery2, {
+        );*/
+        this.load.spritesheet("battery_focus", battery2, {
           frameWidth: 155.5,
           frameHeight: 57,
         });
         this.load.spritesheet("battery_efficiency", battery3, {
           frameWidth: 155,
-          frameHeight: 58,
+          frameHeight: 57.5,
         });
         this.load.spritesheet("hands", hands, {
           frameWidth:281.5,
@@ -245,6 +247,6 @@ export default class preload_scene extends Phaser.Scene {
         this.progressBox.destroy();
     }
     create() {        
-        this.scene.start('intermediate');
+        this.scene.start('disclaimer');
     }
 }

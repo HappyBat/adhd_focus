@@ -1,4 +1,5 @@
 import preload_scene from './scenes/preload';
+import disclaimer from "./scenes/disclaimer";
 import intermediate from './scenes/intermediate';
 import focus1 from './scenes/focus1';
 import focus2 from './scenes/focus2(bathroom)';
@@ -21,5 +22,5 @@ export default {
             debug : false
         }
     },
-    scene : [preload_scene,intermediate, focus1,focus2, focus3, focus4, focus5, focus6, focus7, results]
+    scene : [preload_scene,disclaimer, intermediate, focus1,focus2, focus3, focus4, focus5, focus6, focus7, results]
 };

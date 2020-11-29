@@ -7,6 +7,8 @@ var dragged;
 var counter2 = 0;
 var pointerDown = false;
 var popped = 0;
+var cl;
+var laundry;
 
 export default class Focus2 extends Focus_scene {
   constructor() {
@@ -24,21 +26,17 @@ export default class Focus2 extends Focus_scene {
         super.setScoreValue(data.sv);
     }*/
   init(data) {
-    super.scoreValue = data.sv;
-    super.cup = data.cup;
-    super.pill = data.pill;
-    super.b1Frame = data.b1Frame;
-    super.b2Frame = data.b2Frame;
-    super.b3Frame = data.b3Frame;
-    super.b1 = data.b1;
-    super.b2 = data.b2;
-    super.b3 = data.b3;
+    super.Init(data);
+    super.cloth = this.cloth;
+    laundry = data.lau;
+    cl = data.cl;
+    super.myCol6 = this.col6;
   }
   create() {
     super.create();
-
-    this.executed = 0;
-
+    console.log(cl);
+    this.exec = 0;
+    this.clothesUpd= 0;
     super.createTaskbarButton(1, 295, 715, 145, "Do the laundry", 45);
 
     this.btn1.on("pointerdown", () => {
@@ -61,30 +59,106 @@ export default class Focus2 extends Focus_scene {
       this.doLaundry.setText(this.t1, true);
     });
 
-    pointer = this.input.activePointer;
-    this.input.on("pointerdown", () => {
-      console.log(pointer.x);
-      console.log(pointer.y);
-    });
-
     array = [];
-    
-    
-    this.createClothes(897, 571, "shirt");
-    this.createClothes(635, 600, "sock1");
-    this.createClothes(1125, 729, "sock2");
-    this.createClothes(291, 651, "pantsBlue");
-    this.createClothes(175, 722, "pantsBlue2");
-    this.createClothes(985, 664, "pantsBlue3");
-    this.createClothes(683, 655, "light_shirt");
-    this.createClothes(279, 412, "pantsGreen");
-    this.createClothes(1127, 388, "pantsOrange");
-    this.createClothes(737, 570, "scarf");
-    this.createClothes(1080, 612, "stuff1");
-    this.createClothes(556, 589, "stuff2");
-    this.createClothes(895, 363, "stuff3");
-    this.createClothes(620, 430, "greenTowel");
-    this.createClothes(1193, 489, "toiletTowel");
+    if (!laundry && this.cloth !=2) {
+      this.createClothes(897, 571, "shirt");
+      this.createClothes(635, 600, "sock1");
+      this.createClothes(1125, 729, "sock2");
+      this.createClothes(291, 651, "pantsBlue");
+      this.createClothes(175, 722, "pantsBlue2");
+      this.createClothes(985, 664, "pantsBlue3");
+      this.createClothes(683, 655, "light_shirt");
+      this.createClothes(279, 412, "pantsGreen");
+      this.createClothes(1127, 388, "pantsOrange");
+      this.createClothes(737, 570, "scarf");
+      this.createClothes(1080, 612, "stuff1");
+      this.createClothes(556, 589, "stuff2");
+      this.createClothes(895, 363, "stuff3");
+      this.createClothes(620, 430, "greenTowel");
+      this.createClothes(1193, 489, "toiletTowel");
+    }
+    if (laundry) {
+      for (var i = 0; i < cl.length; i++) {
+        if (cl[i] == 0) {
+          this.createClothes(897, 571, "shirt");
+        }        if (cl[i] == 1) {
+          this.createClothes(635, 600, "sock1");
+        }
+        if (cl[i] == 2) {
+          this.createClothes(1125, 729, "sock2");
+        }        if (cl[i] == 3) {
+          this.createClothes(291, 651, "pantsBlue");
+        }
+        if (cl[i] == 4) {
+          this.createClothes(175, 722, "pantsBlue2");
+        }
+        if (cl[i] == 5) {
+          this.createClothes(985, 664, "pantsBlue3");
+        }
+        if (cl[i] == 6) {
+          this.createClothes(683, 655, "light_shirt");
+        }
+        if (cl[i] == 7) {
+          this.createClothes(279, 412, "pantsGreen");
+        }
+        if (cl[i] == 8) {
+          this.createClothes(1127, 388, "pantsOrange");
+        }
+        if (cl[i] == 9) {
+          this.createClothes(737, 570, "scarf");
+        }
+        if (cl[i] == 10) {
+          this.createClothes(1080, 612, "stuff1");
+        }
+        if (cl[i] == 11) {
+          this.createClothes(556, 589, "stuff2");
+        }
+        if (cl[i] == 12) {
+          this.createClothes(895, 363, "stuff3");
+        }
+        if (cl[i] == 13) {
+          this.createClothes(620, 430, "greenTowel");
+        }
+        if (cl[i] == 14) {
+          this.createClothes(1193, 489, "toiletTowel");
+        }
+      }
+    }
+    /*else{
+      for(var i=0; i < 15; i++){
+        if (cl[i] != 0) {
+          this.createClothes(1193, 489, "toiletTowel");
+        } if (cl[i] != 1) {
+          this.createClothes(620, 430, "greenTowel");
+        }  if (cl[i] != 2) {
+          this.createClothes(895, 363, "stuff3");
+        }  if (cl[i] != 3) {
+          this.createClothes(556, 589, "stuff2");
+        }  if (cl[i] != 4) {
+          this.createClothes(1080, 612, "stuff");
+        }  if (cl[i] != 5) {
+          this.createClothes(737, 570, "scarf");
+        }  if (cl[i] != 6) {
+          this.createClothes(1127, 388, "pantsOrange");
+        }  if (cl[i] != 7) {
+          this.createClothes(279, 412, "pantsGreen");
+        }  if (cl[i] != 8) {
+          this.createClothes(683, 655, "light_shirt");
+        }  if (cl[i] != 9) {
+          this.createClothes(985, 664, "pantsBlue3");
+        }  if (cl[i] != 10) {
+          this.createClothes(175, 722, "pantsBlue2");
+        }  if (cl[i] != 11) {
+          this.createClothes(291, 651, "pantsBlue");
+        }  if (cl[i] != 12) {
+          this.createClothes(1125, 729, "sock2");
+        }  if (cl[i] != 13) {
+          this.createClothes(635, 600, "sock1");
+        }  if (cl[i] != 14) {
+          this.createClothes(897, 571, "shirt");
+        }
+      }
+    }*/
   }
   createClothes(x, y, name) {
     this.cloth = this.add.image(x, y, name).setDepth(-100);
@@ -92,19 +166,27 @@ export default class Focus2 extends Focus_scene {
       this.cloth.setScale(1.5);
     }
 
-    array.push(this.cloth)
+    array.push(this.cloth);
   }
 
   onEvent() {}
 
-  callSuper() {
+  callSuper(d) {
     super.updatescore(5);
   }
-  batteryUpdate(){
-    console.log("update2")
-    super.updateB1("-1")
+  batteryUpdate() {
+    super.updateB1("-1");
     super.updateB2("-1");
     super.updateB3("-1");
+    if (this.clothesUpdated != 1 && array.length >11) {
+      console.log("update 1")
+      for (var i = 0; i < array.length; i++) {
+        if (array[i].visible == true) {
+          super.updateLaundry(i,1);
+        }
+      }
+      this.clothesUpdated = 1;
+    }
   }
 
   createPopup() {
@@ -128,42 +210,64 @@ export default class Focus2 extends Focus_scene {
     );
     this.tooHard.setText(this.t, true);
   }
+  updateLaundry2(){
+    super.updatelaundry2();
+  }
 
   update() {
     super.update();
-    if(pointerDown && this.executed == 0){
-      console.log(array);
-    for(var i=0; i < array.length; i++){
+    /*if(this.col6){
+      if (this.clothesUpd != 1 && array.length <11) {
+      console.log("update 2");
+      for (var i = 0; i < array.length; i++) {
+        if (array[i].visible == true) {
+          if(array[i]==1){
+          super.updateLaundry(i,2);
+          }else{
+          super.updateLaundry(i, 3);
+          }
+        }
+      }
+      this.clothesUpd = 1;
+    }
+    }*/
+    if (pointerDown && this.exec == 0) {
       
-    array[i].setInteractive({ useHandCursor: true, draggable: true });//update if(pointerDown){}
-    array[i].on("drag", function (pointer, dragX, dragY) {
-      this.pointer = pointer;
-      dragged = 0;
+      for (var i = 0; i < array.length; i++) {
+        array[i].setInteractive({ useHandCursor: true, draggable: true }); //update if(pointerDown){}
+        array[i].on("drag", function (pointer, dragX, dragY) {
+          this.pointer = pointer;
+          dragged = 0;
 
-      counter2 = counter2 + 1;
-      this.x = dragX + (counter * counter2) / 3;
-      this.y = dragY + (counter * counter2) / 6;
-    });
-    array[i].on("dragend", function () {
-      if (this.x > 324 && this.x < 404 && this.y > 408 && this.y < 530) {
-        this.setVisible(false);
-        counter = counter + 1;
-        dragged = 1;
+          counter2 = counter2 + 1;
+          this.x = dragX + (counter * counter2) / 3;
+          this.y = dragY + (counter * counter2) / 6;
+        });
+        array[i].on("dragend", function () {
+          if (this.x > 324 && this.x < 404 && this.y > 408 && this.y < 530) {
+            this.setVisible(false);
+            counter = counter + 1;
+            dragged = 1;
+          }
+          if (dragged == 1) {
+            this.scene.callSuper();
+            dragged = 0;
+          }
+          counter2 = 0;
+          if ((counter == 5)  && popped == 0) {
+            this.scene.createPopup();
+            this.scene.batteryUpdate();
+            popped = 1;
+          } else if (counter == 6) {
+            this.scene.batteryUpdate();
+          }
+          console.log(counter)
+          if (counter == 15){
+            this.scene.updateLaundry2();
+          }
+        }); //update
+        this.exec = 1;
       }
-      if (dragged == 1) {
-        this.scene.callSuper();
-        dragged = 0;
-      }
-      counter2 = 0;
-      if (counter == 5 && popped ==0) {
-        this.scene.createPopup();
-        this.scene.batteryUpdate();
-        popped = 1;
-      }else if (counter == 6){
-        this.scene.batteryUpdate();
-      }
-    });//update
-    this.executed = 1;
-  }}
+    }
   }
 }

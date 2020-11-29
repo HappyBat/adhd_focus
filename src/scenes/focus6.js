@@ -76,7 +76,7 @@ export default class Focus6 extends Focus_scene {
 
     //this.createTaskbar();
     super.createTaskbarButton(1,300, 715, 115, "Go to work",160);
-    super.createTaskbarButton(2,570, 715, 110, "Go running",0);
+    //super.createTaskbarButton(2,570, 715, 110, "Go running",0);
 
     this.btn1.on("pointerdown", () => {
       this.btn1_create();
@@ -160,10 +160,10 @@ export default class Focus6 extends Focus_scene {
       );
       this.btn1.input.enabled = false;
     });
-    this.btn2.on("pointerdown", ()=>{
+    /*this.btn2.on("pointerdown", ()=>{
       console.log("changeScene to 7")
       super.changeScene("focus7");
-    });
+    });*/
     function changePosition() {
       this.value = Phaser.Math.Between(0, 15);
       this.value2 = Phaser.Math.Between(0, 15);
@@ -446,6 +446,7 @@ export default class Focus6 extends Focus_scene {
 
   Fired() {
     console.log("fired");
+    if(!this.firedExecuted){
     this.layer = this.add.graphics().fillStyle(0x303030, 0.8);
 
     this.bigWhiteLayer = this.add.graphics()
@@ -479,6 +480,8 @@ export default class Focus6 extends Focus_scene {
         },
         wordWrap: { width: 900, useAdvancedWrap: true },
       },
+    }
+    this.firedExecuted = true;
     };
 
     this.notification = this.make.text(fired_text).setDepth(1200);

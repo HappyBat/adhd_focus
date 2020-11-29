@@ -3,6 +3,7 @@ import PopupPlugin from "../../dist/pop";
 var btn;
 var pointer;
 var btn3;
+var intro;
 export default class intermediate extends Phaser.Scene {
   constructor() {
     super({ key: "intermediate" });
@@ -39,92 +40,76 @@ export default class intermediate extends Phaser.Scene {
         .setDepth(2000));
 
     btn.on("pointerdown", () => {
-      //this.scene.start('focus1');
-      this.intro = this.add.image(683, 384, "intro").setDepth(-1200);
-      this.layer = this.add
-        .graphics()
-        .fillStyle(0x303030, 0.9)
-        .fillRect(0, 0, 1366, 768)
-        .setDepth(-1000);
-      this.pop.toggleWindow();
-      btn.setVisible(false);
-
-      this.instructionsText =
-        'Almost ready to go! Read the instructions and press "FOUCS" if you are done.\n\nAh sorry, "FOCUS"' +
-        " - can't get it right!";
-      this.instructions = new PopupPlugin(
-        this,
-        3,
-        "0x005e58",
-        350, //height
-        16,
-        500, //width
-        0,
-        290, //x
-        -190, //y
-        0,
-        "24px",
-        false
-      );
-      this.instructions.setText(this.instructionsText, true);
-
-      this.qMark1 = this.add.image(643, 140, "qMark").setInteractive(); //batteries
-      this.qMark2 = this.add.image(1233, 156, "qMark").setInteractive(); //day
-      this.qMark3 = this.add.image(186, 330, "qMark").setInteractive(); //items
-      this.qMark4 = this.add.image(360, 657, "qMark").setInteractive(); //arrows
-      this.qMark5 = this.add.image(980, 380, "qMark").setInteractive(); //player
-      this.qMark6 = this.add.image(251, 35, "qMark").setInteractive(); //score&countdown
-      this.input.on("pointerdown", () => {
-        console.log(pointer.x);
-        console.log(pointer.y);
-      });
-      this.t1 =
-        "How good you do in keeping your batteries full, will contribute towards the outcome of the game.\n\n" +
-        "Keep an close eye on them!";
-      this.t2 = "Display of the current day.";
-      this.t3 =
-        "Here you find items, that might help you. Be careful, when to use them.";
-      this.t4 = "Go to the arrows to enter a different room.";
-      this.t5 =
-        "That's you! Be nice to yourself.\n\n" +
-        "You can move the player by pressing the arrow keys. ";
-      this.t6 =
-        "The score is your primary factor towards winning the game. Try to collect as many points as possible by solving the tasks in each room!\n\n";
-      ("The countdown shows you the remaining time.\n\n");
-      this.createQMarks(
-        this.qMark1,
-        this.t1,
-        230,
-        300,
-        310,
-        -400,
-        "batteries"
-      );
-      this.createQMarks(this.qMark2, this.t2, 90, 300, 895, -530,"monday");
-      this.createQMarks(this.qMark3, this.t3, 125, 300, 230, -320, "items"); //items
-      this.createQMarks(this.qMark4, this.t4, 90, 300, 220, -180, "arrows");
-      this.createQMarks(this.qMark5, this.t5, 180, 300, 1021, -220, "player");
-      this.createQMarks(
-        this.qMark6,
-        this.t6,
-        115,
-        600,
-        290,
-        -630,
-        "score",
-        0,
-        0
-      );
-      btn3 = this.add
-        .sprite(543, 493, "borderPlay")
-        .setInteractive({ useHandCursor: true })
-        .setScale(0.4);
-      btn3.on("pointerdown", () => {
-        this.scene.start("focus1");
-      });
+      this.startIntro();
     });
   }
+  startIntro(){
+    //this.scene.start('focus1');
+    intro = this.add.image(683, 384, "intro").setDepth(-1200);
+    this.layer = this.add
+      .graphics()
+      .fillStyle(0x303030, 0.9)
+      .fillRect(0, 0, 1366, 768)
+      .setDepth(-1000);
+    this.pop.toggleWindow();
+    btn.setVisible(false);
 
+    this.instructionsText =
+      'Almost ready to go! Read the instructions and press "FOUCS" if you are done.\n\nAh sorry, "FOCUS"' +
+      " - can't get it right!";
+    this.instructions = new PopupPlugin(
+      this,
+      3,
+      "0x005e58",
+      350, //height
+      16,
+      500, //width
+      0,
+      290, //x
+      -190, //y
+      0,
+      "24px",
+      false
+    );
+    this.instructions.setText(this.instructionsText, true);
+
+    this.qMark1 = this.add.image(643, 140, "qMark").setInteractive(); //batteries
+    this.qMark2 = this.add.image(1233, 156, "qMark").setInteractive(); //day
+    this.qMark3 = this.add.image(186, 330, "qMark").setInteractive(); //items
+    this.qMark4 = this.add.image(360, 657, "qMark").setInteractive(); //arrows
+    this.qMark5 = this.add.image(980, 380, "qMark").setInteractive(); //player
+    this.qMark6 = this.add.image(251, 35, "qMark").setInteractive(); //score&countdown
+    this.input.on("pointerdown", () => {
+      console.log(pointer.x);
+      console.log(pointer.y);
+    });
+    this.t1 =
+      "How good you do in keeping your batteries full, will contribute towards the outcome of the game.\n\n" +
+      "Keep an close eye on them!";
+    this.t2 = "Display of the current day.";
+    this.t3 =
+      "Here you find items, that might help you. Be careful, when to use them.";
+    this.t4 = "Go to the arrows to enter a different room.";
+    this.t5 =
+      "That's you! Be nice to yourself.\n\n" +
+      "You can move the player by pressing the arrow keys. ";
+    this.t6 =
+      "The score is your primary factor towards winning the game. Try to collect as many points as possible by solving the tasks in each room!\n\n";
+    ("The countdown shows you the remaining time.\n\n");
+    this.createQMarks(this.qMark1, this.t1, 230, 300, 310, -400, "batteries");
+    this.createQMarks(this.qMark2, this.t2, 90, 300, 895, -530, "monday");
+    this.createQMarks(this.qMark3, this.t3, 125, 300, 230, -320, "items"); //items
+    this.createQMarks(this.qMark4, this.t4, 90, 300, 220, -180, "arrows");
+    this.createQMarks(this.qMark5, this.t5, 180, 300, 1021, -220, "player");
+    this.createQMarks(this.qMark6, this.t6, 115, 600, 290, -630, "score", 0, 0);
+    btn3 = this.add
+      .sprite(543, 493, "borderPlay")
+      .setInteractive({ useHandCursor: true })
+      .setScale(0.4);
+    btn3.on("pointerdown", () => {
+      this.scene.start("focus1");
+    });
+  }
   createQMarks(name, text, height, width, x, y, lightUp) {
     name.on("pointerover", () => {
       this.pop1 = new PopupPlugin(
@@ -165,9 +150,8 @@ export default class intermediate extends Phaser.Scene {
         fontStyle: "bold",
         });
       }else if(this.lightUp == "batteries" && !this.battery1){
-        this.battery1 = this.add.image(450.5, 50, "battery_focus");
-        this.battery2 = this.add.image(655.5, 50, "battery_energy");
-        this.battery3 = this.add.image(860.5, 50, "battery_efficiency");
+        this.battery2 = this.add.image(605.5, 50, "battery_energy");
+        this.battery3 = this.add.image(810.5, 50, "battery_efficiency");
       }else if(this.lightUp == "items" && !this.draggable1){
         this.draggable1 = this.add.image(65, 500, "cup");
         this.draggable2 = this.add.image(65, 400, "medication");
@@ -197,28 +181,32 @@ export default class intermediate extends Phaser.Scene {
   update() {
     if (this.pop) {
       if (this.pop.timedEvent) {
-        if (this.pop.timedEvent.hasDispatched && !this.intro) {
+        if (this.pop.timedEvent.hasDispatched && !intro && !this.created) {
           btn.destroy();
           this.btn2 = this.add
             .sprite(Config.width / 2, Config.height - 170, "borderPlay")
             .setInteractive({ useHandCursor: true });
           this.btn2.on("pointerdown", () => {
-            this.scene.start("focus1");
+            this.btn2.setVisible(false);
+            this.startIntro();
           });
+          this.created = true;
         }
       }
     }
-    if (!this.pop.timedEvent) {
+    /*if (!this.pop.timedEvent && !intro) {
+      console.log("huhu");
       btn.destroy();
       this.btn2 = this.add
         .sprite(Config.width / 2, Config.height - 170, "borderPlay")
         .setInteractive({ useHandCursor: true });
       this.btn2.on("pointerdown", () => {
-        this.scene.start("focus1");
+        this.btn2.setVisible(false);
+        this.startIntro();
       });
     }
-  }
-}
+  }*/
+
 //this.btn.on('pointerup', () => this.btn.setScale(0.9));*/
 /*console.log("here");
         generateButton(this,0);
@@ -252,3 +240,4 @@ export default class intermediate extends Phaser.Scene {
             }
             console.log(btn)
         } */
+      }}

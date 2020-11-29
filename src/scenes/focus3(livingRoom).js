@@ -68,13 +68,14 @@ export default class Focus3 extends Focus_scene {
 
       
       this.t =
-        "Do at least 30 push ups to increase your overall wellbeing.";
+        "Do at least 30 push ups to increase your overall wellbeing.\n\n"+
+        "Press the up and down arrow keys!";
 
       this.explainPushup = new PopupPlugin(
         this,
         3,
         "0x907748",
-        120,
+        180,
         16,
         300,
         0,

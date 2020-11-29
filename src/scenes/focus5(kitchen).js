@@ -267,9 +267,6 @@ export default class Focus5 extends Focus_scene {
   callSuper() {
     super.updateHob();
     super.updatescore(10);
-    super.updateB1("-1");
-    super.updateB2("-1");
-    super.updateB3("-1");
   }
   callSuper2(){
   super.updatescore(20);
@@ -332,7 +329,7 @@ export default class Focus5 extends Focus_scene {
             call = 1;
           } else {
             this.x = 890;
-            this.y = 250;
+            this.y = 483;
           }
         });
         if (call == 1) {
