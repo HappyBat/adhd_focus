@@ -1,11 +1,9 @@
 import Focus_scene from "../focus_scene";
 import PopupPlugin from "../../dist/pop";
 
-var pokal;
 var pointer;
 var sv;
 var item;
-var achievements;
 var scoreText;
 var scoreAnimation;
 var tween;
@@ -15,9 +13,12 @@ var q;
 var qText1;
 var qText2;
 var fav;
+var fav1;
 var fav2;
 var qTexts;
-
+var q;
+var qu;
+var bdc;
 export default class results extends Focus_scene {
   constructor() {
     super("results", "", {}, {}, [{}, {}, {}, {}, {}, {}]);
@@ -25,11 +26,13 @@ export default class results extends Focus_scene {
   init(data) {
     super.Init(data);
     sv = data.sv;
+    bdc = data.bdc;
   }
   create() {
     pointer = this.input.activePointer;
-    achievements = [];
     qTexts=[];
+    fav = [];
+    q=[];
     super.create();
     this.add.image(683, 384, "graduation").setDepth(3000);
     this.layer = this.add
@@ -38,12 +41,8 @@ export default class results extends Focus_scene {
       .fillRect(0, 0, 1366, 768)
       .setDepth(3100);
     //this.add.image(300, 384, "pokal").setScale(0.8).setDepth(3200);
-    fav = this.add.image(160, 606, "favicon").setScale(1.5).setDepth(3200).setVisible(false);
-    fav2 = this.add
-      .image(157, 282, "favicon")
-      .setScale(1.5)
-      .setDepth(3200)
-      .setVisible(false);
+    this.createFav(1);
+    this.createFav(2);
 
     scoreText = this.add
       .text(320, 20, "Your score: " + sv, {
@@ -99,13 +98,14 @@ export default class results extends Focus_scene {
   }
 
   generateQuestionmark(x, y, width, height, plus) {
-    q = this.add
+    qu = this.add
       .graphics()
       .fillStyle(0x303030, 0.8)
       .fillRect(x, y, width, height)
       .lineStyle(4, 0x000000, 1.0)
       .strokeRect(x, y, width, height)
       .setDepth(3100);  
+    q.push(qu);
       if (x == 112) {
         qText1 = this.add
           .text(x + 37, y + 10+plus, "?", {
@@ -127,6 +127,23 @@ export default class results extends Focus_scene {
           qTexts.push(qText2); 
       }   
      
+  }
+  createFav(f){
+    if(f ==1){
+        fav1 = this.add
+          .image(160, 606, "favicon")
+          .setScale(1.5)
+          .setDepth(3200)
+          .setVisible(false);
+          fav.push(fav1);
+    }else if(f == 2){
+        fav2 = this.add
+          .image(157, 282, "favicon")
+          .setScale(1.5)
+          .setDepth(3200)
+          .setVisible(false);
+        fav.push(fav2);
+    }   
   }
   makeFinalInfo() {
     if (sv == 100) {
@@ -158,7 +175,7 @@ export default class results extends Focus_scene {
       })
       .setDepth(3200);
   }
-  showAchievements(image, scale, visible,x,y,Scale,fav) {
+  showAchievements(image, scale, visible,x,y,Scale,f) {
     item = this.add
       .image(725, 430, image)
       .setScale(scale)
@@ -180,21 +197,29 @@ export default class results extends Focus_scene {
         onComplete: function () {
           //if all comorbidities
           //if score
-          if(fav=="fav1"){
+          if(f =="fav1"){ //&& tasks <
           item.setVisible(false); 
           qTexts[1].setVisible(false);
-          //fav.setVisible(true);
+          fav[1].setVisible(true);
+          }else {
+            if(image== "pokal"){
+              q[1].setVisible(false);
+              qTexts[1].setVisible(false);
+            }
           }
-          if(fav=="fav2"){
+
+          if(f =="fav2" && bdc > 4){
           item.setVisible(false); 
           qTexts[0].setVisible(false);
-          //fav2.setVisible(true);
+          fav[0].setVisible(true);
+          } else {
+            if(image== "batterySaver"){
+              q[0].setVisible(false);
+              qTexts[0].setVisible(false);
+            }
           }
-        },
-        });
-    //achievements.push(item);
-  
-    
+          
+        }});
   }
 
   updateScore(n) {

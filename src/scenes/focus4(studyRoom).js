@@ -8,6 +8,7 @@ var oH;
 var updated = 0;
 var counter;
 var changed =0;
+var updated2 = 0;
 
 export default class Focus4 extends Focus_scene {
   constructor() {
@@ -71,6 +72,7 @@ export default class Focus4 extends Focus_scene {
       this.play_btn.on(
         "pointerdown",
         () => {
+          if(this.finished != 1){
           this.play_btn.input.enabled = false;
           this.btn1.input.enabled = false;
           this.pop.toggleWindow();
@@ -126,6 +128,7 @@ export default class Focus4 extends Focus_scene {
               virus.setVisible(false);
             }
           }
+        }
         },
         this
       );
@@ -198,7 +201,6 @@ export default class Focus4 extends Focus_scene {
               this.updateScore();
               this.BatteryUpdate();
             }
-
           },
           this
         );
@@ -535,6 +537,8 @@ export default class Focus4 extends Focus_scene {
           }
           this.done.setVisible(false);
           timeLeftText.frame.glTexture = 0;
+          this.btn1.input.enabled = true;
+          this.finished = 1;
           //this.done.input.enabled = false;
         }
       });
@@ -562,9 +566,13 @@ export default class Focus4 extends Focus_scene {
       .setDepth(1000);
   }
   BatteryUpdate(){
-    super.updateB1("-1");
-    super.updateB2("-1");
-    super.updateB3("-1");
+    if (updated2 == 0) {
+      super.updateB1("-1");
+      super.updateB2("-1");
+      super.updateB3("-1");
+    updated2 = 1;
+    }
+
   }
 
   update() {

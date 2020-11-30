@@ -16,6 +16,7 @@ var size;
 var clothes;
 var laundry;
 var depressionTimed;
+var batteryDownCounter;
 
 //var combo;
 export default class Focus_scene extends Phaser.Scene {
@@ -76,6 +77,9 @@ export default class Focus_scene extends Phaser.Scene {
 
   create() {
     console.log(this.name);
+    if(typeof batteryDownCounter == "undefined"){
+    batteryDownCounter= 0;
+    }
     pointer = this.input.activePointer;
     if (typeof clothes == "object") {
     } else {
@@ -678,6 +682,7 @@ export default class Focus_scene extends Phaser.Scene {
     super.ovw = data.ovw;
     super.clothes = data.cl;
     super.laundry = data.lau;
+    super.batteryDownCounter = data.bdc;
   }
   tweenPlayer(D, arrow, Xchange, Ychange, TheScene, duration) {
     //console.log("tweenPlayer executed")
@@ -923,6 +928,9 @@ export default class Focus_scene extends Phaser.Scene {
       this.updateB3("-2");
     }
   }
+  updateScoreCounter(){
+    //scoreCounter = scoreCounter +1;
+  }
   updatescore(value) {
     if (value < 0) {
       colour = "#ff6666";
@@ -978,19 +986,31 @@ export default class Focus_scene extends Phaser.Scene {
     } else if (frame != -2 && frame != -1) {
       this.battery2.anims.play(frame, true);
     }else{};
+    if (this.b2Frame == 7 && this.else != true) {
+      console.log("update batterydown counter");
+      this.batteryDown();
+    }
+  }
+  batteryDown(){
+    batteryDownCounter = batteryDownCounter +1;
+    console.log("bdc");
+    console.log(batteryDownCounter)
   }
   updateB3(frame) {
     console.log(this.b3Frame);
     if (frame == -2 && this.b3Frame != 13) {
-      console.log("1st elsif");
       this.battery3.anims.play(parseInt(this.b3Frame) - 1, true);
     } else if (frame == -1 && this.b3Frame != 18) {
-      console.log("2nd elsif");
       this.battery3.anims.play(parseInt(this.b3Frame) + 1, true);
     } else if (frame != -2 && frame != -1) {
-      console.log("3rd elsif");
       this.battery3.anims.play(frame, true);
-    }else{};
+    }else{
+      this.else = true;
+    };
+    if(this.b3Frame==13 && this.else != true){
+      console.log("update batterydown counter 2")
+      this.batteryDown();
+    }
   }
   updateHob() {
     this.oH = true;
@@ -1138,6 +1158,7 @@ export default class Focus_scene extends Phaser.Scene {
           depression: this.depression,
           ovw: this.ovw,
           cl: clothes,
+          bdc: batteryDownCounter,
         });
       }
     }
