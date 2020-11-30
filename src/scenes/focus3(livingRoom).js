@@ -115,10 +115,15 @@ export default class Focus3 extends Focus_scene {
     });
   }
   onEvent() {}
-  updateBatteries() {
+  updateBatteries(b2,b3) {
     super.updateB1(-2);
     super.updateB2(-2);
     super.updateB3(-2);
+    if(b2){
+      super.updateB2(b2);
+    }if(b3){
+      super.updateB3(b3);
+    }
   }
 
   update() {
@@ -203,7 +208,7 @@ export default class Focus3 extends Focus_scene {
         if (layer) {
           layer.setVisible(false);
           sleep2.setVisible(false);
-          this.updateBatteries();
+          this.updateBatteries("7","13");
         }
         for (var i = 0; i < this.sleepObjects.length; i++) {
           this.sleepObjects[i].setVisible(false);

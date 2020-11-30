@@ -73,7 +73,7 @@ export default class intermediate extends Phaser.Scene {
     );
     this.instructions.setText(this.instructionsText, true);
 
-    this.qMark1 = this.add.image(643, 140, "qMark").setInteractive(); //batteries
+    this.qMark1 = this.add.image(698, 140, "qMark").setInteractive(); //batteries
     this.qMark2 = this.add.image(1233, 156, "qMark").setInteractive(); //day
     this.qMark3 = this.add.image(186, 330, "qMark").setInteractive(); //items
     this.qMark4 = this.add.image(360, 657, "qMark").setInteractive(); //arrows
@@ -96,7 +96,7 @@ export default class intermediate extends Phaser.Scene {
     this.t6 =
       "The score is your primary factor towards winning the game. Try to collect as many points as possible by solving the tasks in each room!\n\n";
     ("The countdown shows you the remaining time.\n\n");
-    this.createQMarks(this.qMark1, this.t1, 230, 300, 310, -400, "batteries");
+    this.createQMarks(this.qMark1, this.t1, 230, 300, 362, -400, "batteries");
     this.createQMarks(this.qMark2, this.t2, 90, 300, 895, -530, "monday");
     this.createQMarks(this.qMark3, this.t3, 125, 300, 230, -320, "items"); //items
     this.createQMarks(this.qMark4, this.t4, 90, 300, 220, -180, "arrows");
@@ -150,7 +150,7 @@ export default class intermediate extends Phaser.Scene {
         fontStyle: "bold",
         });
       }else if(this.lightUp == "batteries" && !this.battery1){
-        this.battery2 = this.add.image(605.5, 50, "battery_energy");
+        this.battery2 = this.add.image(605.5, 50, "battery_focus");
         this.battery3 = this.add.image(810.5, 50, "battery_efficiency");
       }else if(this.lightUp == "items" && !this.draggable1){
         this.draggable1 = this.add.image(65, 500, "cup");

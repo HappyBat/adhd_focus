@@ -104,6 +104,7 @@ import redDirt from "../../assets/redDirt.png";
 import yellowDirt from "../../assets/yellowDirt.png";
 import greyDirt from "../../assets/greyDirt.png";
 import batterySaver from "../../assets/batterySaver.png";
+import favicon from "../../assets/favicon.png";
 
 
 export default class preload_scene extends Phaser.Scene {
@@ -216,6 +217,7 @@ export default class preload_scene extends Phaser.Scene {
           this.load.image("yellowDirt", yellowDirt),
           this.load.image("greyDirt", greyDirt),
           this.load.image("batterySaver", batterySaver),
+          this.load.image("favicon", favicon),
           this.load.spritesheet("pushup", pushup, {
             frameWidth: 568,
             frameHeight: 238,

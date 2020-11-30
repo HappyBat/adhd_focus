@@ -526,7 +526,7 @@ export default class Focus6 extends Focus_scene {
             }
           }
         }
-        executed = 1;
+        executed = 1; 
       };
     }
 

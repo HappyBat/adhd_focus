@@ -361,7 +361,7 @@ export default class Focus_scene extends Phaser.Scene {
       this.draggable1.on("pointerover", () => {
         if (this.draggable1.dragged == 0 && this.draggable1.x <= 70) {
           this.t =
-            "Coffee can help you to recharge your focus and energy battery a bit.";
+            "Coffee can help you to recharge your focus battery a bit.";
 
           this.pop1 = new PopupPlugin(
             this,
@@ -475,7 +475,7 @@ export default class Focus_scene extends Phaser.Scene {
       this.draggable2.on("pointerover", () => {
         if (this.draggable2.dragged == 0 && this.draggable2.x <= 70) {
           this.t =
-            "Medication can help you to recharge your focus and energy battery.\n" +
+            "Medication can help you to recharge your focus battery.\n" +
             "However, it might sometimes leave you depressive when it wears out.";
           this.pop2 = new PopupPlugin(
             this,
@@ -886,8 +886,6 @@ export default class Focus_scene extends Phaser.Scene {
   }
 
   collision(s1, s2) {
-    console.log(s1.getBounds().x)
-    console.log(s1.x - s1.getBounds().width / 2);
     let r1 = [
       s1.x + s1.getBounds().width / 2,
       s1.x - s1.getBounds().width / 2,
@@ -949,6 +947,7 @@ export default class Focus_scene extends Phaser.Scene {
       targets: scoreAnimation,
       x: scoreText.x + 100,
       y: scoreText.y - 10,
+      scale:0.2,
       ease: "Linear",
       duration: 1000,
       repeat: 0,
@@ -1150,6 +1149,7 @@ export default class Focus_scene extends Phaser.Scene {
   update() {
     if (initialTime == 0) {
       this.showMessageBox();
+      this.player.setVisible(false);
       //this.sys.game.destroy(true);
       this.timedEvent = this.time.addEvent({
         delay: 2000,
@@ -1487,11 +1487,17 @@ export default class Focus_scene extends Phaser.Scene {
 
     //################# change battery on timer ##########################
     if (
+      initialTime == 550 ||
       initialTime == 500 ||
+      initialTime == 450 ||
       initialTime == 400 ||
+      initialTime == 350 ||
       initialTime == 300 ||
+      initialTime == 250 ||
       initialTime == 200 ||
-      initialTime == 100
+      initialTime == 150 ||
+      initialTime == 100 ||
+      initialTime == 50
     ) {
       this.updateB1(-1);
       this.updateB2(-1);
