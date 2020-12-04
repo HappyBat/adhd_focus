@@ -116,13 +116,18 @@ export default class Focus3 extends Focus_scene {
   }
   onEvent() {}
   updateBatteries(b2,b3) {
-    super.updateB1(-2);
-    super.updateB2(-2);
-    super.updateB3(-2);
+
     if(b2){
+      console.log("1")
       super.updateB2(b2);
     }if(b3){
+      console.log("2");
       super.updateB3(b3);
+    }else{
+      console.log("3");
+      super.updateB1(-2);
+      super.updateB2(-2);
+      super.updateB3(-2);
     }
   }
 
@@ -136,7 +141,7 @@ export default class Focus3 extends Focus_scene {
         updated == 0
       ) {
         this.pushup.anims.play("pushUp", true);
-        counter = counter + 1;
+        //counter = counter + 1;
       } else if (
         this.cursors.down.isDown &&
         this.pushup.anims.currentAnim.key == "pushUp" &&
@@ -146,6 +151,7 @@ export default class Focus3 extends Focus_scene {
         counter = counter + 1;
       }
       if(counter == 30 && updated != 1){
+        console.log("bbbb")
         super.updateB1(-2);
         super.updateB2(-2);
         super.updateB3(-2);

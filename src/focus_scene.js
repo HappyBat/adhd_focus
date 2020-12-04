@@ -17,6 +17,10 @@ var clothes;
 var laundry;
 var depressionTimed;
 var batteryDownCounter;
+var b2Counter1 = 0;
+var b2Counter2 = 0;
+var b3Counter1 = 0;
+var b3Counter2 = 0;
 
 //var combo;
 export default class Focus_scene extends Phaser.Scene {
@@ -76,9 +80,13 @@ export default class Focus_scene extends Phaser.Scene {
   }
 
   create() {
+    b2Counter1 = 0;
+    b2Counter2 = 0;
+    b3Counter1 = 0;
+    b3Counter2 = 0;
     console.log(this.name);
-    if(typeof batteryDownCounter == "undefined"){
-    batteryDownCounter= 0;
+    if (typeof batteryDownCounter == "undefined") {
+      batteryDownCounter = 0;
     }
     pointer = this.input.activePointer;
     if (typeof clothes == "object") {
@@ -364,8 +372,7 @@ export default class Focus_scene extends Phaser.Scene {
         .setInteractive({ draggable: true, useHandCursor: true });
       this.draggable1.on("pointerover", () => {
         if (this.draggable1.dragged == 0 && this.draggable1.x <= 70) {
-          this.t =
-            "Coffee can help you to recharge your focus battery a bit.";
+          this.t = "Coffee can help you to recharge your focus battery a bit.";
 
           this.pop1 = new PopupPlugin(
             this,
@@ -748,7 +755,10 @@ export default class Focus_scene extends Phaser.Scene {
   }
 
   washHands() {
-    this.hands = this.physics.add.sprite(650, 390, "hands").setDepth(3000).setVisible(false);
+    this.hands = this.physics.add
+      .sprite(650, 390, "hands")
+      .setDepth(3000)
+      .setVisible(false);
     //console.log("hello");
     this.hands.washingCounter = 0;
 
@@ -908,8 +918,8 @@ export default class Focus_scene extends Phaser.Scene {
       s2.x <= [r1[1]] ||
       s2.y >= [r1[2]] ||
       s2.y <= [r1[3]]
-    ){
-      return false
+    ) {
+      return false;
     }
 
     return true;
@@ -928,7 +938,7 @@ export default class Focus_scene extends Phaser.Scene {
       this.updateB3("-2");
     }
   }
-  updateScoreCounter(){
+  updateScoreCounter() {
     //scoreCounter = scoreCounter +1;
   }
   updatescore(value) {
@@ -955,7 +965,7 @@ export default class Focus_scene extends Phaser.Scene {
       targets: scoreAnimation,
       x: scoreText.x + 100,
       y: scoreText.y - 10,
-      scale:0.2,
+      scale: 0.2,
       ease: "Linear",
       duration: 1000,
       repeat: 0,
@@ -979,36 +989,114 @@ export default class Focus_scene extends Phaser.Scene {
 
   updateB2(frame) {
     //console.log(this.b2Frame);
-    if (frame == -2 && this.b2Frame != 7) {
-      this.battery2.anims.play(parseInt(this.b2Frame) - 1, true);
-    } else if (frame == -1 && this.b2Frame != 12) {
-      this.battery2.anims.play(parseInt(this.b2Frame) + 1, true);
-    } else if (frame != -2 && frame != -1) {
+    if (this.changedEmpty1) {
+      console.log("this.changedEmpty1");
+      frame = 18;
+      this.changedEmpty1 = false;
+    } else if (this.changedFull1) {
+      console.log("this.changedFull1");
+      frame = 13;
+      this.changedFull1 = false;
+    }
+    if (b2Counter1 == 1) {
+      if (frame == -2 && this.b2Frame != 7) {
+        console.log("second battery update minus");
+        this.battery2.anims.play(parseInt(this.b2Frame) - 2, true);
+      }
+    }
+    if (b2Counter2 == 1) {
+      if (frame == -1 && this.b2Frame != 12) {
+        console.log("second battery update pluse");
+        this.battery2.anims.play(parseInt(this.b2Frame) + 2, true);
+      }
+    }
+    if (b2Counter1 == 0 && b2Counter2 == 0) {
+      if (frame == -2 && this.b2Frame != 7) {
+        //full
+        this.battery2.anims.play(parseInt(this.b2Frame) - 1, true);
+        b2Counter1 = b2Counter1 + 1;
+      } else if (frame == -1 && this.b2Frame != 12) {
+        this.battery2.anims.play(parseInt(this.b2Frame) + 1, true);
+        b2Counter2 = b2Counter2 + 1;
+      }
+    }
+    if (frame != -2 && frame != -1) {
       this.battery2.anims.play(frame, true);
-    }else{};
-    if (this.b2Frame == 7 && this.else != true) {
+      //this.b2FrameWithinScene = frame;
+      if (frame == 12) {
+        this.changedEmpty1 = true;
+      } else if (frame == 7) {
+        this.changedFull1 = true;
+      }
+    } else {
+      this.else2 = true;
+    }
+
+    if (this.b2Frame == 12 || this.else2) {
+      this.else2 = false;
       console.log("update batterydown counter");
       this.batteryDown();
     }
   }
-  batteryDown(){
-    batteryDownCounter = batteryDownCounter +1;
+  batteryDown() {
+    batteryDownCounter = batteryDownCounter + 1;
     console.log("bdc");
-    console.log(batteryDownCounter)
+    console.log(batteryDownCounter);
   }
   updateB3(frame) {
-    console.log(this.b3Frame);
-    if (frame == -2 && this.b3Frame != 13) {
-      this.battery3.anims.play(parseInt(this.b3Frame) - 1, true);
-    } else if (frame == -1 && this.b3Frame != 18) {
-      this.battery3.anims.play(parseInt(this.b3Frame) + 1, true);
-    } else if (frame != -2 && frame != -1) {
+    /*console.log("b3Counter1");
+    console.log(b3Counter1)
+    console.log("b3Counter2");
+    console.log(b3Counter2);*/
+    console.log(this.b3Frame + 1);
+
+    if (this.changedEmpty) {
+      console.log("this.changedEmpty");
+      frame = 18;
+      this.changedEmpty = false;
+    } else if (this.changedFull) {
+      console.log("this.changedFull");
+      frame = 13;
+      this.changedFull = false;
+    }
+    if (b3Counter1 == 1) {
+      if (frame == -2 && this.b3Frame != 13) {
+        console.log("first battery update");
+        this.battery3.anims.play(parseInt(this.b3Frame) - 2, true);
+      }
+    } else if (b3Counter2 == 1) {
+      if (frame == -1 && this.b3Frame != 18) {
+        console.log("a bird");
+        this.battery3.anims.play(parseInt(this.b3Frame) + 2, true);
+      }
+    } else if (b3Counter1 == 0 && b3Counter2 == 0) {
+      if (frame == -2 && this.b3Frame != 13) {
+        console.log("first");
+        //full
+        this.battery3.anims.play(parseInt(this.b3Frame) - 1, true);
+        b3Counter1 = b3Counter1 + 1;
+      } else if (frame == -1 && this.b3Frame != 18) {
+        console.log("a pig"); //empty
+        console.log(this.b3Frame + 1);
+        this.battery3.anims.play(parseInt(this.b3Frame) + 1, true);
+        b3Counter2 = b3Counter2 + 1;
+      }
+    }
+    if (frame != -2 && frame != -1) {
+      console.log("second");
       this.battery3.anims.play(frame, true);
-    }else{
+      if (frame == 18 && this.changedEmpty!=false) {
+        this.changedEmpty = true;
+      } else if (frame == 13 && this.changedFull != false) {
+        this.changedFull = true;
+      }
+    } else {
       this.else = true;
-    };
-    if(this.b3Frame==13 && this.else != true){
-      console.log("update batterydown counter 2")
+    }
+
+    if (this.b3Frame == 18 || this.else) {
+      this.else = false;
+      console.log("update batterydown counter 2");
       this.batteryDown();
     }
   }
@@ -1128,8 +1216,8 @@ export default class Focus_scene extends Phaser.Scene {
         }*/
         if (this.battery2) {
           if (typeof this.battery2.scene !== "undefined") {
-          this.b2 = true;
-          this.b3 = true;
+            this.b2 = true;
+            this.b3 = true;
           }
           this.b2Frame = this.battery2.anims.currentAnim.key;
         }
@@ -1208,154 +1296,20 @@ export default class Focus_scene extends Phaser.Scene {
         }
       }
     }
-    //console.log("this.depLAYER")
-    //console.log(this.dep_layer)
-
-    if (this.executed == 0) {
-      //Random event (depression)
-      //export depressed variable to check for during study task?
-      if (initialTime == this.depressionTime || this.depression) {
-        this.add
-          .graphics()
-          .fillStyle(0x303030, 0.8)
-          .fillRect(0, 0, 1366, 768)
-          .setDepth(-1000);
-        console.log("dep_layerCreated");
-        this.executed = 1;
-      }
-      //if (this.battery3.anims.currentAnim) {
-      //random depression or if wellbeing to low
-      if (
-        initialTime ==
-        this
-          .depressionTime /*||
-          this.battery3.anims.currentAnim == 18*/
-      ) {
-        console.log("hello depression");
-
-        if (this.depression != true) {
-          this.t =
-            "Uhhh...ohhhh. How unlucky can anyone be?\n" +
-            "Depression can often occur with AD(H)D, and of course, it had to hit you.\n\n" +
-            "Doing nothing might have long term adverse affects. Studying will probably be impossible.\n\n" +
-            "Try to recharge your batteries instead!";
-          this.pop_dep = new PopupPlugin(
-            this,
-            10,
-            "0x907748",
-            650,
-            32,
-            800,
-            1,
-            280,
-            -50,
-            -350,
-            "28px",
-            true
-          );
-
-          this.pop_dep.setText(this.t, true);
-          this.depGuy = this.add.image(500, 384, "depGuy").setScale(0.75);
-
-          //this.battery1.anims.play("6", true);
-          this.battery2.anims.play("12", true);
-          this.battery3.anims.play("18", true);
-        }
-
-        if (this.executed == 1 /*&& !depressionTimed*/) {
-          console.log("created delete Depression event");
-          this.timedEventDep = this.time.addEvent({
-            delay: 60000,
-            callback: deleteDepression,
-            callbackScope: this,
-          });
-          //depressionTimed = true;
-        }
-      }
-      function deleteDepression() {
-        console.log("depression deleted");
-        this.executed = 0;
-        this.depression = false;
-        console.log(scoreValue);
-      }
-      //}
-    }
-
-    if (this.pop_dep) {
-      if (this.pop_dep.closedFlag == 1) {
-        if (this.depGuy) {
-          this.depGuy.setVisible(false);
-        }
-      }
-    }
-
-    //feeling overwhelmed
-    if (
-      this.ovw_executed == 0 &&
-      this.name != "focus5" &&
-      this.name != "focus2" &&
-      this.depression != true 
-    ) {
-      if (this.battery2.anims.currentAnim /*|| this.battery1.anims.currentAnim*/) {
-        if (
-          ((/*this.battery1.anims.currentAnim.key == 6 ||*/
-            this.battery2.anims.currentAnim.key == 12) &&
-            !this.pop_dep) ||
-          this.ovw
-        ) {
-          if (!this.ovw && !this.infoGiven) {
-            this.tO =
-              "BEING OVERWHELMED.\n\n" +
-              "This paralysing feeling when you want to do everything but you just cannot get anything done.\n\n" +
-              "Like a wall that repels you every time you try to climb it.\n\n" +
-              "Like trying to swim in cement - A body and a mind that are shut down.\n\n" +
-              "How can you ever get hold of your life??? ";
-            this.pop_ovw = new PopupPlugin(
-              this,
-              10,
-              "0x907748",
-              560,
-              32,
-              800,
-              1,
-              280,
-              -50,
-              0,
-              "28px",
-              true
-            );
-            this.pop_ovw.setText(this.tO, true);
-            this.bG.setAngle(180);
-            this.ovw = true;
-            this.infoGiven = true;
-          }
-          this.ovw_executed = 1;
-          if (this.ovw_executed == 1) {
-            this.timedEventOvw = this.time.addEvent({
-              delay: 60000,
-              callback: onEvent2,
-              callbackScope: this,
-            });
-
-            function onEvent2() {
-              //this.ovw_executed = 0;
-              //this.executed = 0;
-              this.ovw = false;
-              this.bG.setAngle(0);
-            }
-          }
-        }
-      }
-    }
 
     //OCD Event
-    if (this.executed2 == 0) {
+    if (
+      (this.executed2 == 0 && ((initialTime <= this.depressionTime - 40) ||
+      initialTime >= this.depressionTime + 40))
+    ) {
       //if (this.battery3.anims.currentAnim && !this.depression) {
       //random depression or if wellbeing to low
       if (this.battery3.anims.currentAnim) {
         if (
           //initialTime == this.ocdTime //||
-          this.battery3.anims.currentAnim.key == 18 && this.depression !=true && this.ovw != true
+          this.battery3.anims.currentAnim.key == 18 &&
+          this.depression != true &&
+          this.ovw != true
         ) {
           console.log("hello ocd");
 
@@ -1449,6 +1403,148 @@ export default class Focus_scene extends Phaser.Scene {
       }
     }
 
+    //console.log("this.depLAYER")
+    //console.log(this.dep_layer)
+    //DEPRESSION
+
+    if (this.executed == 0) {
+      //Random event (depression)
+      //export depressed variable to check for during study task?
+      if (initialTime == this.depressionTime || this.depression) {
+        this.add
+          .graphics()
+          .fillStyle(0x303030, 0.8)
+          .fillRect(0, 0, 1366, 768)
+          .setDepth(-1000);
+        console.log("dep_layerCreated");
+        this.executed = 1;
+      }
+      //if (this.battery3.anims.currentAnim) {
+      //random depression or if wellbeing to low
+      if (
+        initialTime ==
+        this
+          .depressionTime /*||
+          this.battery3.anims.currentAnim == 18*/
+      ) {
+        console.log("hello depression");
+
+        if (this.depression != true) {
+          this.t =
+            "Uhhh...ohhhh. How unlucky can anyone be?\n" +
+            "Depression can often occur with AD(H)D, and of course, it had to hit you.\n\n" +
+            "Doing nothing might have long term adverse affects. Studying will probably be impossible.\n\n" +
+            "Try to recharge your batteries instead!";
+          this.pop_dep = new PopupPlugin(
+            this,
+            10,
+            "0x907748",
+            650,
+            32,
+            800,
+            1,
+            280,
+            -50,
+            -350,
+            "28px",
+            true
+          );
+
+          this.pop_dep.setText(this.t, true);
+          this.depGuy = this.add.image(500, 384, "depGuy").setScale(0.75);
+
+          //this.battery1.anims.play("6", true);
+          this.battery2.anims.play("12", true);
+          this.battery3.anims.play("18", true);
+        }
+
+        if (this.executed == 1 /*&& !depressionTimed*/) {
+          console.log("created delete Depression event");
+          this.timedEventDep = this.time.addEvent({
+            delay: 60000,
+            callback: deleteDepression,
+            callbackScope: this,
+          });
+          //depressionTimed = true;
+        }
+      }
+      function deleteDepression() {
+        console.log("depression deleted");
+        this.executed = 0;
+        this.depression = false;
+        console.log(scoreValue);
+      }
+      //}
+    }
+
+    if (this.pop_dep) {
+      if (this.pop_dep.closedFlag == 1) {
+        if (this.depGuy) {
+          this.depGuy.setVisible(false);
+        }
+      }
+    }
+
+    //feeling overwhelmed
+    if (
+      this.ovw_executed == 0 &&
+      this.name != "focus5" &&
+      this.name != "focus2" &&
+      this.depression != true
+    ) {
+      if (
+        this.battery2.anims.currentAnim /*|| this.battery1.anims.currentAnim*/
+      ) {
+        if (
+          /*this.battery1.anims.currentAnim.key == 6 ||*/
+          (this.battery2.anims.currentAnim.key == 12 && !this.pop_dep) ||
+          this.ovw
+        ) {
+          if (!this.ovw && !this.infoGiven) {
+            this.tO =
+              "BEING OVERWHELMED.\n\n" +
+              "This paralysing feeling when you want to do everything but you just cannot get anything done.\n\n" +
+              "Like a wall that repels you every time you try to climb it.\n\n" +
+              "Like trying to swim in cement - A body and a mind that are shut down.\n\n" +
+              "How can you ever get hold of your life??? ";
+            this.pop_ovw = new PopupPlugin(
+              this,
+              10,
+              "0x907748",
+              560,
+              32,
+              800,
+              1,
+              280,
+              -50,
+              0,
+              "28px",
+              true
+            );
+            this.pop_ovw.setText(this.tO, true);
+            this.bG.setAngle(180);
+            this.ovw = true;
+            this.infoGiven = true;
+          }
+          this.ovw_executed = 1;
+          if (this.ovw_executed == 1) {
+            this.timedEventOvw = this.time.addEvent({
+              delay: 60000,
+              callback: onEvent2,
+              callbackScope: this,
+            });
+
+            function onEvent2() {
+              //this.ovw_executed = 0;
+              //this.executed = 0;
+              this.ovw = false;
+              this.bG.setAngle(0);
+            }
+          }
+        }
+      }
+    }
+
     //######################## PLAYER ########################
     if (this.ovw) {
       this.cursors = this.input.keyboard.createCursorKeys();
@@ -1507,7 +1603,7 @@ export default class Focus_scene extends Phaser.Scene {
     }
 
     //################# change battery on timer ##########################
-    if (
+    /*if (
       initialTime == 550 ||
       initialTime == 500 ||
       initialTime == 450 ||
@@ -1523,7 +1619,7 @@ export default class Focus_scene extends Phaser.Scene {
       this.updateB1(-1);
       this.updateB2(-1);
       this.updateB3(-1);
-    }
+    }*/
 
     //####################################################################
     /*if (this.input.pointer1.isDown) {

@@ -1,5 +1,6 @@
 import Focus_scene from "../focus_scene";
 import PopupPlugin from "../../dist/pop";
+import White from "../../dist/white";
 var initialTime2;
 var timeLeftText;
 var timeLeftRect;
@@ -7,8 +8,8 @@ var billCounter;
 var oH;
 var updated = 0;
 var counter;
-var changed =0;
 var updated2 = 0;
+var updated = 2;
 
 export default class Focus4 extends Focus_scene {
   constructor() {
@@ -19,7 +20,6 @@ export default class Focus4 extends Focus_scene {
       { x: 40, y: 190, width: 1240, height: 640 },
       [{}, {}, {}, {}, { x: 1290, y: 650, img: "arrow_right_white" }, {}]
     );
-
     initialTime2 = 90;
   }
   init(data) {
@@ -45,95 +45,96 @@ export default class Focus4 extends Focus_scene {
     this.x = 0;
 
     super.createTaskbarButton(1, 310, 715, 140, "Prep for exam", 50);
-    super.createTaskbarButton(2, 560, 715, 100, "Pay bills",50);
+    super.createTaskbarButton(2, 560, 715, 100, "Pay bills", 50);
 
     //open instructions on click
-    this.btn1.on("pointerdown", () => {
-      this.btn1_create();
-      this.pop;
-      this.check = 1;
+    if (this.finished != 1) {
+      this.btn1.on("pointerdown", () => {
+        this.btn1_create();
+        this.check = 1;
+        this.input.on(
+          "gameobjectup",
+          function (pointer, gameObject) {
+            if (this.x == 0 && this.created == 0) {
+              gameObject.emit("clicked", gameObject);
+            }
+          },
+          this
+        );
 
-      this.input.on(
-        "gameobjectup",
-        function (pointer, gameObject) {
-          if (this.x == 0 && this.created == 0) {
-            gameObject.emit("clicked", gameObject);
-          }
-        },
-        this
-      );
+        this.play_btn = this.add
+          .sprite(680, 600, "borderPlay")
+          .setInteractive({ useHandCursor: true })
+          .setScale(0.5);
+        //this.play_btn.on("clicked2", playRemove, this);
 
-      this.play_btn = this.add
-        .sprite(680, 600, "borderPlay")
-        .setInteractive({ useHandCursor: true })
-        .setScale(0.5);
-      //this.play_btn.on("clicked2", playRemove, this);
+        this.play_btn.on(
+          "pointerdown",
+          () => {
+            this.play_btn.input.enabled = false;
+            this.btn1.input.enabled = false;
+            this.pop.toggleWindow();
+            this.play_btn.setVisible(false);
+            if (this.x == 0) {
+              if (this.check == 1) {
+                //text to read
+                this.studyText = this.add
+                  .image(683, 384, "studyText")
+                  .setDepth(1000);
 
-      this.play_btn.on(
-        "pointerdown",
-        () => {
-          if(this.finished != 1){
-          this.play_btn.input.enabled = false;
-          this.btn1.input.enabled = false;
-          this.pop.toggleWindow();
-          this.play_btn.setVisible(false);
-          if (this.x == 0) {
-            if (this.check == 1) {
-              //text to read
-              this.studyText = this.add
-                .image(683, 384, "studyText")
-                .setDepth(1000);
+                //countdown for task
+                timeLeftRect = this.add
+                  .graphics()
+                  .fillStyle(0x8b0000, 1)
+                  .setDepth(1200);
+                timeLeftRect = this.add
+                  .graphics()
+                  .fillRoundedRect(950, 15, 240, 50, [20])
+                  .setDepth(1200);
 
-              //countdown for task
-              timeLeftRect = this.add
-                .graphics()
-                .fillStyle(0x8b0000, 1)
-                .setDepth(1200);
-              timeLeftRect = this.add
-                .graphics()
-                .fillRoundedRect(950, 15, 240, 50, [20])
-                .setDepth(1200);
+                timeLeftText = this.add
+                  .text(960, 30, "Time left: 1:30", {
+                    fontSize: "25px",
+                    fill: "white",
+                  })
+                  .setDepth(1200);
 
-              timeLeftText = this.add
-                .text(960, 30, "Time left: 1:30", {
-                  fontSize: "25px",
-                  fill: "white",
-                })
-                .setDepth(1200);
+                //flying objects as distruction from text
+                for (var i = 0; i < 50; i++) {
+                  var x = Phaser.Math.Between(60, 1300);
+                  var y = Phaser.Math.Between(35, 750);
 
-              //flying objects as distruction from text
-              for (var i = 0; i < 50; i++) {
-                var x = Phaser.Math.Between(60, 1300);
-                var y = Phaser.Math.Between(35, 750);
+                  this.virus = this.physics.add
+                    .sprite(x, y, "virus")
+                    .setInteractive({ useHandCursor: true })
+                    .setDepth(1300);
+                  if (i % 2 != 0) {
+                    this.virus.setScale(2);
+                  }
 
-                this.virus = this.physics.add
-                  .sprite(x, y, "virus")
-                  .setInteractive({ useHandCursor: true })
-                  .setDepth(1300);
-                if (i % 2 != 0) {
-                  this.virus.setScale(2);
+                  this.virus.on("clicked", virusRemove, this);
+                  this.allObjects.push(this.virus);
+                  this.check = 0;
                 }
+              }
 
-                this.virus.on("clicked", virusRemove, this);
-                this.allObjects.push(this.virus);
-                this.check = 0;
+              //remove on click
+              function virusRemove(virus = this.virus) {
+                //this.check = 0;
+                virus.input.enabled = false;
+                virus.off("clicked", virusRemove);
+                virus.setVisible(false);
               }
             }
-
-            //remove on click
-            function virusRemove(virus = this.virus) {
-              //this.check = 0;
-              virus.input.enabled = false;
-              virus.off("clicked", virusRemove);
-              virus.setVisible(false);
-            }
-          }
-        }
-        },
-        this
-      );
+            this.createWhiteLayer();
+          },
+          this
+        );
+        this.btn1.input.enabled = false;
+      });
+    } else {
       this.btn1.input.enabled = false;
-    });
+    }
     this.call = 0;
     this.btn2.on("pointerdown", () => {
       this.pop_billsCreated = 0;
@@ -204,12 +205,12 @@ export default class Focus4 extends Focus_scene {
           },
           this
         );
-        
-        this.input.on("pointerup", function (pointer){
-          if(counter == 1){
-          this.scene.bills.setVisible(false);
-          rt.setVisible(false);
-          billCounter = 0;
+
+        this.input.on("pointerup", function (pointer) {
+          if (counter == 1) {
+            this.scene.bills.setVisible(false);
+            rt.setVisible(false);
+            billCounter = 0;
           }
           counter = 1;
         })
@@ -228,8 +229,13 @@ export default class Focus4 extends Focus_scene {
       }*/
     });
   }
-
   //create pop-up
+  createWhiteLayer() {
+    this.pop3 = new White(
+      this
+    );
+  }
+
   btn1_create() {
     this.t =
       "Arrghhhh...study for the exam? You really don't feel like it. Anyway, what has to be done, has to be done. \n\n" +
@@ -266,6 +272,7 @@ export default class Focus4 extends Focus_scene {
   //countdown for task
 
   onEvent() {
+    try{
     if (timeLeftText && timeLeftText.frame.glTexture !== 0) {
       initialTime2 -= 1;
       this.seconds2 = initialTime2;
@@ -274,7 +281,7 @@ export default class Focus4 extends Focus_scene {
       this.partInSeconds2 = this.partInSeconds2.toString().padStart(2, "0");
       this.fa = `${this.minutes2}:${this.partInSeconds2}`;
       timeLeftText.setText("Time left: " + this.fa);
-    }
+    }}catch{}
   }
 
   createQuestionnaire() {
@@ -537,8 +544,9 @@ export default class Focus4 extends Focus_scene {
           }
           this.done.setVisible(false);
           timeLeftText.frame.glTexture = 0;
-          this.btn1.input.enabled = true;
+          this.btn1.input.enabled = false;
           this.finished = 1;
+          this.pop3.destroy();
           //this.done.input.enabled = false;
         }
       });
@@ -565,12 +573,12 @@ export default class Focus4 extends Focus_scene {
       .setScale(0.6)
       .setDepth(1000);
   }
-  BatteryUpdate(){
+  BatteryUpdate() {
     if (updated2 == 0) {
       super.updateB1("-1");
       super.updateB2("-1");
       super.updateB3("-1");
-    updated2 = 1;
+      updated2 = 1;
     }
 
   }

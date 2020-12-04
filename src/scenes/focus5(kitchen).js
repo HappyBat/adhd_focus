@@ -7,6 +7,7 @@ var whiteLayer;
 var arrayDish;
 var arrayDirt;
 var counter = 0;
+var updated;
 
 export default class Focus5 extends Focus_scene {
   constructor() {
@@ -27,6 +28,7 @@ export default class Focus5 extends Focus_scene {
     arrayDirt = [];
     this.dirtRemoved = 0;
     this.dirt;
+    this.updated = 0;
     pointer = this.input.activePointer;
     super.createTaskbarButton(1, 300, 715, 145, "Cook something",20);
 
@@ -269,10 +271,13 @@ export default class Focus5 extends Focus_scene {
     super.updatescore(10);
   }
   callSuper2(){
+  if(updated != 1){
   super.updatescore(20);
   super.updateB1("-1");
   super.updateB2("-1");
   super.updateB3("-1");
+  updated = 1;
+  }
   }
   update() {
     super.update();
@@ -292,10 +297,12 @@ export default class Focus5 extends Focus_scene {
       this.dirtRemoved = 1;
     }*/
     if(counter == 20 && this.updated != 1){
+      console.log("counter is 20")
       for(var i=0; i < arrayDish.length; i++){
       arrayDish[i].setVisible(false);
       whiteLayer.setVisible(false);
       console.log(this)
+      counter = 0;
       }
       this.callSuper2();
       this.updated = 1;

@@ -55,7 +55,7 @@ export default class intermediate extends Phaser.Scene {
     btn.setVisible(false);
 
     this.instructionsText =
-      'Almost ready to go! Read the instructions and press "FOUCS" if you are done.\n\nAh sorry, "FOCUS"' +
+      'Almost ready to go! Read the instructions by hovering over the question marks and press "FOUCS" if you are done.\n\nAh sorry, "FOCUS"' +
       " - can't get it right!";
     this.instructions = new PopupPlugin(
       this,
@@ -79,6 +79,8 @@ export default class intermediate extends Phaser.Scene {
     this.qMark4 = this.add.image(360, 657, "qMark").setInteractive(); //arrows
     this.qMark5 = this.add.image(980, 380, "qMark").setInteractive(); //player
     this.qMark6 = this.add.image(251, 35, "qMark").setInteractive(); //score&countdown
+    this.qMark7 = this.add.image(391, 74, "qMark").setInteractive(); //
+
     this.input.on("pointerdown", () => {
       console.log(pointer.x);
       console.log(pointer.y);
@@ -94,14 +96,26 @@ export default class intermediate extends Phaser.Scene {
       "That's you! Be nice to yourself.\n\n" +
       "You can move the player by pressing the arrow keys. ";
     this.t6 =
-      "The score is your primary factor towards winning the game. Try to collect as many points as possible by solving the tasks in each room!\n\n";
+      "The score is your primary factor towards winning the game.\n"+"Try to collect as many points as possible by solving the tasks in each room!\n\n";
     ("The countdown shows you the remaining time.\n\n");
+    this.t7 = "You have 10 minutes to complete the game.\n\n"+ "The countdown shows you, how much time is left."
     this.createQMarks(this.qMark1, this.t1, 230, 300, 362, -400, "batteries");
     this.createQMarks(this.qMark2, this.t2, 90, 300, 895, -530, "monday");
     this.createQMarks(this.qMark3, this.t3, 125, 300, 230, -320, "items"); //items
     this.createQMarks(this.qMark4, this.t4, 90, 300, 220, -180, "arrows");
     this.createQMarks(this.qMark5, this.t5, 180, 300, 1021, -220, "player");
-    this.createQMarks(this.qMark6, this.t6, 115, 600, 290, -630, "score", 0, 0);
+    this.createQMarks(this.qMark6, this.t6, 130, 600, 290, -600, "score", 0, 0);
+        this.createQMarks(
+          this.qMark7,
+          this.t7,
+          170,
+          300,
+          435,
+          -530,
+          "countdown",
+          0,
+          0
+        );
     btn3 = this.add
       .sprite(543, 493, "borderPlay")
       .setInteractive({ useHandCursor: true })
@@ -133,10 +147,10 @@ export default class intermediate extends Phaser.Scene {
           fontSize: "34px",
           fill: "white",
         });
-        this.add.text(20, 64, "Countdown: 9:54", {
+        this.add.text(20, 64, "Countdown: 10:00", {
           fontSize: "34px",
           fill: "white",
-        });
+        }).setDepth(-900);
       }else if (this.lightUp == "monday" && !this.Monday){
         this.Monday = this.add
         .graphics()
