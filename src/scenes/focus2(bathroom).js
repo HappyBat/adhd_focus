@@ -213,6 +213,9 @@ export default class Focus2 extends Focus_scene {
   updateLaundry2(){
     super.updatelaundry2();
   }
+  updateTodo(){
+    super.updateText(3);
+  }
 
   update() {
     super.update();
@@ -264,6 +267,7 @@ export default class Focus2 extends Focus_scene {
           console.log(counter)
           if (counter == 15){
             this.scene.updateLaundry2();
+            this.scene.updateTodo();
           }
         }); //update
         this.exec = 1;

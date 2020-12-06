@@ -17,10 +17,17 @@ var clothes;
 var laundry;
 var depressionTimed;
 var batteryDownCounter;
+var tasksDone;
+var counter = 0;
+var counter2 = 0;
+var myFrame;
+var myFrame2;
 var b2Counter1 = 0;
 var b2Counter2 = 0;
 var b3Counter1 = 0;
 var b3Counter2 = 0;
+var popuptext;
+var obsessive;
 
 //var combo;
 export default class Focus_scene extends Phaser.Scene {
@@ -84,10 +91,16 @@ export default class Focus_scene extends Phaser.Scene {
     b2Counter2 = 0;
     b3Counter1 = 0;
     b3Counter2 = 0;
+    counter = 0;
+    counter2 = 0;
     console.log(this.name);
     if (typeof batteryDownCounter == "undefined") {
       batteryDownCounter = 0;
     }
+    if (typeof tasksDone == "undefined") {
+      tasksDone = 0;
+    }
+
     pointer = this.input.activePointer;
     if (typeof clothes == "object") {
     } else {
@@ -357,6 +370,15 @@ export default class Focus_scene extends Phaser.Scene {
     //######################### BATTERY END ############################
     if (!scoreValue) {
       scoreValue = 0;
+      popuptext = [
+        "TO-DO list: \n\n\n",
+        "X prepare exam\v\v\v\v/50s.\n \n",
+        "X pay bills\v\v\v\v\v\v\v/50s. \n \n",
+        "X do the laundry\v\v/45s.\n \n",
+        "X go to work \v\v\v\v\v/160s.\n \n",
+        "X cook \v\v\v\v\v\v\v\v\v\v\v/20s. \n \n",
+        "X do the dishes\v\v\v/20s.\n \n",
+      ];
     }
     scoreText = this.add.text(20, 20, "Score: " + scoreValue, {
       fontSize: "34px",
@@ -555,7 +577,7 @@ export default class Focus_scene extends Phaser.Scene {
 
     this.todo_btn.on("pointerover", () => {
       //this.pointer = pointer;
-      this.t = "Click to view your To-Do list!";
+      this.t = "Click to keep track of your To-Do list!";
       this.pop4 = new PopupPlugin(
         this,
         3,
@@ -667,7 +689,7 @@ export default class Focus_scene extends Phaser.Scene {
     if (points == 160) {
       this.points.fillRoundedRect(x + width + 165, y - 10, 80, 40, [20]);
     }
-    this.pointsText = this.add.text(x + width + 170, y - 3, points + "p.", {
+    this.pointsText = this.add.text(x + width + 170, y - 3, points + "s.", {
       fontSize: "25px",
       fill: "white",
     });
@@ -690,6 +712,8 @@ export default class Focus_scene extends Phaser.Scene {
     super.clothes = data.cl;
     super.laundry = data.lau;
     super.batteryDownCounter = data.bdc;
+    super.popuptext = data.todol;
+    super.tasksDone = data.td;
   }
   tweenPlayer(D, arrow, Xchange, Ychange, TheScene, duration) {
     //console.log("tweenPlayer executed")
@@ -792,6 +816,8 @@ export default class Focus_scene extends Phaser.Scene {
           }
         }
       }
+      console.log(this.washed);
+
       if (this.scene.hands.washingCounter == 6) {
         this.scene.updateB3("-2");
         this.scene.hands.setVisible(false);
@@ -821,14 +847,7 @@ export default class Focus_scene extends Phaser.Scene {
   }
 
   btn_create() {
-    this.t =
-      "TO-DO list: \n\n\n" +
-      "> prepare exam\v\v\v\v/50p.\n \n" +
-      "> pay bills\v\v\v\v\v\v\v/50p. \n \n" +
-      "> do the laundry\v\v/45p.\n \n" +
-      "> go to work \v\v\v\v\v/160p.\n \n" +
-      "> cook \v\v\v\v\v\v\v\v\v\v\v/20p. \n \n" +
-      "> do the dishes\v\v\v/20p.\n \n";
+    this.tabuda = popuptext.join("");
 
     this.pop = new PopupPlugin(
       this,
@@ -844,7 +863,7 @@ export default class Focus_scene extends Phaser.Scene {
       "24px",
       false
     );
-    this.pop.setText(this.t, true);
+    this.pop.setText(this.tabuda, true);
   }
 
   showMessageBox() {
@@ -987,56 +1006,50 @@ export default class Focus_scene extends Phaser.Scene {
     }else{};*/
   }
 
+  updateText(task) {
+    tasksDone = tasksDone + 1;
+    popuptext[task] = popuptext[task].replace("X", "✔");
+  }
+
   updateB2(frame) {
-    //console.log(this.b2Frame);
-    if (this.changedEmpty1) {
-      console.log("this.changedEmpty1");
-      frame = 18;
-      this.changedEmpty1 = false;
-    } else if (this.changedFull1) {
-      console.log("this.changedFull1");
-      frame = 13;
-      this.changedFull1 = false;
+    if (this.changedEmpty1 && !this.firstEmpty) {
+      myFrame2 = 12;
+      this.firstEmpty = true;
+    } else if (this.changedFull1 && !this.firstFull) {
+      myFrame2 = 7;
+      this.firstFull = true;
     }
-    if (b2Counter1 == 1) {
-      if (frame == -2 && this.b2Frame != 7) {
-        console.log("second battery update minus");
-        this.battery2.anims.play(parseInt(this.b2Frame) - 2, true);
+    if (frame == -2 || frame == -1) {
+      
+      if (frame == -2 && ((this.b3Frame == 7 && myFrame == 12) || (this.b3Frame != 7)) && myFrame2 !=7) {
+        counter = counter - 1;
+      }
+      if (frame == -1 && ((this.b2Frame == 12 && myFrame == 7)|| (this.b3Frame !=12)) && myFrame2 !=12) {
+        counter = counter + 1;
+      }
+      if (!this.changedEmpty1 && !this.changedFull1) {
+        this.battery2.anims.play(parseInt(this.b2Frame) + counter, true);
+      } else if (this.changedEmpty1 || this.changedFull1) {
+        this.battery2.anims.play(parseInt(myFrame2) + counter, true);
+        myFrame2 = myFrame2 + counter;
       }
     }
-    if (b2Counter2 == 1) {
-      if (frame == -1 && this.b2Frame != 12) {
-        console.log("second battery update pluse");
-        this.battery2.anims.play(parseInt(this.b2Frame) + 2, true);
-      }
-    }
-    if (b2Counter1 == 0 && b2Counter2 == 0) {
-      if (frame == -2 && this.b2Frame != 7) {
-        //full
-        this.battery2.anims.play(parseInt(this.b2Frame) - 1, true);
-        b2Counter1 = b2Counter1 + 1;
-      } else if (frame == -1 && this.b2Frame != 12) {
-        this.battery2.anims.play(parseInt(this.b2Frame) + 1, true);
-        b2Counter2 = b2Counter2 + 1;
-      }
-    }
-    if (frame != -2 && frame != -1) {
+
+
+    if (frame != -2 && frame != -1 && (!this.changedEmpty1 && !this.changedFull1)) {
       this.battery2.anims.play(frame, true);
-      //this.b2FrameWithinScene = frame;
       if (frame == 12) {
         this.changedEmpty1 = true;
       } else if (frame == 7) {
         this.changedFull1 = true;
       }
-    } else {
-      this.else2 = true;
-    }
-
+    } 
     if (this.b2Frame == 12 || this.else2) {
       this.else2 = false;
       console.log("update batterydown counter");
       this.batteryDown();
     }
+
   }
   batteryDown() {
     batteryDownCounter = batteryDownCounter + 1;
@@ -1044,61 +1057,51 @@ export default class Focus_scene extends Phaser.Scene {
     console.log(batteryDownCounter);
   }
   updateB3(frame) {
-    /*console.log("b3Counter1");
-    console.log(b3Counter1)
-    console.log("b3Counter2");
-    console.log(b3Counter2);*/
-    console.log(this.b3Frame + 1);
 
-    if (this.changedEmpty) {
-      console.log("this.changedEmpty");
-      frame = 18;
-      this.changedEmpty = false;
-    } else if (this.changedFull) {
-      console.log("this.changedFull");
-      frame = 13;
-      this.changedFull = false;
+    if (this.changedEmpty && !this.firstEmpty) {
+      myFrame = 18; 
+      this.firstEmpty = true;
+    } else if (this.changedFull && !this.firstFull) {
+      myFrame = 13;  
+      this.firstFull = true;
     }
-    if (b3Counter1 == 1) {
-      if (frame == -2 && this.b3Frame != 13) {
-        console.log("first battery update");
-        this.battery3.anims.play(parseInt(this.b3Frame) - 2, true);
+    if (frame == -2 || frame == -1) {
+        console.log("counter2: " + counter2);
+        console.log("myFrame: "+myFrame);
+        console.log("b3Frame: " + this.b3Frame);
+      if (frame == -2 && ((this.b3Frame == 13 && myFrame ==18)|| (this.b3Frame != 13)) && myFrame != 13) {
+        counter2 = counter2 - 1; 
       }
-    } else if (b3Counter2 == 1) {
-      if (frame == -1 && this.b3Frame != 18) {
-        console.log("a bird");
-        this.battery3.anims.play(parseInt(this.b3Frame) + 2, true);
+      if (frame == -1 && ((this.b3Frame == 18 && myFrame == 13)|| (this.b3Frame != 18)) && myFrame != 18) {
+        counter2 = counter2 + 1;
       }
-    } else if (b3Counter1 == 0 && b3Counter2 == 0) {
-      if (frame == -2 && this.b3Frame != 13) {
-        console.log("first");
-        //full
-        this.battery3.anims.play(parseInt(this.b3Frame) - 1, true);
-        b3Counter1 = b3Counter1 + 1;
-      } else if (frame == -1 && this.b3Frame != 18) {
-        console.log("a pig"); //empty
-        console.log(this.b3Frame + 1);
-        this.battery3.anims.play(parseInt(this.b3Frame) + 1, true);
-        b3Counter2 = b3Counter2 + 1;
+      if (!this.changedEmpty && !this.changedFull) {
+        this.battery3.anims.play(parseInt(this.b3Frame) + counter2, true);
+      } else if (this.changedEmpty || this.changedFull) {
+        this.battery3.anims.play(parseInt(myFrame) + counter2, true);
+        myFrame=myFrame + counter2;
       }
     }
-    if (frame != -2 && frame != -1) {
+
+    if (frame != -2 && frame != -1 && (!this.changedEmpty && !this.changedFull)) {
       console.log("second");
       this.battery3.anims.play(frame, true);
-      if (frame == 18 && this.changedEmpty!=false) {
+      if (frame == 18 && this.changedEmpty != false) {
         this.changedEmpty = true;
+        //io(this);
+        this.batteryDown();
       } else if (frame == 13 && this.changedFull != false) {
         this.changedFull = true;
       }
-    } else {
-      this.else = true;
-    }
-
-    if (this.b3Frame == 18 || this.else) {
-      this.else = false;
+    } 
+    /*function io(d){
+      d.batteryDown();
+    }*/
+    if ((this.b3Frame+counter2) == 18 || (myFrame + counter2) == 18) {
       console.log("update batterydown counter 2");
       this.batteryDown();
     }
+
   }
   updateHob() {
     this.oH = true;
@@ -1159,6 +1162,11 @@ export default class Focus_scene extends Phaser.Scene {
     return true;
   }
   changeScene(next) {
+    this.changedFull = false;
+    this.changedEmpty = false;
+    this.changedFull1 = false;
+    this.changedEmpty1 = false;
+    this.batteryUpdated == 0;
     if ((next == "focus5" || next == "focus2") && this.ovw) {
       this.t =
         "No, it wasn't this room you wanted to go to, was it?\n\n" +
@@ -1247,6 +1255,8 @@ export default class Focus_scene extends Phaser.Scene {
           ovw: this.ovw,
           cl: clothes,
           bdc: batteryDownCounter,
+          todol: popuptext,
+          td: tasksDone,
         });
       }
     }
@@ -1299,8 +1309,9 @@ export default class Focus_scene extends Phaser.Scene {
 
     //OCD Event
     if (
-      (this.executed2 == 0 && ((initialTime <= this.depressionTime - 40) ||
-      initialTime >= this.depressionTime + 40))
+      this.executed2 == 0 &&
+      (initialTime <= this.depressionTime - 40 ||
+        initialTime >= this.depressionTime + 40)
     ) {
       //if (this.battery3.anims.currentAnim && !this.depression) {
       //random depression or if wellbeing to low
@@ -1309,7 +1320,7 @@ export default class Focus_scene extends Phaser.Scene {
           //initialTime == this.ocdTime //||
           this.battery3.anims.currentAnim.key == 18 &&
           this.depression != true &&
-          this.ovw != true
+          this.ovw != true && obsessive != true
         ) {
           console.log("hello ocd");
 
@@ -1332,12 +1343,18 @@ export default class Focus_scene extends Phaser.Scene {
             "28px",
             true
           );
-
+          obsessive = true;
           this.pop_ocd.setText(this.t, true);
 
           this.executed2 = 1;
           this.triggered = 0;
-          //this.triggerOCD();
+        }
+        if (
+          //initialTime == this.ocdTime //||
+          this.battery3.anims.currentAnim.key == 18 &&
+          this.depression != true &&
+          this.ovw != true 
+        ){
 
           this.timedEvent = this.time.addEvent({
             delay: 30000,
@@ -1603,23 +1620,25 @@ export default class Focus_scene extends Phaser.Scene {
     }
 
     //################# change battery on timer ##########################
-    /*if (
-      initialTime == 550 ||
-      initialTime == 500 ||
-      initialTime == 450 ||
-      initialTime == 400 ||
-      initialTime == 350 ||
-      initialTime == 300 ||
-      initialTime == 250 ||
-      initialTime == 200 ||
-      initialTime == 150 ||
-      initialTime == 100 ||
-      initialTime == 50
+    if (
+      (initialTime == 550 ||
+        initialTime == 500 ||
+        initialTime == 450 ||
+        initialTime == 400 ||
+        initialTime == 350 ||
+        initialTime == 300 ||
+        initialTime == 250 ||
+        initialTime == 200 ||
+        initialTime == 150 ||
+        initialTime == 100 ||
+        initialTime == 50) &&
+      this.batteryUpdated == 0
     ) {
-      this.updateB1(-1);
+      //this.updateB1(-1);
       this.updateB2(-1);
       this.updateB3(-1);
-    }*/
+      this.batteryUpdated == 1;
+    }
 
     //####################################################################
     /*if (this.input.pointer1.isDown) {
@@ -1704,6 +1723,23 @@ export default class Focus_scene extends Phaser.Scene {
       }
     } catch (e) {}
     if (this.pot && this.name == "focus5" && this.pot2Created == 0) {
+      this.dishwasherText = "Put me into the dishwasher!";
+      this.dishwasher =  new PopupPlugin(
+        this,
+        2,
+        "0x907748",
+        70,
+        8,
+        200,
+        0,
+        405,
+        -480,
+        0,
+        "16px",
+        false
+      );
+      this.dishwasher.setText(this.dishwasherText, true);
+
       this.pot2 = this.add
         .sprite(500, 310, "pot")
         .setInteractive({ useHandCursor: true, draggable: true })
@@ -1721,6 +1757,7 @@ export default class Focus_scene extends Phaser.Scene {
         //console.log(this.y);
         if (this.x > 1057 && this.x < 1300 && this.y > 400 && this.y < 740) {
           this.setVisible(false);
+          this.scene.dishwasher.toggleWindow();
           call = 1;
         } else {
           this.x = 500;
@@ -1737,6 +1774,7 @@ export default class Focus_scene extends Phaser.Scene {
       this.updateB1("-1");
       this.updateB2("-1");
       this.updateB3("-1");
+      this.updateText(5);
     }
   }
 }

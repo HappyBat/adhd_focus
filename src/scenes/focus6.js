@@ -157,6 +157,7 @@ export default class Focus6 extends Focus_scene {
                 timeLeftText.frame.glTexture = 0;
                 this.btn1.input.enabled = false;
                 this.finished = 1;
+                super.updateText(4);
               });
           },
           this
@@ -456,8 +457,9 @@ export default class Focus6 extends Focus_scene {
   }*/
 
   Fired() {
-    console.log("fired");
     if (!this.firedExecuted) {
+      console.log("fired");
+
       this.layer = this.add.graphics().fillStyle(0x303030, 0.8);
 
       this.bigWhiteLayer = this.add

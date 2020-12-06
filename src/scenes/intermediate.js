@@ -96,7 +96,7 @@ export default class intermediate extends Phaser.Scene {
       "That's you! Be nice to yourself.\n\n" +
       "You can move the player by pressing the arrow keys. ";
     this.t6 =
-      "The score is your primary factor towards winning the game.\n"+"Try to collect as many points as possible by solving the tasks in each room!\n\n";
+      "The score is your primary factor towards winning the game.\n"+"It is measured in squirrels. The more squirrels a task has, the more difficult it will be to manage your AD(H)D symptoms for that task. Try to collect as many squirrels as possible by solving the tasks in each room!\n\n";
     ("The countdown shows you the remaining time.\n\n");
     this.t7 = "You have 10 minutes to complete the game.\n\n"+ "The countdown shows you, how much time is left."
     this.createQMarks(this.qMark1, this.t1, 230, 300, 362, -400, "batteries");
@@ -104,7 +104,7 @@ export default class intermediate extends Phaser.Scene {
     this.createQMarks(this.qMark3, this.t3, 125, 300, 230, -320, "items"); //items
     this.createQMarks(this.qMark4, this.t4, 90, 300, 220, -180, "arrows");
     this.createQMarks(this.qMark5, this.t5, 180, 300, 1021, -220, "player");
-    this.createQMarks(this.qMark6, this.t6, 130, 600, 290, -600, "score", 0, 0);
+    this.createQMarks(this.qMark6, this.t6, 200, 600, 290, -550, "score", 0, 0);
         this.createQMarks(
           this.qMark7,
           this.t7,

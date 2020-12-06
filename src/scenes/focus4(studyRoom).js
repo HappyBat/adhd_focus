@@ -10,6 +10,7 @@ var updated = 0;
 var counter;
 var updated2 = 0;
 var updated = 2;
+var finished2 = 0;
 
 export default class Focus4 extends Focus_scene {
   constructor() {
@@ -136,104 +137,105 @@ export default class Focus4 extends Focus_scene {
       this.btn1.input.enabled = false;
     }
     this.call = 0;
-    this.btn2.on("pointerdown", () => {
-      this.pop_billsCreated = 0;
-      if (billCounter < 3 && !oH) {
-        this.bills_blurred = this.add
-          .image(683, 384, "bills_blurred")
-          .setScale(0.5);
-        this.t =
-          "Oh no! Why do you feel so overwhelmed? The text seems blurred, you can't see a single letter.\n\n" +
-          "Try again later!";
-        this.pop_bills = new PopupPlugin(
-          this,
-          10,
-          "0x907748",
-          300,
-          32,
-          520,
-          1,
-          433,
-          -50,
-          0,
-          "28px",
-          true
-        );
-        this.pop_bills.setText(this.t, true);
-        this.pop_billsCreated = 1;
+    if (finished2 != 1) {
+      this.btn2.on("pointerdown", () => {
+        this.pop_billsCreated = 0;
+        if (billCounter < 3 && !oH) {
+          this.bills_blurred = this.add
+            .image(683, 384, "bills_blurred")
+            .setScale(0.5);
+          this.t =
+            "Oh no! Why do you feel so overwhelmed? The text seems blurred, you can't see a single letter.\n\n" +
+            "Try again later!";
+          this.pop_bills = new PopupPlugin(
+            this,
+            10,
+            "0x907748",
+            300,
+            32,
+            520,
+            1,
+            433,
+            -50,
+            0,
+            "28px",
+            true
+          );
+          this.pop_bills.setText(this.t, true);
+          this.pop_billsCreated = 1;
 
-        this.call = this.call + 1;
-        updateCounter(this);
-      } else if (oH && this.call < 3 && this.x != 1) {
-        this.bills_blurred2 = this.add.image(683, 384, "bills").setScale(0.5);
-        this.tHob =
-          "You forgot the rice\n" +
-          "in the kitchen and it smells burned. Go rescue your meal and do the bills later!";
+          this.call = this.call + 1;
+          updateCounter(this);
+        } else if (oH && this.call < 3 && this.x != 1) {
+          this.bills_blurred2 = this.add.image(683, 384, "bills").setScale(0.5);
+          this.tHob =
+            "You forgot the rice\n" +
+            "in the kitchen and it smells burned. Go rescue your meal and do the bills later!";
 
-        this.popHob2 = new PopupPlugin(
-          this,
-          6,
-          "0xff0000",
-          150,
-          16,
-          320,
-          1,
-          523,
-          -400,
-          0,
-          "16px",
-          false
-        );
-        this.popHob2.setText(this.tHob, true);
-      } else {
-        //if medication
-        console.log("pay bills clicked");
-        this.bills = this.add
-          .image(683, 384, "bills")
-          .setScale(0.5)
-          .setDepth(950);
-        var rt = this.add.renderTexture(260, 10, 800, 730).setDepth(1000);
+          this.popHob2 = new PopupPlugin(
+            this,
+            6,
+            "0xff0000",
+            150,
+            16,
+            320,
+            1,
+            523,
+            -400,
+            0,
+            "16px",
+            false
+          );
+          this.popHob2.setText(this.tHob, true);
+        } else {
+          //if medication
+          console.log("pay bills clicked");
+          this.bills = this.add
+            .image(683, 384, "bills")
+            .setScale(0.5)
+            .setDepth(950);
+          var rt = this.add.renderTexture(260, 10, 800, 730).setDepth(1000);
 
-        this.input.on(
-          "pointermove",
-          function (pointer) {
-            if (pointer.isDown) {
-              rt.draw("dot", pointer.x - 255, pointer.y - 5);
-              this.updateScore();
-              this.BatteryUpdate();
+          this.input.on(
+            "pointermove",
+            function (pointer) {
+              if (pointer.isDown) {
+                rt.draw("dot", pointer.x - 255, pointer.y - 5);
+                this.updateScore();
+                this.BatteryUpdate();
+                counter = 1;
+              }
+            },
+            this
+          );
+
+          this.input.on("pointerup", function (pointer) {
+            if (counter == 1) {
+              this.scene.bills.setVisible(false);
+              rt.setVisible(false);
+              billCounter = 0;
+              finished2 = 1;
             }
-          },
-          this
-        );
-
-        this.input.on("pointerup", function (pointer) {
-          if (counter == 1) {
-            this.scene.bills.setVisible(false);
-            rt.setVisible(false);
-            billCounter = 0;
-          }
-          counter = 1;
-        })
-        //this.x serves to check if pay bills is clicked and disable execution of prepexam
-        //set this.x to 0 when finishing pay bills task so that prep for exam can be executed
-        this.x = 1;
-      }
-      function updateCounter(d) {
-        if (d.call < 3) {
-          d.callSuper();
+          });
+          //this.x serves to check if pay bills is clicked and disable execution of prepexam
+          //set this.x to 0 when finishing pay bills task so that prep for exam can be executed
+          this.x = 1;
         }
-      }
-      /*function updateScore(d) {
+        function updateCounter(d) {
+          if (d.call < 3) {
+            d.callSuper();
+          }
+        }
+        /*function updateScore(d) {
         d.updateScore();
         d.BatteryUpdate();
       }*/
-    });
+      });
+    }
   }
   //create pop-up
   createWhiteLayer() {
-    this.pop3 = new White(
-      this
-    );
+    this.pop3 = new White(this);
   }
 
   btn1_create() {
@@ -272,16 +274,17 @@ export default class Focus4 extends Focus_scene {
   //countdown for task
 
   onEvent() {
-    try{
-    if (timeLeftText && timeLeftText.frame.glTexture !== 0) {
-      initialTime2 -= 1;
-      this.seconds2 = initialTime2;
-      this.minutes2 = Math.floor(this.seconds2 / 60);
-      this.partInSeconds2 = this.seconds2 % 60;
-      this.partInSeconds2 = this.partInSeconds2.toString().padStart(2, "0");
-      this.fa = `${this.minutes2}:${this.partInSeconds2}`;
-      timeLeftText.setText("Time left: " + this.fa);
-    }}catch{}
+    try {
+      if (timeLeftText && timeLeftText.frame.glTexture !== 0) {
+        initialTime2 -= 1;
+        this.seconds2 = initialTime2;
+        this.minutes2 = Math.floor(this.seconds2 / 60);
+        this.partInSeconds2 = this.seconds2 % 60;
+        this.partInSeconds2 = this.partInSeconds2.toString().padStart(2, "0");
+        this.fa = `${this.minutes2}:${this.partInSeconds2}`;
+        timeLeftText.setText("Time left: " + this.fa);
+      }
+    } catch {}
   }
 
   createQuestionnaire() {
@@ -546,6 +549,7 @@ export default class Focus4 extends Focus_scene {
           timeLeftText.frame.glTexture = 0;
           this.btn1.input.enabled = false;
           this.finished = 1;
+          super.updateText(1);
           this.pop3.destroy();
           //this.done.input.enabled = false;
         }
@@ -578,9 +582,9 @@ export default class Focus4 extends Focus_scene {
       super.updateB1("-1");
       super.updateB2("-1");
       super.updateB3("-1");
+      super.updateText(2);
       updated2 = 1;
     }
-
   }
 
   update() {
@@ -616,6 +620,10 @@ export default class Focus4 extends Focus_scene {
         this.createQuestionnaire();
         this.nowCreate = 0;
         this.created = 1;
+      }
+      if (finished2) {
+        this.btn2.input.enabled = false;
+        super.updateText(2);
       }
     }
     /*if (this.bills_blurred && this.pop_billsCreated != 1) {

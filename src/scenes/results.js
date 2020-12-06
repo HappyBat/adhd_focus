@@ -19,6 +19,7 @@ var qTexts;
 var q;
 var qu;
 var bdc;
+var td;
 export default class results extends Focus_scene {
   constructor() {
     super("results", "", {}, {}, [{}, {}, {}, {}, {}, {}]);
@@ -27,6 +28,7 @@ export default class results extends Focus_scene {
     super.Init(data);
     sv = data.sv;
     bdc = data.bdc;
+    td = data.td;
   }
   create() {
     pointer = this.input.activePointer;
@@ -57,6 +59,23 @@ export default class results extends Focus_scene {
       console.log(pointer.x);
       console.log(pointer.y);
     });
+    this.sT =
+      "The Golden Squirrel is for those brave\nworriers that managed to withstand all the \ndistractions and finish the assigned tasks.\n\nIt is worth 50 squirrels!",
+    this.bT =
+        "The Golden Battery is for those who\npractised self-love, even though it made it \nso much harder to finish the tasks in time.\n\nIt is worth 50 squirrels, too!",
+    this.squirrelText = this.add
+        .text(340, 210, this.sT, {
+          fontSize: "28px",
+          fill: "white",
+        })
+        .setDepth(3100).setLineSpacing(15);
+    this.batteryText = this.add
+      .text(340, 540, this.bT, {
+        fontSize: "28px",
+        fill: "white",
+        lineSpacing:1.5,
+      })
+      .setDepth(3100).setLineSpacing(15);
     //grey background to achievements
     //this.add.graphics().fillStyle(0x303030, 0.8).setDepth(3100);
     //this.add.graphics().fillRect(20, 150, 300, 500).setDepth(3100);
@@ -175,17 +194,14 @@ export default class results extends Focus_scene {
       })
       .setDepth(3200);
   }
-  showAchievements(image, scale, visible,x,y,Scale,f) {
+  showAchievements(image, scale, visible,x,y,Scale,f,d) {
     item = this.add
       .image(725, 430, image)
       .setScale(scale)
       .setDepth(3200)
       .setVisible(visible);
     
-    if (this.firstUpdate != 1) {
-      this.updateScore(50);
-      this.firstUpdate = 1;
-    }
+
     this.tweens.add({
         targets: item,
         x:x,
@@ -197,7 +213,7 @@ export default class results extends Focus_scene {
         onComplete: function () {
           //if all comorbidities
           //if score
-          if(f =="fav1"){ //&& tasks <
+          if(f =="fav1" && td <= 6){ //&& tasks <
           item.setVisible(false); 
           qTexts[1].setVisible(false);
           fav[1].setVisible(true);
@@ -205,6 +221,7 @@ export default class results extends Focus_scene {
             if(image== "pokal"){
               q[1].setVisible(false);
               qTexts[1].setVisible(false);
+              updateScore(50);
             }
           }
 
@@ -216,14 +233,13 @@ export default class results extends Focus_scene {
             if(image== "batterySaver"){
               q[0].setVisible(false);
               qTexts[0].setVisible(false);
+              updateScore(50);
             }
           }
           
         }});
-  }
-
-  updateScore(n) {
-    scoreAnimation = this.add
+    function updateScore(n){
+      scoreAnimation = d.add
       .text(1200, 400, "+" + n, {
         fontFamily: "Arial",
         fontSize: "120px",
@@ -233,7 +249,7 @@ export default class results extends Focus_scene {
       })
       .setDepth(4000);
 
-    tween = this.tweens.add({
+    tween = d.tweens.add({
       targets: scoreAnimation,
       x: 1010,
       y: 28,
@@ -247,7 +263,9 @@ export default class results extends Focus_scene {
         scoreText.setText("Your score: " + sv);
       },
     });
+    }
   }
+
   update() {
     //super.update()
 
@@ -266,7 +284,7 @@ export default class results extends Focus_scene {
         
         
         if (this.timedEvent.repeatCount == 1) {
-          this.showAchievements("pokal", 1.2, true, 165, 300, 0.5,"fav1");
+          this.showAchievements("pokal", 1.2, true, 165, 300, 0.5,"fav1",this);
           /*this.q.setVisible(false);
           achievements[0].x = 165;
           achievements[0].y = 300;
@@ -275,7 +293,7 @@ export default class results extends Focus_scene {
           this.updateScore(50);*/
         }
         if (this.timedEvent.repeatCount == 0) {
-          this.showAchievements("batterySaver", 3, true, 165, 605, 1,"fav2");
+          this.showAchievements("batterySaver", 3, true, 165, 605, 1,"fav2",this);
           console.log("moveMe");
           /*achievements[1].x = 165;
           achievements[1].y = 605;
@@ -285,6 +303,8 @@ export default class results extends Focus_scene {
       this.executedAchievement = 1;
     }
     if (this.timedEvent.hasDispatched) {
+      this.batteryText.setVisible(false);
+      this.squirrelText.setVisible(false);
       this.makeFinalInfo();
     }
 

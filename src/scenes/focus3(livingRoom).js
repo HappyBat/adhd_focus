@@ -162,6 +162,7 @@ export default class Focus3 extends Focus_scene {
         this.add.graphics().clear;
         this.pushupCounter.clear();
         this.pushupCounterText.setVisible(false);
+        this.btn2.input.enabled = false;
         counter = 0;
       }
       this.pushupCounterText.setText(counter);
