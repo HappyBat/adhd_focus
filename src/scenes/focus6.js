@@ -140,7 +140,6 @@ export default class Focus6 extends Focus_scene {
                   }
                   console.log(score);
                 }
-                super.updatescore(score);
                 this.sheet.setVisible(false);
                 this.dyslexia.setVisible(false);
                 this.dyslexia2.setVisible(false);
@@ -523,7 +522,10 @@ export default class Focus6 extends Focus_scene {
       }
     }
   }
-
+  US(s) {
+    console.log(s);
+    super.updatescore(s);
+  }
   update() {
     super.update();
     if (executed == 0) {
@@ -553,7 +555,7 @@ export default class Focus6 extends Focus_scene {
 
     if (this.done) {
       this.timedEvent = this.time.addEvent({
-        delay: 60000,
+        delay: 6000,
         callback: onEvent,
         callbackScope: this,
       });
@@ -577,6 +579,21 @@ export default class Focus6 extends Focus_scene {
         this.timedEvent.destroy();
         if (this.fired == 0) {
           this.Fired();
+
+          for (var i = 0; i < sortingArray.length; i++) {
+            sortingArray[i].input.enabled = false;
+            sortingArray[i].setVisible(false);
+            if (
+              sortingArray[i].x == check_X_PositionArray[i] &&
+              sortingArray[i].y == check_Y_PositionArray[i]
+            ) {
+              score = score + 10;
+              counter = counter + 10;
+              console.log(counter);
+            }
+            console.log(score);
+          }
+          this.US(score);
           this.fired = 1;
         }
         timeLeftText.frame.glTexture = 0;

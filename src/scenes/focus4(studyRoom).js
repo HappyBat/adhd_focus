@@ -9,7 +9,6 @@ var oH;
 var updated = 0;
 var counter;
 var updated2 = 0;
-var updated = 2;
 var finished2 = 0;
 
 export default class Focus4 extends Focus_scene {
@@ -267,7 +266,7 @@ export default class Focus4 extends Focus_scene {
   }
   updateScore() {
     if (updated == 0) {
-      super.updatescore(10);
+      super.updatescore(50);
       updated = 1;
     }
   }

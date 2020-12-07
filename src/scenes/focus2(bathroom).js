@@ -172,7 +172,7 @@ export default class Focus2 extends Focus_scene {
   onEvent() {}
 
   callSuper(d) {
-    super.updatescore(5);
+    super.updatescore(3);
   }
   batteryUpdate() {
     super.updateB1("-1");
