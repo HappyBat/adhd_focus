@@ -169,9 +169,9 @@ export default class results extends Focus_scene {
     if (sv >= 240) {
       this.t =
         "CONGRATULATIONS!\n\n" +
-        "You managed your AD(H)D quite \n\nwell and finished all your tasks \n\nsuccessfully!";
+        "You managed your AD(H)D quite \n\nwell. Nicely done!";
       colour = "green";
-    } if(sv<240) {
+    } else {
       this.t =
         "TRY AGAIN!\n\n" +
         "You were not able to finish all \n\ntasks and manage your AD(H)D.";
@@ -300,7 +300,8 @@ export default class results extends Focus_scene {
       }
       this.executedAchievement = 1;
     }
-    if (this.timedEvent.hasDispatched) {
+    if (this.timedEvent.hasDispatched && this.finished != 1) {
+
       this.timedEvent = this.time.addEvent({
         delay: 3000,
         callback: wait,
@@ -311,6 +312,7 @@ export default class results extends Focus_scene {
       this.squirrelText.setVisible(false);
       this.makeFinalInfo();
       }
+      this.finished = 1;
     }
 
     //if depression + ocd - gotta catch em all (-20) "you did not look after your(yourself, your wellbeing) batteries it seems."

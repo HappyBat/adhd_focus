@@ -46,7 +46,7 @@ export default class Focus4 extends Focus_scene {
 
     super.createTaskbarButton(1, 310, 715, 140, "Prep for exam", 50);
     super.createTaskbarButton(2, 560, 715, 100, "Pay bills", 50);
-
+    console.log(this.finished);
     //open instructions on click
     if (this.finished != 1) {
       this.btn1.on("pointerdown", () => {
@@ -71,8 +71,8 @@ export default class Focus4 extends Focus_scene {
         this.play_btn.on(
           "pointerdown",
           () => {
-            this.play_btn.input.enabled = false;
-            this.btn1.input.enabled = false;
+            //this.play_btn.input.enabled = false;
+            //this.btn1.input.enabled = false;
             this.pop.toggleWindow();
             this.play_btn.setVisible(false);
             if (this.x == 0) {
@@ -130,7 +130,7 @@ export default class Focus4 extends Focus_scene {
           },
           this
         );
-        this.btn1.input.enabled = false;
+        //this.btn1.input.enabled = false;
       });
     } else {
       this.btn1.input.enabled = false;
@@ -188,7 +188,7 @@ export default class Focus4 extends Focus_scene {
           this.popHob2.setText(this.tHob, true);
         } else {
           //if medication
-          console.log("pay bills clicked");
+          //console.log("pay bills clicked");
           this.bills = this.add
             .image(683, 384, "bills")
             .setScale(0.5)
@@ -662,8 +662,8 @@ export default class Focus4 extends Focus_scene {
         if (this.play_btn) {
           this.play_btn;
           this.play_btn.setVisible(false);
-          this.play_btn.input.enabled = false;
-          this.btn1.input.enabled = false;
+          //this.play_btn.input.enabled = false;
+          //this.btn1.input.enabled = false;
         }
       }
     }
