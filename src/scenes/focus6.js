@@ -555,7 +555,7 @@ export default class Focus6 extends Focus_scene {
 
     if (this.done) {
       this.timedEvent = this.time.addEvent({
-        delay: 6000,
+        delay: 60000,
         callback: onEvent,
         callbackScope: this,
       });
