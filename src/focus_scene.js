@@ -1275,7 +1275,7 @@ export default class Focus_scene extends Phaser.Scene {
       if (previous == timedEvent3.getOverallProgress()) {
         previous = 0;
         timedEvent3 = this.time.addEvent({
-          delay: 8000,
+          delay: 15000,
           callback: this.washCall,
           callbackScope: this,
           repeat: timedEvent3.getRepeatCount(),
@@ -1372,7 +1372,7 @@ export default class Focus_scene extends Phaser.Scene {
             delay: 10000,
             callback: this.washCall,
             callbackScope: this,
-            repeat: 10,
+            repeat: 7,
           });
         }
       }
