@@ -96,7 +96,7 @@ export default class Focus6 extends Focus_scene {
             this.pop.toggleWindow();
             this.angryBoss.x = 1190;
             timer = this.time.addEvent({
-              delay: 20000,
+              delay: 18000,
               callback: changePosition,
               repeat: 3,
             });
@@ -142,6 +142,8 @@ export default class Focus6 extends Focus_scene {
                 }
                 super.updatescore(score);
                 this.sheet.setVisible(false);
+                this.dyslexia.setVisible(false);
+                this.dyslexia2.setVisible(false);
                 this.done.setVisible(false);
                 timeLeftText.setVisible(false);
                 timeLeftRect.setVisible(false);
@@ -233,6 +235,11 @@ export default class Focus6 extends Focus_scene {
       .fillRect(0, 0, 1366, 768)
       .setDepth(950);
     this.sheet = this.add.image(492, 350, "sheet").setDepth(1000);
+    this.dyslexia = this.add.image(100, 350, "dyslexia").setDepth(1000);
+    this.dyslexia2 = this.add
+      .image(70, 150, "dyslexia2")
+      .setDepth(1000)
+      .setScale(1.3);
     x1 = 490;
 
     y1 = 87;
@@ -558,6 +565,8 @@ export default class Focus6 extends Focus_scene {
           sortingArray[i].setVisible(false);
         }
         this.sheet.setVisible(false);
+        this.dyslexia.setVisible(false);
+        this.dyslexia2.setVisible(false);
         this.done.setVisible(false);
         timeLeftText.setVisible(false);
         timeLeftText.destroy();

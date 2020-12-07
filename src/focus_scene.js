@@ -954,7 +954,7 @@ export default class Focus_scene extends Phaser.Scene {
     if (Draggable == this.draggable1) {
       this.updateB1("-2");
       this.updateB2("-2");
-      this.updateB3("-2");
+      //this.updateB3("-2");
     }
   }
   updateScoreCounter() {

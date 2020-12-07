@@ -105,7 +105,8 @@ import yellowDirt from "../../assets/yellowDirt.png";
 import greyDirt from "../../assets/greyDirt.png";
 import batterySaver from "../../assets/batterySaver.png";
 import favicon from "../../assets/favicon.png";
-
+import dyslexia from "../../assets/dyslexia.png";
+import dyslexia2 from "../../assets/dyslexia2.png";
 
 export default class preload_scene extends Phaser.Scene {
     constructor() {
@@ -218,6 +219,8 @@ export default class preload_scene extends Phaser.Scene {
           this.load.image("greyDirt", greyDirt),
           this.load.image("batterySaver", batterySaver),
           this.load.image("favicon", favicon),
+          this.load.image("dyslexia", dyslexia),
+          this.load.image("dyslexia2", dyslexia2),
           this.load.spritesheet("pushup", pushup, {
             frameWidth: 568,
             frameHeight: 238,
