@@ -28,6 +28,8 @@ var b3Counter1 = 0;
 var b3Counter2 = 0;
 var popuptext;
 var obsessive;
+var timedEvent3;
+var previous = 0;
 
 //var combo;
 export default class Focus_scene extends Phaser.Scene {
@@ -1012,44 +1014,19 @@ export default class Focus_scene extends Phaser.Scene {
   }
 
   updateB2(frame) {
-    if (this.changedEmpty1 && !this.firstEmpty) {
-      myFrame2 = 12;
-      this.firstEmpty = true;
-    } else if (this.changedFull1 && !this.firstFull) {
-      myFrame2 = 7;
-      this.firstFull = true;
-    }
-    if (frame == -2 || frame == -1) {
-      
-      if (frame == -2 && ((this.b3Frame == 7 && myFrame == 12) || (this.b3Frame != 7)) && myFrame2 !=7) {
-        counter = counter - 1;
-      }
-      if (frame == -1 && ((this.b2Frame == 12 && myFrame == 7)|| (this.b3Frame !=12)) && myFrame2 !=12) {
-        counter = counter + 1;
-      }
-      if (!this.changedEmpty1 && !this.changedFull1) {
-        this.battery2.anims.play(parseInt(this.b2Frame) + counter, true);
-      } else if (this.changedEmpty1 || this.changedFull1) {
-        this.battery2.anims.play(parseInt(myFrame2) + counter, true);
-        myFrame2 = myFrame2 + counter;
-      }
-    }
+        if (frame == -2 && myFrame != 7) {
+          this.battery2.anims.play(parseInt(this.b2Frame) - 1, true);
+        } else if (frame == -1 && myFrame != 12) {
+          this.battery2.anims.play(parseInt(this.b2Frame) + 1, true);
+        } else {
+          this.battery2.anims.play(frame, true);
+        }
+        this.b2Frame = this.battery2.anims.currentAnim.key;
 
-
-    if (frame != -2 && frame != -1 && (!this.changedEmpty1 && !this.changedFull1)) {
-      this.battery2.anims.play(frame, true);
-      if (frame == 12) {
-        this.changedEmpty1 = true;
-      } else if (frame == 7) {
-        this.changedFull1 = true;
-      }
-    } 
-    if (this.b2Frame == 12 || this.else2) {
-      this.else2 = false;
-      console.log("update batterydown counter");
-      this.batteryDown();
-    }
-
+        if (this.b3Frame == 12) {
+          console.log("update batterydown counter");
+          this.batteryDown();
+        }
   }
   batteryDown() {
     batteryDownCounter = batteryDownCounter + 1;
@@ -1058,46 +1035,18 @@ export default class Focus_scene extends Phaser.Scene {
   }
   updateB3(frame) {
 
-    if (this.changedEmpty && !this.firstEmpty) {
-      myFrame = 18; 
-      this.firstEmpty = true;
-    } else if (this.changedFull && !this.firstFull) {
-      myFrame = 13;  
-      this.firstFull = true;
-    }
-    if (frame == -2 || frame == -1) {
-        console.log("counter2: " + counter2);
-        console.log("myFrame: "+myFrame);
-        console.log("b3Frame: " + this.b3Frame);
-      if (frame == -2 && ((this.b3Frame == 13 && myFrame ==18)|| (this.b3Frame != 13)) && myFrame != 13) {
-        counter2 = counter2 - 1; 
-      }
-      if (frame == -1 && ((this.b3Frame == 18 && myFrame == 13)|| (this.b3Frame != 18)) && myFrame != 18) {
-        counter2 = counter2 + 1;
-      }
-      if (!this.changedEmpty && !this.changedFull) {
-        this.battery3.anims.play(parseInt(this.b3Frame) + counter2, true);
-      } else if (this.changedEmpty || this.changedFull) {
-        this.battery3.anims.play(parseInt(myFrame) + counter2, true);
-        myFrame=myFrame + counter2;
-      }
-    }
-
-    if (frame != -2 && frame != -1 && (!this.changedEmpty && !this.changedFull)) {
-      console.log("second");
+    if (frame == -2 && myFrame != 13) {
+      this.battery3.anims.play(parseInt(this.b3Frame) - 1, true);
+    } else if (frame == -1 && myFrame != 18) {
+      this.battery3.anims.play(parseInt(this.b3Frame) + 1, true);
+      
+    } else {
       this.battery3.anims.play(frame, true);
-      if (frame == 18 && this.changedEmpty != false) {
-        this.changedEmpty = true;
-        //io(this);
-        this.batteryDown();
-      } else if (frame == 13 && this.changedFull != false) {
-        this.changedFull = true;
-      }
-    } 
-    /*function io(d){
-      d.batteryDown();
-    }*/
-    if ((this.b3Frame+counter2) == 18 || (myFrame + counter2) == 18) {
+    }
+    this.b3Frame = this.battery3.anims.currentAnim.key;
+
+
+    if (this.b3Frame == 18) {
       console.log("update batterydown counter 2");
       this.batteryDown();
     }
@@ -1264,8 +1213,78 @@ export default class Focus_scene extends Phaser.Scene {
   getPlayer() {
     return this.player;
   }
+  washCall(){
+              //function washCall() {
+                console.log("washCall");
+                this.updateB3("-1");
+                this.layer = this.add.graphics().fillStyle(0x303030, 0.8);
+
+                this.bigWhiteLayer = this.add
+                  .graphics()
+                  .fillRect(0, 0, 1366, 768)
+                  .setDepth(1000);
+
+                var OCD_text = {
+                  x: 240,
+                  y: 180,
+                  text: "I need to wash my hands!!!",
+                  style: {
+                    fontSize: "140px",
+                    fontStyle: "bold",
+                    fontFamily: "Aleo",
+                    color: "#ff0f0f",
+                    align: "center",
+                    lineSpacing: 20,
+                    stroke: "#000000",
+                    stokeThickness: 20,
+                    shadow: {
+                      offsetX: 2,
+                      offsetY: 2,
+                      color: "#000",
+                      blur: 0,
+                      stroke: true,
+                      fill: true,
+                    },
+                    wordWrap: { width: 1000, useAdvancedWrap: true },
+                  },
+                };
+
+                this.notification = this.make.text(OCD_text).setDepth(1200);
+                this.callThere = 1;
+
+                if (this.callThere == 1) {
+                  this.timedEvent2 = this.time.addEvent({
+                    delay: 2000,
+                    callback: notificationDelete,
+                    callbackScope: this,
+                  });
+                  this.callThere = 0;
+
+                  function notificationDelete() {
+                    //depression not working? => this.graphics instead of this.add
+                    this.bigWhiteLayer.clear();
+                    this.notification.setVisible(false);
+                  }
+                }
+              //}
+  }
 
   update() {
+  if (timedEvent3) {
+    if (timedEvent3.getOverallProgress() != 1) {
+      if (previous == timedEvent3.getOverallProgress()) {
+        previous = 0;
+        timedEvent3 = this.time.addEvent({
+          delay: 8000,
+          callback: this.washCall,
+          callbackScope: this,
+          repeat: timedEvent3.getRepeatCount(),
+        });
+      } else {
+        previous = timedEvent3.getOverallProgress();
+      }
+    }
+  }
     if (initialTime == 0) {
       this.showMessageBox();
       this.player.setVisible(false);
@@ -1348,74 +1367,13 @@ export default class Focus_scene extends Phaser.Scene {
 
           this.executed2 = 1;
           this.triggered = 0;
-        }
-        if (
-          //initialTime == this.ocdTime //||
-          this.battery3.anims.currentAnim.key == 18 &&
-          this.depression != true &&
-          this.ovw != true 
-        ){
 
-          this.timedEvent = this.time.addEvent({
-            delay: 30000,
-            callback: washCall,
+          timedEvent3 = this.time.addEvent({
+            delay: 10000,
+            callback: this.washCall,
             callbackScope: this,
             repeat: 10,
           });
-
-          function washCall() {
-            console.log("washCall");
-            this.updateB3("-1");
-            this.layer = this.add.graphics().fillStyle(0x303030, 0.8);
-
-            this.bigWhiteLayer = this.add
-              .graphics()
-              .fillRect(0, 0, 1366, 768)
-              .setDepth(1000);
-
-            var OCD_text = {
-              x: 240,
-              y: 180,
-              text: "I need to wash my hands!!!",
-              style: {
-                fontSize: "140px",
-                fontStyle: "bold",
-                fontFamily: "Aleo",
-                color: "#ff0f0f",
-                align: "center",
-                lineSpacing: 20,
-                stroke: "#000000",
-                stokeThickness: 20,
-                shadow: {
-                  offsetX: 2,
-                  offsetY: 2,
-                  color: "#000",
-                  blur: 0,
-                  stroke: true,
-                  fill: true,
-                },
-                wordWrap: { width: 1000, useAdvancedWrap: true },
-              },
-            };
-
-            this.notification = this.make.text(OCD_text).setDepth(1200);
-            this.callThere = 1;
-
-            if (this.callThere == 1) {
-              this.timedEvent2 = this.time.addEvent({
-                delay: 2000,
-                callback: notificationDelete,
-                callbackScope: this,
-              });
-              this.callThere = 0;
-
-              function notificationDelete() {
-                //depression not working? => this.graphics instead of this.add
-                this.bigWhiteLayer.clear();
-                this.notification.setVisible(false);
-              }
-            }
-          }
         }
       }
     }
