@@ -31,6 +31,7 @@ export default class intermediate extends Phaser.Scene {
       "28px",
       true
     );
+
     //MAKE QUESTION MARKS GREY AFTER HOVER AND TELL TO "HOVER OVER QUESTION MARK AND READ THE INSTRUCTION" INSTEAD OF "READ INSTRUCTIONS" ONLY
     this.pop.setText(this.t, true),
       (btn = this.add
@@ -43,7 +44,7 @@ export default class intermediate extends Phaser.Scene {
       this.startIntro();
     });
   }
-  startIntro(){
+  startIntro() {
     //this.scene.start('focus1');
     intro = this.add.image(683, 384, "intro").setDepth(-1200);
     this.layer = this.add
@@ -72,6 +73,23 @@ export default class intermediate extends Phaser.Scene {
       false
     );
     this.instructions.setText(this.instructionsText, true);
+    this.warningText =
+      'WARNING\n\nThis game works differently than other games.\n\nIt is crucial for winning the game that you read all the texts.\n\nBugs you might see are not bugs, they are a features.\n\nThe game might be a bit chaotic and confusing - so is AD(H)D!';
+    this.warning = new PopupPlugin(
+      this,
+      15,
+      "0x8b0000",
+      520, //height
+      16,
+      320, //width
+      0,
+      1020, //x
+      -30, //y
+      0,
+      "20px",
+      false
+    );
+    this.warning.setText(this.warningText, true);
 
     this.qMark1 = this.add.image(698, 140, "qMark").setInteractive(); //batteries
     this.qMark2 = this.add.image(1233, 156, "qMark").setInteractive(); //day
@@ -96,26 +114,29 @@ export default class intermediate extends Phaser.Scene {
       "That's you! Be nice to yourself.\n\n" +
       "You can move the player by pressing the arrow keys. ";
     this.t6 =
-      "The score is your primary factor towards winning the game.\n"+"It is measured in squirrels. The more squirrels a task has, the more difficult it will be to manage your AD(H)D symptoms for that task. Try to collect as many squirrels as possible by solving the tasks in each room!\n\n";
+      "The score is your primary factor towards winning the game.\n" +
+      "It is measured in squirrels. The more squirrels a task has, the more difficult it will be to manage your AD(H)D symptoms for that task. Try to collect as many squirrels as possible by solving the tasks in each room!\n\n";
     ("The countdown shows you the remaining time.\n\n");
-    this.t7 = "You have 10 minutes to complete the game.\n\n"+ "The countdown shows you, how much time is left."
+    this.t7 =
+      "You have 10 minutes to complete the game.\n\n" +
+      "The countdown shows you, how much time is left.";
     this.createQMarks(this.qMark1, this.t1, 230, 300, 362, -400, "batteries");
     this.createQMarks(this.qMark2, this.t2, 90, 300, 895, -530, "monday");
     this.createQMarks(this.qMark3, this.t3, 125, 300, 230, -320, "items"); //items
     this.createQMarks(this.qMark4, this.t4, 90, 300, 220, -180, "arrows");
     this.createQMarks(this.qMark5, this.t5, 180, 300, 1021, -220, "player");
     this.createQMarks(this.qMark6, this.t6, 200, 600, 290, -550, "score", 0, 0);
-        this.createQMarks(
-          this.qMark7,
-          this.t7,
-          170,
-          300,
-          435,
-          -530,
-          "countdown",
-          0,
-          0
-        );
+    this.createQMarks(
+      this.qMark7,
+      this.t7,
+      170,
+      300,
+      435,
+      -530,
+      "countdown",
+      0,
+      0
+    );
     btn3 = this.add
       .sprite(543, 493, "borderPlay")
       .setInteractive({ useHandCursor: true })
@@ -142,48 +163,49 @@ export default class intermediate extends Phaser.Scene {
       );
       this.pop1.setText(text, true);
       this.lightUp = lightUp;
-      if (this.lightUp == "score"&&!this.score) {
+      if (this.lightUp == "score" && !this.score) {
         this.score = this.add.text(20, 20, "Score: 0", {
           fontSize: "34px",
           fill: "white",
         });
-        this.add.text(20, 64, "Countdown: 10:00", {
-          fontSize: "34px",
-          fill: "white",
-        }).setDepth(-900);
-      }else if (this.lightUp == "monday" && !this.Monday){
+        this.add
+          .text(20, 64, "Countdown: 10:00", {
+            fontSize: "34px",
+            fill: "white",
+          })
+          .setDepth(-900);
+      } else if (this.lightUp == "monday" && !this.Monday) {
         this.Monday = this.add
-        .graphics()
-        .fillStyle(0xffffff, 0.8)
-        .fillRect(1150, 15, 180, 80)
-        .lineStyle(1, 0x000000, 1.0)
-        .strokeRect(1150, 15, 180, 80);
+          .graphics()
+          .fillStyle(0xffffff, 0.8)
+          .fillRect(1150, 15, 180, 80)
+          .lineStyle(1, 0x000000, 1.0)
+          .strokeRect(1150, 15, 180, 80);
         this.MondayText = this.add.text(1180, 40, "Monday", {
-        fontSize: "34px",
-        fill: "black",
-        fontStyle: "bold",
+          fontSize: "34px",
+          fill: "black",
+          fontStyle: "bold",
         });
-      }else if(this.lightUp == "batteries" && !this.battery1){
+      } else if (this.lightUp == "batteries" && !this.battery1) {
         this.battery2 = this.add.image(605.5, 50, "battery_focus");
         this.battery3 = this.add.image(810.5, 50, "battery_efficiency");
-      }else if(this.lightUp == "items" && !this.draggable1){
+      } else if (this.lightUp == "items" && !this.draggable1) {
         this.draggable1 = this.add.image(65, 500, "cup");
         this.draggable2 = this.add.image(65, 400, "medication");
         this.todo_btn = this.add.image(70, 200, "todo");
-      }
-      else if(this.lightUp == "player" && !this.player){
+      } else if (this.lightUp == "player" && !this.player) {
         this.player = this.physics.add.sprite(900, 550, "guy").setScale(1);
         this.anims.create({
-         key: "turn",
-         frames: [{ key: "guy", frame: 2 }],
+          key: "turn",
+          frames: [{ key: "guy", frame: 2 }],
         });
         this.player.anims.play("turn", true);
-      }else if(this.lightUp == "arrows" && !this.arrow1){
-          this.arrow1 = this.add.image(240,610,"arrow_up")
-          this.arrow2 = this.add.image(475, 610, "arrow_up");
-          this.arrow3 = this.add.image(1085, 610, "arrow_up");
-          this.arrow4 = this.add.image(70, 650, "arrow_left");
-          this.arrow5 = this.add.image(1290,650,"arrow_right")
+      } else if (this.lightUp == "arrows" && !this.arrow1) {
+        this.arrow1 = this.add.image(240, 610, "arrow_up");
+        this.arrow2 = this.add.image(475, 610, "arrow_up");
+        //this.arrow3 = this.add.image(1085, 610, "arrow_up");
+        this.arrow4 = this.add.image(70, 650, "arrow_left");
+        //this.arrow5 = this.add.image(1290, 650, "arrow_right");
       }
     });
 
@@ -221,8 +243,8 @@ export default class intermediate extends Phaser.Scene {
     }
   }*/
 
-//this.btn.on('pointerup', () => this.btn.setScale(0.9));*/
-/*console.log("here");
+    //this.btn.on('pointerup', () => this.btn.setScale(0.9));*/
+    /*console.log("here");
         generateButton(this,0);
         function generateButton(scene,tog) {
             console.log(scene);
@@ -254,4 +276,5 @@ export default class intermediate extends Phaser.Scene {
             }
             console.log(btn)
         } */
-      }}
+  }
+}

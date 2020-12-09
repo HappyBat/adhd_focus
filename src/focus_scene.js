@@ -880,7 +880,7 @@ export default class Focus_scene extends Phaser.Scene {
         fill: "black",
         fontStyle: "bold",
       })
-      .setDepth(1000); //.setInteractive(true);
+      .setDepth(4000); //.setInteractive(true);
   }
 
   formatTime(seconds) {
@@ -1014,9 +1014,9 @@ export default class Focus_scene extends Phaser.Scene {
   }
 
   updateB2(frame) {
-        if (frame == -2 && frame != 7) {
+        if (frame == -2 && this.b2Frame != 7) {
           this.battery2.anims.play(parseInt(this.b2Frame) - 1, true);
-        } else if (frame == -1 && frame != 12) {
+        } else if (frame == -1 && this.b3Frame != 12) {
           this.battery2.anims.play(parseInt(this.b2Frame) + 1, true);
         } else {
           this.battery2.anims.play(frame, true);
@@ -1035,16 +1035,14 @@ export default class Focus_scene extends Phaser.Scene {
   }
   updateB3(frame) {
 
-    if (frame == -2 && frame != 13) {
+    if (frame == -2 && this.b3Frame != 13) {
       this.battery3.anims.play(parseInt(this.b3Frame) - 1, true);
-    } else if (frame == -1 && frame != 18) {
+    } else if (frame == -1 && this.b3Frame != 18) {
       this.battery3.anims.play(parseInt(this.b3Frame) + 1, true);
-      
     } else {
       this.battery3.anims.play(frame, true);
     }
     this.b3Frame = this.battery3.anims.currentAnim.key;
-
 
     if (this.b3Frame == 18) {
       console.log("update batterydown counter 2");
@@ -1222,7 +1220,7 @@ export default class Focus_scene extends Phaser.Scene {
                 this.bigWhiteLayer = this.add
                   .graphics()
                   .fillRect(0, 0, 1366, 768)
-                  .setDepth(1000);
+                  .setDepth(3000);
 
                 var OCD_text = {
                   x: 240,
@@ -1249,7 +1247,7 @@ export default class Focus_scene extends Phaser.Scene {
                   },
                 };
 
-                this.notification = this.make.text(OCD_text).setDepth(1200);
+                this.notification = this.make.text(OCD_text).setDepth(3200);
                 this.callThere = 1;
 
                 if (this.callThere == 1) {

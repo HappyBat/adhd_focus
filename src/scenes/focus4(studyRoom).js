@@ -242,17 +242,17 @@ export default class Focus4 extends Focus_scene {
       "Arrghhhh...study for the exam? You really don't feel like it. Anyway, what has to be done, has to be done. \n\n" +
       "Only this article you read - about a vaccine for COVID-19! So interesting! If only you could stop thinking about it.\n \n" +
       "Can you push your thoughts away and concentrate on your studies?\n \n" +
-      "Read and click the virus away if it prevents you from focusing!\n \n";
-    ("After that there will be a test! You will get +10 for every right and -5 points for every wrong answer.");
+      "Read and click the virus away if it prevents you from focusing!\n \n"+
+      "After that there will be a test! You will get +10 for every right and -5 squirrels for every wrong answer.";
     this.pop = new PopupPlugin(
       this,
       10,
       "0x907748",
-      650,
+      670,
       32,
-      800,
+      1140,
       1,
-      280,
+      130,
       -50,
       0,
       "28px",
