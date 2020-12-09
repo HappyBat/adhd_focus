@@ -1014,9 +1014,9 @@ export default class Focus_scene extends Phaser.Scene {
   }
 
   updateB2(frame) {
-        if (frame == -2 && myFrame != 7) {
+        if (frame == -2 && frame != 7) {
           this.battery2.anims.play(parseInt(this.b2Frame) - 1, true);
-        } else if (frame == -1 && myFrame != 12) {
+        } else if (frame == -1 && frame != 12) {
           this.battery2.anims.play(parseInt(this.b2Frame) + 1, true);
         } else {
           this.battery2.anims.play(frame, true);
@@ -1035,9 +1035,9 @@ export default class Focus_scene extends Phaser.Scene {
   }
   updateB3(frame) {
 
-    if (frame == -2 && myFrame != 13) {
+    if (frame == -2 && frame != 13) {
       this.battery3.anims.play(parseInt(this.b3Frame) - 1, true);
-    } else if (frame == -1 && myFrame != 18) {
+    } else if (frame == -1 && frame != 18) {
       this.battery3.anims.play(parseInt(this.b3Frame) + 1, true);
       
     } else {
