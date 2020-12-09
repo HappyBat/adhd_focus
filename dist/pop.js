@@ -13,7 +13,7 @@ constructor(scene, bT, bC, wH, p, w,closed, xpos, ypos, textAdjust, fontSize, an
    this.windowHeight = wH//700;
    this.padding = p//32;
    //this.closeBtnColor = "darkorange";
-   this.dialogSpeed = 3;
+   this.dialogSpeed = 3.5;
    this.fontsize = fontSize;
    // used for animating the text
    this.eventCounter = 0;

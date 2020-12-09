@@ -947,17 +947,18 @@ export default class Focus_scene extends Phaser.Scene {
   }
 
   applyeffect(Draggable) {
-    this.removeDrag(Draggable);
+    
     if (Draggable == this.draggable2) {
       //this.battery1.anims.play("1", true);
       this.battery2.anims.play("7", true);
     }
     //should sometimes lead to depressive phase
     if (Draggable == this.draggable1) {
-      this.updateB1("-2");
+      //this.updateB1("-2");
       this.updateB2("-2");
       //this.updateB3("-2");
     }
+    this.removeDrag(Draggable);
   }
   updateScoreCounter() {
     //scoreCounter = scoreCounter +1;
@@ -1161,6 +1162,7 @@ export default class Focus_scene extends Phaser.Scene {
         if (typeof this.draggable2.scene !== "undefined") {
           this.pill = true;
         }
+      }
         /*if (this.battery1) {
           if (typeof this.battery1.scene !== "undefined") {
             this.b1 = true;
@@ -1205,7 +1207,7 @@ export default class Focus_scene extends Phaser.Scene {
           todol: popuptext,
           td: tasksDone,
         });
-      }
+      
     }
   }
   getPlayer() {
@@ -1629,8 +1631,8 @@ export default class Focus_scene extends Phaser.Scene {
     } catch (e) {}
 
     try {
-      this.col3 = this.arrowCollision(this.player, this.arrow_up3);
-      if (this.col3 && this.cursors.up.isDown && this.col3Collided == 0) {
+      this.col7 = this.arrowCollision(this.player, this.arrow_up3);
+      if (this.col7 && this.cursors.up.isDown && this.col3Collided == 0) {
         //function to contai if and else?
         if (this.oH) {
           this.popHob();
