@@ -12,6 +12,7 @@ var updated = 0;
 
 export default class Focus3 extends Focus_scene {
   constructor() {
+    //initialise living room scene
     super(
       "focus3",
       "living_room",
@@ -27,30 +28,34 @@ export default class Focus3 extends Focus_scene {
       ]
     );
   }
+
   init(data) {
     super.Init(data);
   }
+
   create() {
     super.create();
-    imageArray = ["cloud_focus2", "cloud_brainfog", "cloud_late","cloud_focus","cloud_class","cloud_intelligent","cloud_failure","cloud_lazy","cloud_stared"]
-    imageArray2 = ["sheep1","sheep2","sheep2","sheep3"]
+    imageArray = ["cloud_focus2", "cloud_brainfog", "cloud_late", "cloud_focus", "cloud_class", "cloud_intelligent", "cloud_failure", "cloud_lazy", "cloud_stared"]
+    imageArray2 = ["sheep1", "sheep2", "sheep2", "sheep3"]
 
     this.sleepObjects = [];
-    super.createTaskbarButton(1, 320, 715, 105, "Go to bed",0);
+    super.createTaskbarButton(1, 320, 715, 105, "Go to bed", 0);
     this.btn1.on("pointerdown", () => {
-        executed = 0;
-        layer = this.add
-          .graphics()
-          .fillStyle(0x505050, 9)
-          .fillRect(0, 0, 1366, 768)
-          .setDepth(1900);
-        sleep = this.add
-          .sprite(650, 380, "sleeping2")
-          .setScale(2)
-          .setDepth(2000);
-        this.sound.play("gnMusic");
-      
-      for (var i = 0; i < imageArray.length; i++) {
+      executed = 0;
+      layer = this.add
+        .graphics()
+        .fillStyle(0x505050, 9)
+        .fillRect(0, 0, 1366, 768)
+        .setDepth(1900);
+      sleep = this.add
+        .sprite(650, 380, "sleeping2")
+        .setScale(2)
+        .setDepth(2000);
+      this.sound.play("gnMusic");
+
+     
+      for (var i = 0; i < imageArray.length; i++) { 
+         //initialise all sleeping clouds
         var x = Phaser.Math.Between(60, 1300);
         var y = Phaser.Math.Between(40, 745);
 
@@ -60,15 +65,17 @@ export default class Focus3 extends Focus_scene {
         this.sleepObjects.push(this.sleepObject);
       }
     });
-    super.createTaskbarButton(2, 550, 715, 105, "Exercise!",0);
+    super.createTaskbarButton(2, 550, 715, 105, "Exercise!", 0);
     this.exercise = false;
 
+    
     this.btn2.on("pointerdown", () => {
+      //initialise exercise popup
       this.player.setVisible(false);
 
-      
+
       this.t =
-        "Do at least 30 push ups to increase your overall wellbeing.\n\n"+
+        "Do at least 30 push ups to increase your overall wellbeing.\n\n" +
         "Press the up and down arrow keys!";
 
       this.explainPushup = new PopupPlugin(
@@ -86,7 +93,7 @@ export default class Focus3 extends Focus_scene {
         false
       );
       this.explainPushup.setText(this.t, true);
-                  
+
       this.pushupCounter = this.add
         .graphics()
         .fillStyle(0x8b0000, 1)
@@ -101,9 +108,9 @@ export default class Focus3 extends Focus_scene {
 
       this.pushup = this.physics.add.sprite(650, 580, "pushup");
       this.anims.create({
-      key: "pushUp",
-      frames: [{ key: "pushup", frame:0 }],
-     });
+        key: "pushUp",
+        frames: [{ key: "pushup", frame: 0 }],
+      });
       this.anims.create({
         key: "pushDown",
         frames: [{ key: "pushup", frame: 1 }],
@@ -114,18 +121,13 @@ export default class Focus3 extends Focus_scene {
       updated = 0;
     });
   }
-  onEvent() {}
-  updateBatteries(b2,b3) {
 
-    if(b2){
-      console.log("1")
+  updateBatteries(b2, b3) {
+    if (b2) {
       super.updateB2(b2);
-    }if(b3){
-      console.log("2");
+    } if (b3) {
       super.updateB3(b3);
-    }else{
-      console.log("3");
-      super.updateB1(-2);
+    } else {
       super.updateB2(-2);
       super.updateB3(-2);
     }
@@ -141,7 +143,6 @@ export default class Focus3 extends Focus_scene {
         updated == 0
       ) {
         this.pushup.anims.play("pushUp", true);
-        //counter = counter + 1;
       } else if (
         this.cursors.down.isDown &&
         this.pushup.anims.currentAnim.key == "pushUp" &&
@@ -150,9 +151,9 @@ export default class Focus3 extends Focus_scene {
         this.pushup.anims.play("pushDown", true);
         counter = counter + 1;
       }
-      if(counter == 30 && updated != 1){
-        console.log("bbbb")
-        super.updateB1(-2);
+      
+      if (counter == 30 && updated != 1) {
+        //check if all pushups are completed
         super.updateB2(-2);
         super.updateB3(-2);
         updated = 1;
@@ -166,18 +167,15 @@ export default class Focus3 extends Focus_scene {
         counter = 0;
       }
       this.pushupCounterText.setText(counter);
-      console.log(counter)
     }
-    
-      if (sleep && executed != 1) {
+
+    if (sleep && executed != 1) {
       this.timedEvent1 = this.time.addEvent({
         delay: 18000,
         callback: onEvent1,
         callbackScope: this,
       });
-      if(1)
-      console.log(executed)
-      function onEvent1(){
+      function onEvent1() {
         sleep2 = this.add
           .sprite(650, 380, "sleeping")
           .setScale(2)
@@ -193,15 +191,17 @@ export default class Focus3 extends Focus_scene {
         for (var i = 0; i < this.sleepObjects.length; i++) {
           this.sleepObjects[i].setVisible(false);
         }
+        
         for (var i = 0; i < imageArray2.length; i++) {
-        var x = Phaser.Math.Between(60, 1300);
-        var y = Phaser.Math.Between(40, 745);
+          //initialise sheep
+          var x = Phaser.Math.Between(60, 1300);
+          var y = Phaser.Math.Between(40, 745);
 
-        this.sleepObject = this.physics.add
-          .sprite(x, y, imageArray2[i])
-          .setDepth(2200);
-        this.sleepObjects.push(this.sleepObject);
-       }
+          this.sleepObject = this.physics.add
+            .sprite(x, y, imageArray2[i])
+            .setDepth(2200);
+          this.sleepObjects.push(this.sleepObject);
+        }
 
       }
 
@@ -215,7 +215,7 @@ export default class Focus3 extends Focus_scene {
         if (layer) {
           layer.setVisible(false);
           sleep2.setVisible(false);
-          this.updateBatteries("7","13");
+          this.updateBatteries("7", "13");
         }
         for (var i = 0; i < this.sleepObjects.length; i++) {
           this.sleepObjects[i].setVisible(false);
@@ -225,7 +225,9 @@ export default class Focus3 extends Focus_scene {
       executed = 1;
     }
 
-    for (var i = 0; i < this.sleepObjects.length; i++) {
+    
+    for (var i = 0; i < this.sleepObjects.length; i++) { 
+      //regulate movement of sleeping objects
       if (i % 2 == 0) {
         this.sleepObjects[i].x += 0.2;
         if (this.sleepObjects[i].x > 1366) {

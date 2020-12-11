@@ -7,7 +7,6 @@ import focus3 from './scenes/focus3(livingRoom)';
 import focus4 from './scenes/focus4(studyRoom)';
 import focus5 from './scenes/focus5(kitchen)';
 import focus6 from "./scenes/focus6";
-import focus7 from "./scenes/focus7";
 import results from "./scenes/results";
 
 
@@ -22,5 +21,5 @@ export default {
             debug : false
         }
     },
-    scene : [preload_scene,disclaimer, intermediate, focus1,focus2, focus3, focus4, focus5, focus6, focus7, results]
+    scene : [preload_scene,disclaimer, intermediate, focus1,focus2, focus3, focus4, focus5, focus6, results]
 };

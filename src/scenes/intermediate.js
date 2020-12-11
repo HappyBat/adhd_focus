@@ -5,12 +5,14 @@ var pointer;
 var btn3;
 var intro;
 export default class intermediate extends Phaser.Scene {
+
   constructor() {
+    //initialise intermediate scene
     super({ key: "intermediate" });
   }
 
   create() {
-    pointer = this.input.activePointer;
+    pointer = this.input.activePointer;    
     this.t =
       "Focus! is a game developed to allow you to experience the world as someone with Attention Deficit (Hyperactivity) Disorder (AD(H)D.)[i] The game is based on science & interviews within the AD(H)D community & experts.\n\n";
     this.t +=
@@ -44,8 +46,8 @@ export default class intermediate extends Phaser.Scene {
       this.startIntro();
     });
   }
+
   startIntro() {
-    //this.scene.start('focus1');
     intro = this.add.image(683, 384, "intro").setDepth(-1200);
     this.layer = this.add
       .graphics()
@@ -99,10 +101,6 @@ export default class intermediate extends Phaser.Scene {
     this.qMark6 = this.add.image(251, 35, "qMark").setInteractive(); //score&countdown
     this.qMark7 = this.add.image(391, 74, "qMark").setInteractive(); //
 
-    this.input.on("pointerdown", () => {
-      console.log(pointer.x);
-      console.log(pointer.y);
-    });
     this.t1 =
       "How good you do in keeping your batteries full, will contribute towards the outcome of the game.\n\n" +
       "Keep an close eye on them!";
@@ -145,6 +143,7 @@ export default class intermediate extends Phaser.Scene {
       this.scene.start("focus1");
     });
   }
+
   createQMarks(name, text, height, width, x, y, lightUp) {
     name.on("pointerover", () => {
       this.pop1 = new PopupPlugin(
@@ -203,9 +202,7 @@ export default class intermediate extends Phaser.Scene {
       } else if (this.lightUp == "arrows" && !this.arrow1) {
         this.arrow1 = this.add.image(240, 610, "arrow_up");
         this.arrow2 = this.add.image(475, 610, "arrow_up");
-        //this.arrow3 = this.add.image(1085, 610, "arrow_up");
         this.arrow4 = this.add.image(70, 650, "arrow_left");
-        //this.arrow5 = this.add.image(1290, 650, "arrow_right");
       }
     });
 
@@ -230,51 +227,5 @@ export default class intermediate extends Phaser.Scene {
         }
       }
     }
-    /*if (!this.pop.timedEvent && !intro) {
-      console.log("huhu");
-      btn.destroy();
-      this.btn2 = this.add
-        .sprite(Config.width / 2, Config.height - 170, "borderPlay")
-        .setInteractive({ useHandCursor: true });
-      this.btn2.on("pointerdown", () => {
-        this.btn2.setVisible(false);
-        this.startIntro();
-      });
-    }
-  }*/
-
-    //this.btn.on('pointerup', () => this.btn.setScale(0.9));*/
-    /*console.log("here");
-        generateButton(this,0);
-        function generateButton(scene,tog) {
-            console.log(scene);
-            var img;
-            if (tog == 0){
-                img = "prePlay";
-            }else{
-                img = "borderPlay";
-            }
-            btn = new Sprite(scene, Config.width / 2, Config.height-170, img).setScale(0.05);
-
-            btn.on('pointerdown', () => {
-                btn.setScale(0.5);
-                btn.destroy();
-                scene.start('focus1');
-            });
-            //btn.on('pointerup', () => btn.setScale(0.5));
-
-            if (tog == 0){
-                btn.on("pointerover", () =>{
-                    btn.destroy();
-                    generateButton(scene,1);
-                }); 
-            }else {
-                btn.on("pointerout", () =>{
-                    btn.destroy();
-                    generateButton(scene,0);
-                });
-            }
-            console.log(btn)
-        } */
   }
 }

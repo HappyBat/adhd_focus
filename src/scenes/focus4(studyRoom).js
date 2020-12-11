@@ -12,7 +12,9 @@ var updated2 = 0;
 var finished2 = 0;
 
 export default class Focus4 extends Focus_scene {
+
   constructor() {
+    //initialise study room scene
     super(
       "focus4",
       "studyRoom",
@@ -22,18 +24,17 @@ export default class Focus4 extends Focus_scene {
     );
     initialTime2 = 90;
   }
+
   init(data) {
     super.Init(data);
     billCounter = data.billCounter;
     oH = data.oH;
   }
+
   create() {
-    console.log("oH");
-    console.log(oH);
     super.create();
 
     timeLeftText;
-    //this.timer2 = setInterval(this.onEvent(), 1000);
 
     //create taskbar
 
@@ -46,7 +47,6 @@ export default class Focus4 extends Focus_scene {
 
     super.createTaskbarButton(1, 310, 715, 140, "Prep for exam", 50);
     super.createTaskbarButton(2, 560, 715, 100, "Pay bills", 50);
-    console.log(this.finished);
     //open instructions on click
     if (this.finished != 1) {
       this.btn1.on("pointerdown", () => {
@@ -66,13 +66,10 @@ export default class Focus4 extends Focus_scene {
           .sprite(680, 600, "borderPlay")
           .setInteractive({ useHandCursor: true })
           .setScale(0.5);
-        //this.play_btn.on("clicked2", playRemove, this);
 
         this.play_btn.on(
           "pointerdown",
           () => {
-            //this.play_btn.input.enabled = false;
-            //this.btn1.input.enabled = false;
             this.pop.toggleWindow();
             this.play_btn.setVisible(false);
             if (this.x == 0) {
@@ -118,9 +115,9 @@ export default class Focus4 extends Focus_scene {
                 }
               }
 
-              //remove on click
+              
               function virusRemove(virus = this.virus) {
-                //this.check = 0;
+                //remove on click
                 virus.input.enabled = false;
                 virus.off("clicked", virusRemove);
                 virus.setVisible(false);
@@ -130,7 +127,6 @@ export default class Focus4 extends Focus_scene {
           },
           this
         );
-        //this.btn1.input.enabled = false;
       });
     } else {
       this.btn1.input.enabled = false;
@@ -140,6 +136,7 @@ export default class Focus4 extends Focus_scene {
       this.btn2.on("pointerdown", () => {
         this.pop_billsCreated = 0;
         if (billCounter < 3 && !oH) {
+          //let player only if he has clicked "pay bills" more than 2 times
           this.bills_blurred = this.add
             .image(683, 384, "bills_blurred")
             .setScale(0.5);
@@ -225,19 +222,17 @@ export default class Focus4 extends Focus_scene {
             d.callSuper();
           }
         }
-        /*function updateScore(d) {
-        d.updateScore();
-        d.BatteryUpdate();
-      }*/
       });
     }
   }
-  //create pop-up
+  
   createWhiteLayer() {
+    //create white layer pop-up
     this.pop3 = new White(this);
   }
 
   btn1_create() {
+    //create exam popup
     this.t =
       "Arrghhhh...study for the exam? You really don't feel like it. Anyway, what has to be done, has to be done. \n\n" +
       "Only this article you read - about a vaccine for COVID-19! So interesting! If only you could stop thinking about it.\n \n" +
@@ -264,13 +259,13 @@ export default class Focus4 extends Focus_scene {
   callSuper() {
     super.updateBills();
   }
+
   updateScore() {
     if (updated == 0) {
       super.updatescore(50);
       updated = 1;
     }
   }
-  //countdown for task
 
   onEvent() {
     try {
@@ -287,13 +282,14 @@ export default class Focus4 extends Focus_scene {
   }
 
   createQuestionnaire() {
+    //generate the dolphin questionnaire
     this.dolphinsQ = this.add
       .image(683, 384, "dolphin_questions")
       .setScale(0.5)
       .setDepth(950);
 
     for (var i = 1; i < 16; i++) {
-      //console.log("hello");
+      //handling of question options
       var x = 390;
       this._1clicked = 0;
       this._2clicked = 0;
@@ -550,24 +546,22 @@ export default class Focus4 extends Focus_scene {
           this.finished = 1;
           super.updateText(1);
           this.pop3.destroy();
-          //this.done.input.enabled = false;
         }
       });
   }
 
   createRight(x1, y1) {
-    console.log("right");
     this.right = this.add.image(x1, y1, "right").setScale(0.6).setDepth(1200);
     super.updatescore(10);
-    console.log(this);
     this.Right.push(this.right);
   }
+
   createWrong(x2, y2) {
-    console.log("wrong");
     this.wrong = this.add.image(x2, y2, "wrong").setScale(0.6).setDepth(1200);
     super.updatescore(-5);
     this.Wrong.push(this.wrong);
   }
+
   emptyNamef(x, y, i) {
     var x = 390;
     this.emptyName = this.add
@@ -576,9 +570,9 @@ export default class Focus4 extends Focus_scene {
       .setScale(0.6)
       .setDepth(1000);
   }
+
   BatteryUpdate() {
     if (updated2 == 0) {
-      super.updateB1("-1");
       super.updateB2("-1");
       super.updateB3("-1");
       super.updateText(2);
@@ -625,27 +619,6 @@ export default class Focus4 extends Focus_scene {
         super.updateText(2);
       }
     }
-    /*if (this.bills_blurred && this.pop_billsCreated != 1) {
-      this.t =
-        "Oh no! Why do you feel so overwhelmed? The text seems blurred, you can't see a single letter.\n\n" +
-        "Try again later!";
-      this.pop_bills = new PopupPlugin(
-        this,
-        10,
-        "0x907748",
-        300,
-        32,
-        520,
-        1,
-        433,
-        -50,
-        0,
-        "28px",
-        true
-      );
-      this.pop_bills.setText(this.t, true);
-      this.pop_billsCreated = 1;
-    }*/
     if (this.pop_bills) {
       if (this.pop_bills.closeBtn.closedFlag == 1) {
         this.bills_blurred.setVisible(false);
@@ -662,8 +635,6 @@ export default class Focus4 extends Focus_scene {
         if (this.play_btn) {
           this.play_btn;
           this.play_btn.setVisible(false);
-          //this.play_btn.input.enabled = false;
-          //this.btn1.input.enabled = false;
         }
       }
     }

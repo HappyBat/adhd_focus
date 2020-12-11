@@ -34,10 +34,6 @@ constructor(scene, bT, bC, wH, p, w,closed, xpos, ypos, textAdjust, fontSize, an
    this.animate = animate;
    // Create the dialog window
    this._createWindow();
- /*if (this.borderColor == "0x000000") {
-   console.log("equals")
-   this.windowColor == "0x000000";
- }*/
    
 }
  
@@ -121,7 +117,6 @@ _createCloseModalButton() {
       });
       this.closeBtn.on('pointerdown', function () {
         self.toggleWindow();
-        console.log(self);
         this.closedFlag = 1;
       });
   }

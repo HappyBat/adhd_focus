@@ -1,5 +1,4 @@
 import Focus_scene from "../focus_scene";
-import PopupPlugin from "../../dist/pop";
 
 var pointer;
 var sv;
@@ -21,15 +20,19 @@ var qu;
 var bdc;
 var td;
 export default class results extends Focus_scene {
+
   constructor() {
+    //initialise results scene
     super("results", "", {}, {}, [{}, {}, {}, {}, {}, {}]);
   }
+
   init(data) {
     super.Init(data);
     sv = data.sv;
     bdc = data.bdc;
     td = data.td;
   }
+
   create() {
     pointer = this.input.activePointer;
     qTexts=[];
@@ -41,8 +44,6 @@ export default class results extends Focus_scene {
       .graphics()
       .fillStyle(0x101010, 0.9)
       .fillRect(0, 0, 1366, 768)
-      .setDepth(3100);
-    //this.add.image(300, 384, "pokal").setScale(0.8).setDepth(3200);
     this.createFav(1);
     this.createFav(2);
 
@@ -55,13 +56,11 @@ export default class results extends Focus_scene {
         strokeThickness: 5,
       })
       .setDepth(3100);
-    this.input.on("pointerdown", () => {
-      console.log(pointer.x);
-      console.log(pointer.y);
-    });
+    //create golden squirrel text
     this.sT =
       "The Golden Squirrel is for those brave\nworriers that managed to withstand all the \ndistractions and finish the assigned tasks.\n\nIt is worth 50 squirrels!",
-    this.bT =
+    //create golden battery text
+      this.bT =
         "The Golden Battery is for those who\npractised self-love, even though it made it \nso much harder to finish the tasks in time.\n\nIt is worth 50 squirrels, too!",
     this.squirrelText = this.add
         .text(340, 210, this.sT, {
@@ -76,9 +75,6 @@ export default class results extends Focus_scene {
         lineSpacing:1.5,
       })
       .setDepth(3100).setLineSpacing(15);
-    //grey background to achievements
-    //this.add.graphics().fillStyle(0x303030, 0.8).setDepth(3100);
-    //this.add.graphics().fillRect(20, 150, 300, 500).setDepth(3100);
 
     //golden squirrel
     this.generateFrame(50, 177, 230, 240);
@@ -95,6 +91,7 @@ export default class results extends Focus_scene {
  
     
   }
+
   generateFrame(x, y, width, height, fillStyle = 0x000000) {
     this.add
       .graphics()
@@ -104,14 +101,13 @@ export default class results extends Focus_scene {
       .strokeRect(x, y, width, height)
       .setDepth(3100);
   }
+
   generateText(x, y, text) {
     this.add
       .text(x + 10, y, text, {
         fontFamily: "Arial",
         fontSize: "24px",
-        color: "#39d179", //"#005e58",
-        //strokeThickness: 1,
-        //stroke: "#ffffff",
+        color: "#39d179", 
       })
       .setDepth(3200);
   }
@@ -147,6 +143,7 @@ export default class results extends Focus_scene {
       }   
      
   }
+
   createFav(f){
     if(f ==1){
         fav1 = this.add
@@ -164,34 +161,27 @@ export default class results extends Focus_scene {
         fav.push(fav2);
     }   
   }
-  makeFinalInfo() {
-    
+
+  makeFinalInfo() {    
+    //make info based on game points
     if (sv >= 240) {
+      //game beaten
       this.t =
         "CONGRATULATIONS!\n\n" +
         "You managed your AD(H)D quite \n\nwell. Nicely done!";
       colour = "green";
     } else {
+      //game lost
       this.t =
         "TRY AGAIN!\n\n" +
         "You were not able to finish all \n\ntasks and manage your AD(H)D.";
       colour = "darkred";
     }
 
-    /*this.resultInfo = this.add
-      .graphics()
-      .fillStyle(0x303030, 0.8)
-      .setDepth(3200)
-      .fillRect(533, 100, 600 - 1, 150)
-      .lineStyle(1, 0x005e58, 1.0)
-      .setDepth(3200)
-      .strokeRect(533, 100, 600, 150)
-      .setDepth(3200);*/
     this.resultInfo = this.add
       .text(340, 261, this.t, {
         fontSize: "46px",
         fill: colour,
-        //fontStyle: "bold",
       })
       .setDepth(3200);
   }
@@ -268,40 +258,26 @@ export default class results extends Focus_scene {
   }
 
   update() {
-    //super.update()
 
     if (this.executedAchievement != 1) {
-
       this.timedEvent = this.time.addEvent({
         delay: 3000,
         callback: moveMe,
         callbackScope: this,
         repeat: 2,
       });
-      function moveMe() {
-        
-        
+      function moveMe() {              
         if (this.timedEvent.repeatCount == 1) {
           this.showAchievements("pokal", 1.2, true, 165, 300, 0.5,"fav1",this);
-          /*this.q.setVisible(false);
-          achievements[0].x = 165;
-          achievements[0].y = 300;
-          achievements[0].setScale(0.5);
-          achievements[1].setVisible(true);
-          this.updateScore(50);*/
         }
         if (this.timedEvent.repeatCount == 0) {
           this.showAchievements("batterySaver", 3, true, 165, 605, 1,"fav2",this);
-          console.log("moveMe");
-          /*achievements[1].x = 165;
-          achievements[1].y = 605;
-          achievements[1].setScale(1);*/
         }
       }
       this.executedAchievement = 1;
     }
     if (this.timedEvent.hasDispatched && this.finished != 1) {
-
+      //add timed event to delay display (bug fix)
       this.timedEvent = this.time.addEvent({
         delay: 3000,
         callback: wait,

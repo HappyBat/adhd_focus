@@ -1,7 +1,6 @@
 import PopupPlugin from "../../dist/pop";
 import Focus_scene from "../focus_scene";
 var array;
-var pointer;
 var counter = 0;
 var dragged;
 var counter2 = 0;
@@ -11,7 +10,7 @@ var cl;
 var laundry;
 
 export default class Focus2 extends Focus_scene {
-  constructor() {
+  constructor() { //initialise bathroom scene    
     super(
       "focus2",
       "bathroom",
@@ -21,10 +20,6 @@ export default class Focus2 extends Focus_scene {
     );
   }
 
-  /*init(data){
-        super.setInitialTime(data.it);
-        super.setScoreValue(data.sv);
-    }*/
   init(data) {
     super.Init(data);
     super.cloth = this.cloth;
@@ -32,13 +27,14 @@ export default class Focus2 extends Focus_scene {
     cl = data.cl;
     super.myCol6 = this.col6;
   }
+
   create() {
     super.create();
-    console.log(cl);
     this.exec = 0;
-    this.clothesUpd= 0;
+    this.clothesUpd = 0;
     super.createTaskbarButton(1, 295, 715, 145, "Do the laundry", 45);
 
+    //create washing clothes popup
     this.btn1.on("pointerdown", () => {
       pointerDown = true;
       this.t1 = "Put all the clothes into the washing machine!";
@@ -60,7 +56,10 @@ export default class Focus2 extends Focus_scene {
     });
 
     array = [];
-    if (!laundry && this.cloth !=2) {
+
+    
+    if (!laundry && this.cloth != 2) {
+      //create clothes
       this.createClothes(897, 571, "shirt");
       this.createClothes(635, 600, "sock1");
       this.createClothes(1125, 729, "sock2");
@@ -77,16 +76,19 @@ export default class Focus2 extends Focus_scene {
       this.createClothes(620, 430, "greenTowel");
       this.createClothes(1193, 489, "toiletTowel");
     }
+
+    
     if (laundry) {
+      //recreate only clothes that are still active
       for (var i = 0; i < cl.length; i++) {
         if (cl[i] == 0) {
           this.createClothes(897, 571, "shirt");
-        }        if (cl[i] == 1) {
+        } if (cl[i] == 1) {
           this.createClothes(635, 600, "sock1");
         }
         if (cl[i] == 2) {
           this.createClothes(1125, 729, "sock2");
-        }        if (cl[i] == 3) {
+        } if (cl[i] == 3) {
           this.createClothes(291, 651, "pantsBlue");
         }
         if (cl[i] == 4) {
@@ -124,43 +126,9 @@ export default class Focus2 extends Focus_scene {
         }
       }
     }
-    /*else{
-      for(var i=0; i < 15; i++){
-        if (cl[i] != 0) {
-          this.createClothes(1193, 489, "toiletTowel");
-        } if (cl[i] != 1) {
-          this.createClothes(620, 430, "greenTowel");
-        }  if (cl[i] != 2) {
-          this.createClothes(895, 363, "stuff3");
-        }  if (cl[i] != 3) {
-          this.createClothes(556, 589, "stuff2");
-        }  if (cl[i] != 4) {
-          this.createClothes(1080, 612, "stuff");
-        }  if (cl[i] != 5) {
-          this.createClothes(737, 570, "scarf");
-        }  if (cl[i] != 6) {
-          this.createClothes(1127, 388, "pantsOrange");
-        }  if (cl[i] != 7) {
-          this.createClothes(279, 412, "pantsGreen");
-        }  if (cl[i] != 8) {
-          this.createClothes(683, 655, "light_shirt");
-        }  if (cl[i] != 9) {
-          this.createClothes(985, 664, "pantsBlue3");
-        }  if (cl[i] != 10) {
-          this.createClothes(175, 722, "pantsBlue2");
-        }  if (cl[i] != 11) {
-          this.createClothes(291, 651, "pantsBlue");
-        }  if (cl[i] != 12) {
-          this.createClothes(1125, 729, "sock2");
-        }  if (cl[i] != 13) {
-          this.createClothes(635, 600, "sock1");
-        }  if (cl[i] != 14) {
-          this.createClothes(897, 571, "shirt");
-        }
-      }
-    }*/
   }
-  createClothes(x, y, name) {
+
+  createClothes(x, y, name) {    
     this.cloth = this.add.image(x, y, name).setDepth(-100);
     if (name == "pantsGreen") {
       this.cloth.setScale(1.5);
@@ -169,20 +137,19 @@ export default class Focus2 extends Focus_scene {
     array.push(this.cloth);
   }
 
-  onEvent() {}
+  onEvent() { }
 
   callSuper(d) {
     super.updatescore(3);
   }
+
   batteryUpdate() {
-    super.updateB1("-1");
     super.updateB2("-1");
     super.updateB3("-1");
-    if (this.clothesUpdated != 1 && array.length >11) {
-      console.log("update 1")
+    if (this.clothesUpdated != 1 && array.length > 11) {
       for (var i = 0; i < array.length; i++) {
         if (array[i].visible == true) {
-          super.updateLaundry(i,1);
+          super.updateLaundry(i, 1);
         }
       }
       this.clothesUpdated = 1;
@@ -210,34 +177,22 @@ export default class Focus2 extends Focus_scene {
     );
     this.tooHard.setText(this.t, true);
   }
-  updateLaundry2(){
+
+  updateLaundry2() {
     super.updatelaundry2();
   }
-  updateTodo(){
+
+  updateTodo() {
     super.updateText(3);
   }
 
   update() {
     super.update();
-    /*if(this.col6){
-      if (this.clothesUpd != 1 && array.length <11) {
-      console.log("update 2");
-      for (var i = 0; i < array.length; i++) {
-        if (array[i].visible == true) {
-          if(array[i]==1){
-          super.updateLaundry(i,2);
-          }else{
-          super.updateLaundry(i, 3);
-          }
-        }
-      }
-      this.clothesUpd = 1;
-    }
-    }*/
+
     if (pointerDown && this.exec == 0) {
-      
+
       for (var i = 0; i < array.length; i++) {
-        array[i].setInteractive({ useHandCursor: true, draggable: true }); //update if(pointerDown){}
+        array[i].setInteractive({ useHandCursor: true, draggable: true });
         array[i].on("drag", function (pointer, dragX, dragY) {
           this.pointer = pointer;
           dragged = 0;
@@ -257,19 +212,20 @@ export default class Focus2 extends Focus_scene {
             dragged = 0;
           }
           counter2 = 0;
-          if ((counter == 5)  && popped == 0) {
+          if ((counter == 5) && popped == 0) {
+             //create popup if 5 clothes have been dragged (as it gets harder every time)
             this.scene.createPopup();
             this.scene.batteryUpdate();
             popped = 1;
           } else if (counter == 6) {
             this.scene.batteryUpdate();
           }
-          console.log(counter)
-          if (counter == 15){
+          if (counter == 15) {
+             //update task list
             this.scene.updateLaundry2();
             this.scene.updateTodo();
           }
-        }); //update
+        });
         this.exec = 1;
       }
     }

@@ -46,7 +46,9 @@ var check_Y_PositionArray;
 var counter;
 var whiteLayer;
 export default class Focus6 extends Focus_scene {
+
   constructor() {
+    //initialise work scene
     super(
       "focus6",
       "city",
@@ -56,14 +58,12 @@ export default class Focus6 extends Focus_scene {
     );
     initialTime2 = 60;
   }
+
   init(data) {
     super.Init(data);
     super.done = data.done;
   }
-  /*init(data){
-        super.setInitialTime(data.it);
-        super.setScoreValue(data.sv);
-    }*/
+
   create() {
     playRemove = false;
     this.fired = 0;
@@ -74,13 +74,11 @@ export default class Focus6 extends Focus_scene {
 
     super.create();
 
-    //this.createTaskbar();
 
     super.createTaskbarButton(1, 300, 715, 115, "Go to work", 160);
-    //super.createTaskbarButton(2,570, 715, 110, "Go running",0);
 
     if (this.finished != 1) {
-      this.btn1.on("pointerdown", () => {
+      this.btn1.on("pointerdown", () => {        
         this.btn1_create();
         this.pop;
 
@@ -117,7 +115,6 @@ export default class Focus6 extends Focus_scene {
                 fill: "white",
               })
               .setDepth(1400);
-            console.log("texture");
 
             this.done = this.add
               .image(950, 240, "done")
@@ -125,8 +122,8 @@ export default class Focus6 extends Focus_scene {
               .setInteractive({ useHandCursor: true })
               .setDepth(1200)
               .on("pointerdown", () => {
+                //check and update score based on correct names
                 counter = 0;
-                console.log(counter);
                 for (var i = 0; i < sortingArray.length; i++) {
                   sortingArray[i].input.enabled = false;
                   sortingArray[i].setVisible(false);
@@ -136,9 +133,7 @@ export default class Focus6 extends Focus_scene {
                   ) {
                     score = score + 10;
                     counter = counter + 10;
-                    console.log(counter);
                   }
-                  console.log(score);
                 }
                 this.sheet.setVisible(false);
                 this.dyslexia.setVisible(false);
@@ -149,7 +144,6 @@ export default class Focus6 extends Focus_scene {
                 this.angryBoss.setVisible(false);
                 timer.destroy();
                 if (counter < 50) {
-                  console.log(counter);
                   this.Fired();
                 }
                 whiteLayer.setVisible(false);
@@ -168,14 +162,10 @@ export default class Focus6 extends Focus_scene {
     } else {
       this.btn1.input.enabled = false;
     }
-    /*this.btn2.on("pointerdown", ()=>{
-      console.log("changeScene to 7")
-      super.changeScene("focus7");
-    });*/
     function changePosition() {
+      //random event to change two names
       this.value = Phaser.Math.Between(0, 15);
       this.value2 = Phaser.Math.Between(0, 15);
-      console.log("changePosition");
       x = sortingArray[this.value].x;
       y = sortingArray[this.value].y;
       sortingArray[this.value].x = sortingArray[this.value2].x;
@@ -184,11 +174,9 @@ export default class Focus6 extends Focus_scene {
       sortingArray[this.value2].y = y;
     }
   }
-  //onEvent() {}
+  
   onEvent() {
     if (timeLeftText && timeLeftText.frame.glTexture !== 0) {
-      console.log("Timelefttext");
-      console.log(timeLeftText);
       initialTime2 -= 1;
       this.seconds2 = initialTime2;
       this.minutes2 = Math.floor(this.seconds2 / 60);
@@ -198,7 +186,9 @@ export default class Focus6 extends Focus_scene {
       timeLeftText.setText("Time left: " + this.fa);
     }
   }
+
   btn1_create() {
+    //create work popup
     this.t =
       '"You are late, again! \n\n' +
       "Today you will be sorting files in the personnel apartment.\n \n" +
@@ -226,7 +216,9 @@ export default class Focus6 extends Focus_scene {
       .setScale(2)
       .setDepth(1400);
   }
-  createNames() {
+
+  createNames() {    
+    //create names and place them in the right positions
     this.elementDragged = false;
     whiteLayer = this.add
       .graphics()
@@ -285,7 +277,6 @@ export default class Focus6 extends Focus_scene {
       "name14",
       "name7",
     ];
-    //collisionArray = [9,10,11,4,12,2,5,6,13,15,3,16,1,8,14,7];
 
     newX2 = [
       317,
@@ -363,7 +354,7 @@ export default class Focus6 extends Focus_scene {
       });
 
       sortingArray[i].on("dragend", function () {
-        //left row
+        //control the movement of the left row
         executed = 0;
         if (this.x < x1 && this.y < y1) {
           this.x = 317;
@@ -391,7 +382,7 @@ export default class Focus6 extends Focus_scene {
           this.y = 90 + 7 * 75;
         }
 
-        //right row
+        //control the movement of the right row
         if (this.x > x1 && this.y < y1) {
           this.x = 667;
           this.y = 90;
@@ -421,50 +412,9 @@ export default class Focus6 extends Focus_scene {
     }
   }
 
-  /*createTaskbar() {
-    //add task button 1
-    this.add.graphics().fillStyle(0xffffff, 0.8).setDepth(900);
-    this.add.graphics().fillRoundedRect(300, 715, 115, 20, [5]).setDepth(900);
-    var text1 = {
-      x: 305,
-      y: 717,
-      text: "Go to work",
-      style: { color: "#000000" },
-    };
-    this.btn1 = this.make.text(text1);
-    this.btn1.setInteractive({ useHandCursor: true });
-    this.btn1.setDepth(900);
-
-    //add task button 2
-    this.add.graphics().fillStyle(0xffffff, 0.8).setDepth(900);
-    this.add.graphics().fillRoundedRect(500, 715, 115, 20, [5]).setDepth(900);
-    var text2 = {
-      x: 505,
-      y: 717,
-      text: "Go running",
-      style: { color: "#000000" },
-    };
-    this.btn2 = this.make.text(text2);
-    this.btn2.setInteractive({ useHandCursor: true });
-    this.btn2.setDepth(900);
-
-    //add task button 3
-    this.add.graphics().fillStyle(0xffffff, 0.8).setDepth(900);
-    this.add.graphics().fillRoundedRect(770, 715, 140, 20, [5]).setDepth(900);
-    var text2 = {
-      x: 775,
-      y: 717,
-      text: "Go to meeting",
-      style: { color: "#000000" },
-    };
-    this.btn3 = this.make.text(text2);
-    this.btn3.setInteractive({ useHandCursor: true });
-    this.btn3.setDepth(900);
-  }*/
-
   Fired() {
+    //fired event handler
     if (!this.firedExecuted) {
-      console.log("fired");
 
       this.layer = this.add.graphics().fillStyle(0x303030, 0.8);
 
@@ -473,7 +423,6 @@ export default class Focus6 extends Focus_scene {
         .fillRect(0, 0, 1366, 768)
         .setDepth(900);
 
-      super.updateB1("6");
       super.updateB2("12");
       super.updateB3("18");
 
@@ -516,21 +465,21 @@ export default class Focus6 extends Focus_scene {
       this.callThere = 0;
 
       function notificationDelete() {
-        console.log(this);
         this.bigWhiteLayer.clear();
         this.notification.setVisible(false);
       }
     }
   }
+
   US(s) {
-    console.log(s);
     super.updatescore(s);
   }
+
   update() {
     super.update();
     if (executed == 0) {
       for (var item = 0; item < sortingArray.length; item++) {
-        //collisionArray.forEach(function (item) {
+        //check which two names are being moved around
         for (var i = 0; i < sortingArray.length; i++) {
           if (
             sortingArray[i].getBounds().y == sortingArray[item].getBounds().y &&
@@ -561,7 +510,6 @@ export default class Focus6 extends Focus_scene {
       });
 
       function onEvent() {
-        console.log("executing");
         for (var i = 0; i < sortingArray.length; i++) {
           sortingArray[i].input.enabled = false;
           sortingArray[i].setVisible(false);
@@ -589,9 +537,7 @@ export default class Focus6 extends Focus_scene {
             ) {
               score = score + 10;
               counter = counter + 10;
-              console.log(counter);
             }
-            console.log(score);
           }
           this.US(score);
           this.fired = 1;

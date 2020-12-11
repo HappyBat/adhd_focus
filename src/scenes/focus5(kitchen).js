@@ -11,7 +11,9 @@ var updated;
 var finished = 0;
 
 export default class Focus5 extends Focus_scene {
+
   constructor() {
+    //initialise kitchen scene
     super(
       "focus5",
       "kitchen",
@@ -20,9 +22,11 @@ export default class Focus5 extends Focus_scene {
       [{}, {}, {}, { x: 70, y: 650, img: "arrow_left_white" }, {}, {}]
     );
   }
+
   init(data) {
     super.Init(data);
   }
+
   create() {
     super.create();
     arrayDish = [];
@@ -65,7 +69,8 @@ export default class Focus5 extends Focus_scene {
           true
         );
         this.dishInfo.setText(this.t, true);
-
+        
+        //create dishes 
         this.createDish(379, 395, "pan", 1, 0);
         this.createDish(379, 380, "pan", 1, 0);
         this.createDish(330, 358, "cutlery", 1.5, 130);
@@ -91,9 +96,8 @@ export default class Focus5 extends Focus_scene {
         this.createDish(954, 588, "mug2", 1.1, 0);
         this.createDish(655, 468, "mug3", 1, 0);
         this.createDish(1181, 619, "giantPot", 2.5, 0);
-        /*function dirtRemove(dirt = this.dirt) {
-      dirt.setVisible(false);
-    }*/
+        
+        //create dirt marks
         this.element1 = this.createDirt(1176, 615, "brownDirt", 1, 0);
         this.element1.on("pointerover", () => {
           this.element1.setVisible(false);
@@ -218,11 +222,10 @@ export default class Focus5 extends Focus_scene {
         });
       });
     }
-    this.input.on("pointerdown", () => {
-      console.log(pointer.x, pointer.y);
-    });
   }
+
   createDish(x, y, name, scale, angle) {
+    //create dish function
     this.dish = this.add
       .image(x, y, name)
       .setInteractive()
@@ -236,19 +239,21 @@ export default class Focus5 extends Focus_scene {
     });
     arrayDish.push(this.dish);
   }
+
   createDirt(x, y, name, scale, angle) {
+    //create dirt function
     this.dirt = this.add
       .image(x, y, name)
       .setInteractive({ draggable: true })
       .setScale(scale)
       .setAngle(angle);
-    //this.dirt.on("pointerover", dirtRemove, this);
     return this.dirt;
-    //arrayDirt.push(this.dirt);
   }
 
   onEvent() {}
+
   btn1_create() {
+    //create popup for pot task
     this.t =
       "Find the pot, it is somewhere in the cupboard but you misplaced it, as always.\n" +
       "Click on the cupboards to search, then drag it to the hob and come back after 1 minute!";
@@ -268,21 +273,22 @@ export default class Focus5 extends Focus_scene {
     );
     this.pop.setText(this.t, true);
   }
+
   callSuper() {
-    console.log("callsupercalled");
     super.updateHob();
     super.updatescore(10);
   }
+
   callSuper2() {
     if (updated != 1) {
       super.updatescore(20);
-      super.updateB1("-1");
       super.updateB2("-1");
       super.updateB3("-1");
       super.updateText(6);
       updated = 1;
     }
   }
+
   update() {
     super.update();
     if (finished == 1) {
